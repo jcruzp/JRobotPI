@@ -33,16 +33,23 @@ public class HTU21DDevice extends I2CRpi {
      *
      * @return Calc humidity and return it to the user.Returns 998 if I2C timed
      * out.Returns 999 if CRC is wrong
-     * @throws java.io.IOException
      */
-    public float readHumidity() throws IOException {
-        device.write(HTU21D.TRIGGER_HUMD_MEASURE_NOHOLD.cmd);
+    public float readHumidity() {
+        try {
+            device.write(HTU21D.TRIGGER_HUMD_MEASURE_NOHOLD.cmd);
+        } catch (IOException ex) {
+            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         //Hang out while measurement is taken. 50mS max, page 4 of datasheet.
         I2CUtils.I2Cdelay(200);
 
         ByteBuffer rxBuf = ByteBuffer.allocateDirect(3);
-        device.read(rxBuf);
+        try {
+            device.read(rxBuf);
+        } catch (IOException ex) {
+            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
+        }
         rxBuf.clear();
 
         short msb, lsb, checksum;
@@ -74,15 +81,22 @@ public class HTU21DDevice extends I2CRpi {
      *
      * @return Calc temperature and return it to the user. Returns 998 if I2C
      * timed out. Returns 999 if CRC is wrong
-     * @throws java.io.IOException
      */
-    public float readTemperature() throws IOException {
-        device.write(HTU21D.TRIGGER_TEMP_MEASURE_NOHOLD.cmd);
+    public float readTemperature() {
+        try {
+            device.write(HTU21D.TRIGGER_TEMP_MEASURE_NOHOLD.cmd);
+        } catch (IOException ex) {
+            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //Hang out while measurement is taken. 50mS max, page 4 of datasheet.
         I2CUtils.I2Cdelay(200);
 
         ByteBuffer rxBuf = ByteBuffer.allocateDirect(3);
-        device.read(rxBuf);
+        try {
+            device.read(rxBuf);
+        } catch (IOException ex) {
+            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
+        }
         rxBuf.clear();
 
         short msb, lsb, checksum;

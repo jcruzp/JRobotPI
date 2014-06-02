@@ -6,7 +6,6 @@ package com.jcruz.jrobotpi.i2c.driver;
 import com.jcruz.jrobotpi.i2c.I2CDue;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.MotorsDC;
-import java.io.IOException;
 
 /**
  * Base code to control all DC Motors
@@ -119,13 +118,13 @@ public class Motors4WD extends I2CDue {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
-    void motorBegin(int motor) throws IOException {
+    void motorBegin(int motor) {
         motorStop(motor);  // stop the front motor
         motorStop(motor + 1); // stop the rear motor
     }
 
     // speed range is 0 to 100 percent
-    void motorSetSpeed(int motor, int speed) throws IOException {
+    void motorSetSpeed(int motor, int speed) {
         if (motor == MOTOR_LEFT && speed > differential) {
             speed -= differential;
         }
@@ -147,7 +146,7 @@ public class Motors4WD extends I2CDue {
         // motors[motor+2].setSpeed(pwm) ;
     }
 
-    void motorForward(int motor, int speed) throws IOException {
+    void motorForward(int motor, int speed) {
         motorSetSpeed(motor, speed);
         MotorsDC.CONFIG_MOTORS.write(arduino, CmdEnum.FORWARD.value + nroMotor(motor));
         I2CUtils.I2Cdelay(50);
@@ -158,7 +157,7 @@ public class Motors4WD extends I2CDue {
         //motors[motor+2].run(FORWARD);   
     }
 
-    void motorReverse(int motor, int speed) throws IOException {
+    void motorReverse(int motor, int speed) {
         motorSetSpeed(motor, speed);
         MotorsDC.CONFIG_MOTORS.write(arduino, CmdEnum.BACKWARD.value + nroMotor(motor));
         I2CUtils.I2Cdelay(50);
@@ -169,7 +168,7 @@ public class Motors4WD extends I2CDue {
         //motors[motor+2].run(BACKWARD);   
     }
 
-    void motorStop(int motor) throws IOException {
+    void motorStop(int motor) {
         // todo set speed to 0 ???
         motorSetSpeed(motor, 0);
         MotorsDC.CONFIG_MOTORS.write(arduino, CmdEnum.RELEASE.value + nroMotor(motor));

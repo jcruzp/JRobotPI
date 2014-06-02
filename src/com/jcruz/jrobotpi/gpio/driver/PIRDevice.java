@@ -25,14 +25,13 @@ public class PIRDevice {
      * Define GPIO pin to listen for move detected
      *
      * @param pirGPIO
-     * @throws IOException
      */
-    public PIRDevice(int pirGPIO){
+    public PIRDevice(int pirGPIO) {
         try {
             pir = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
                     0, pirGPIO, GPIOPinConfig.DIR_INPUT_ONLY, GPIOPinConfig.MODE_INPUT_PULL_DOWN,
                     GPIOPinConfig.TRIGGER_RISING_EDGE, false));
-            
+
             I2CUtils.I2Cdelay(3000);    //wait for 3 seconds
         } catch (IOException ex) {
             Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
@@ -44,7 +43,6 @@ public class PIRDevice {
      * config by PIR
      *
      * @param pirListener
-     * @throws IOException
      */
     public void setListener(PinListener pirListener) {
         try {
@@ -57,7 +55,6 @@ public class PIRDevice {
     /**
      * Free PIR GPIO
      *
-     * @throws IOException
      */
     public void close() {
         try {

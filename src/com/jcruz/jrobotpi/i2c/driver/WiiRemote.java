@@ -6,9 +6,6 @@ package com.jcruz.jrobotpi.i2c.driver;
 import com.jcruz.jrobotpi.i2c.I2CDue;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.Wii;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jdk.dio.i2cbus.I2CDevice;
 
 /**
@@ -63,7 +60,7 @@ public class WiiRemote extends I2CDue {
          * Read the x-axis on the Nunchuck joystick.
          */
         HatX {
-                    int getHat(I2CDevice arduino) throws IOException {
+                    int getHat(I2CDevice arduino) {
                         return Wii.READ_JOYX.read(arduino);
                     }
                 },
@@ -71,12 +68,12 @@ public class WiiRemote extends I2CDue {
          * Read the y-axis on the Nunchuck joystick.
          */
         HatY {
-                    int getHat(I2CDevice arduino) throws IOException {
+                    int getHat(I2CDevice arduino) {
                         return Wii.READ_JOYY.read(arduino);
                     }
                 };
 
-        abstract int getHat(I2CDevice arduino) throws IOException;
+        abstract int getHat(I2CDevice arduino);
     };
 
     /**
@@ -191,9 +188,8 @@ public class WiiRemote extends I2CDue {
      *
      * @param b
      * @return Group 1 buttons pressed
-     * @throws IOException
      */
-    public boolean getButton1Press(Button1Enum b) throws IOException {
+    public boolean getButton1Press(Button1Enum b) {
         return (Wii.READ_BUTTONS1.read(arduino) & b.value) == b.value;
     }
 
@@ -201,9 +197,8 @@ public class WiiRemote extends I2CDue {
      *
      * @param b
      * @return Group 2 buttons pressed
-     * @throws IOException
      */
-    public boolean getButton2Press(Button2Enum b) throws IOException {
+    public boolean getButton2Press(Button2Enum b) {
         return (Wii.READ_BUTTONS2.read(arduino) & b.value) == b.value;
     }
 
@@ -212,9 +207,8 @@ public class WiiRemote extends I2CDue {
      *
      * @param a Either ::HatX or ::HatY.
      * @return Return the analog value in the range from approximately 25-230.
-     * @throws java.io.IOException
      */
-    public int getAnalogHat(HatEnum a) throws IOException {
+    public int getAnalogHat(HatEnum a) {
         return a.getHat(arduino);
     }
 
@@ -223,9 +217,8 @@ public class WiiRemote extends I2CDue {
      * Motion Plus is connected.
      *
      * @return Pitch in the range from 0-360.
-     * @throws java.io.IOException
      */
-    public float getPitch() throws IOException {
+    public float getPitch() {
         return Wii.READ_GYRO_PITCH.readFloatArduino(arduino);
     }
 
@@ -234,9 +227,8 @@ public class WiiRemote extends I2CDue {
      * Motion Plus is connected.
      *
      * @return Roll in the range from 0-360.
-     * @throws java.io.IOException
      */
-    public float getRoll() throws IOException {
+    public float getRoll() {
         return Wii.READ_GYRO_ROLL.readFloatArduino(arduino);
     }
 
@@ -247,18 +239,16 @@ public class WiiRemote extends I2CDue {
      * Motion Plus extension is connected.
      *
      * @return The angle calculated using the gyro.
-     * @throws java.io.IOException
      */
-    public float getYaw() throws IOException {
+    public float getYaw() {
         return Wii.READ_GYRO_YAW.readFloatArduino(arduino);
     }
 
     /**
      * Used to set all LEDs and rumble off.
      *
-     * @throws java.io.IOException
      */
-    public void setAllOff() throws IOException {
+    public void setAllOff() {
         ledRumbleStatus = 0;
         Wii.LEDS_RUMBLE.write(arduino, (byte) LEDEnum.OFF.value);
     }
@@ -266,9 +256,8 @@ public class WiiRemote extends I2CDue {
     /**
      * Turn off rumble.
      *
-     * @throws java.io.IOException
      */
-    public void setRumbleOff() throws IOException {
+    public void setRumbleOff() {
         ledRumbleStatus &= (byte) (~LEDEnum.RUMBLE.value);
         Wii.LEDS_RUMBLE.write(arduino, ledRumbleStatus);
     }
@@ -276,9 +265,8 @@ public class WiiRemote extends I2CDue {
     /**
      * Turn on rumble.
      *
-     * @throws java.io.IOException
      */
-    public void setRumbleOn() throws IOException {
+    public void setRumbleOn() {
         ledRumbleStatus |= (byte) (LEDEnum.RUMBLE.value);
         Wii.LEDS_RUMBLE.write(arduino, ledRumbleStatus);
     }
@@ -287,9 +275,8 @@ public class WiiRemote extends I2CDue {
      * Turn the specific ::LEDEnum off.
      *
      * @param a The ::LEDEnum to turn off.
-     * @throws java.io.IOException
      */
-    public void setLedOff(LEDEnum a) throws IOException {
+    public void setLedOff(LEDEnum a) {
         ledRumbleStatus &= (byte) (~a.value);
         Wii.LEDS_RUMBLE.write(arduino, ledRumbleStatus);
     }
@@ -298,9 +285,8 @@ public class WiiRemote extends I2CDue {
      * Turn the specific ::LEDEnum on.
      *
      * @param a The ::LEDEnum to turn on.
-     * @throws java.io.IOException
      */
-    public void setLedOn(LEDEnum a) throws IOException {
+    public void setLedOn(LEDEnum a) {
         ledRumbleStatus |= (byte) (a.value);
         Wii.LEDS_RUMBLE.write(arduino, ledRumbleStatus);
     }
@@ -309,9 +295,8 @@ public class WiiRemote extends I2CDue {
      * Return the battery level of the Wiimote.
      *
      * @return The battery level in the range 0-255.
-     * @throws java.io.IOException
      */
-    public int getBatteryLevel() throws IOException {
+    public int getBatteryLevel() {
         return Wii.READ_BATTERY.read(arduino);
     }
 
@@ -319,9 +304,8 @@ public class WiiRemote extends I2CDue {
      * Pitch and roll calculated from the accelerometer inside the Wiimote.
      *
      * @return
-     * @throws java.io.IOException
      */
-    public double getWiimotePitch() throws IOException {
+    public double getWiimotePitch() {
         accYwiimote = Wii.READ_ACCEL_WRY.readShortArduino(arduino);
         I2CUtils.I2Cdelay(1);
         accZwiimote = Wii.READ_ACCEL_WRZ.readShortArduino(arduino);
@@ -330,9 +314,9 @@ public class WiiRemote extends I2CDue {
 
     /**
      *
-     * @return @throws IOException
+     * @return
      */
-    public double getWiimoteRoll() throws IOException {
+    public double getWiimoteRoll() {
         accXwiimote = Wii.READ_ACCEL_WRX.readShortArduino(arduino);
         I2CUtils.I2Cdelay(1);
         accZwiimote = Wii.READ_ACCEL_WRZ.readShortArduino(arduino);
@@ -343,10 +327,8 @@ public class WiiRemote extends I2CDue {
      * Pitch and roll calculated from the accelerometer inside the Nunchuck.
      *
      * @return
-     * @throws java.io.IOException
-     * @throws java.lang.InterruptedException
      */
-    public double getNunchuckPitch() throws IOException {
+    public double getNunchuckPitch() {
         accYnunchuck = Wii.READ_ACCEL_NCY.readShortArduino(arduino);
         I2CUtils.I2Cdelay(1);
         accZnunchuck = Wii.READ_ACCEL_NCZ.readShortArduino(arduino);
@@ -355,10 +337,9 @@ public class WiiRemote extends I2CDue {
 
     /**
      *
-     * @return @throws IOException
-     * @throws InterruptedException
+     * @return
      */
-    public double getNunchuckRoll() throws IOException {
+    public double getNunchuckRoll() {
         accXnunchuck = Wii.READ_ACCEL_NCX.readShortArduino(arduino);
         I2CUtils.I2Cdelay(1);
         accZnunchuck = Wii.READ_ACCEL_NCZ.readShortArduino(arduino);

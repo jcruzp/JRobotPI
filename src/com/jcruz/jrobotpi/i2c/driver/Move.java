@@ -4,9 +4,6 @@
 package com.jcruz.jrobotpi.i2c.driver;
 
 import com.jcruz.jrobotpi.i2c.I2CUtils;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Define all movements for 4wd motors
@@ -76,9 +73,8 @@ public class Move extends Motors4WD {
     /**
      * Stop move
      *
-     * @throws IOException
      */
-    public void moveStop() throws IOException {
+    public void moveStop() {
         changeMoveState(MoveEnum.MOV_STOP);
         motorStop(MOTOR_LEFT);
         motorStop(MOTOR_RIGHT);
@@ -94,9 +90,8 @@ public class Move extends Motors4WD {
      * Set speed
      *
      * @param speed
-     * @throws IOException
      */
-    public void moveSetSpeed(int speed) throws IOException {
+    public void moveSetSpeed(int speed) {
         motorSetSpeed(MOTOR_LEFT, speed);
         motorSetSpeed(MOTOR_RIGHT, speed);
         moveSpeed = speed; // save the value
@@ -106,9 +101,8 @@ public class Move extends Motors4WD {
      * Decrement speed
      *
      * @param decrement
-     * @throws IOException
      */
-    public void moveSlower(int decrement) throws IOException {
+    public void moveSlower(int decrement) {
         //Serial.print(" Slower: ");
 //        if (moveSpeed >= speedIncrement + MIN_SPEED) {
 //            moveSpeed -= speedIncrement;
@@ -126,9 +120,8 @@ public class Move extends Motors4WD {
      * Increment speed
      *
      * @param increment
-     * @throws IOException
      */
-    public void moveFaster(int increment) throws IOException {
+    public void moveFaster(int increment) {
         //Serial.print(" Faster: ");
         moveSpeed += speedIncrement;
         if (moveSpeed > 100) {
@@ -148,9 +141,8 @@ public class Move extends Motors4WD {
     /**
      * Inicialize motors and stop them
      *
-     * @throws IOException
      */
-    public void moveBegin() throws IOException {
+    public void moveBegin() {
         motorBegin(MOTOR_LEFT);
         motorBegin(MOTOR_RIGHT);
         moveStop();
@@ -159,9 +151,8 @@ public class Move extends Motors4WD {
     /**
      * Move Left
      *
-     * @throws IOException
      */
-    public void moveLeft() throws IOException {
+    public void moveLeft() {
         changeMoveState(MoveEnum.MOV_LEFT);
         motorForward(MOTOR_LEFT, 0);
         motorForward(MOTOR_RIGHT, moveSpeed);
@@ -170,9 +161,8 @@ public class Move extends Motors4WD {
     /**
      * Move Right
      *
-     * @throws IOException
      */
-    public void moveRight() throws IOException {
+    public void moveRight() {
         changeMoveState(MoveEnum.MOV_RIGHT);
         motorForward(MOTOR_LEFT, moveSpeed);
         motorForward(MOTOR_RIGHT, 0);
@@ -181,9 +171,8 @@ public class Move extends Motors4WD {
     /**
      * Move Forward
      *
-     * @throws IOException
      */
-    public void moveForward() throws IOException {
+    public void moveForward() {
         changeMoveState(MoveEnum.MOV_FORWARD);
         motorForward(MOTOR_LEFT, moveSpeed);
         motorForward(MOTOR_RIGHT, moveSpeed);
@@ -192,9 +181,8 @@ public class Move extends Motors4WD {
     /**
      * Move Backward
      *
-     * @throws IOException
      */
-    public void moveBackward() throws IOException {
+    public void moveBackward() {
         changeMoveState(MoveEnum.MOV_BACK);
         motorReverse(MOTOR_LEFT, moveSpeed);
         motorReverse(MOTOR_RIGHT, moveSpeed);
@@ -216,9 +204,8 @@ public class Move extends Motors4WD {
      * check for obstacles while delaying the given duration in ms
      *
      * @param duration
-     * @throws IOException
      */
-    public void movingDelay(long duration) throws IOException {
+    public void movingDelay(long duration) {
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime < duration) {
             // function in Look module checks for obstacle in direction of movement
@@ -240,9 +227,8 @@ public class Move extends Motors4WD {
      *
      * @param direction
      * @param duration
-     * @throws java.io.IOException
      */
-    public void timedMove(MoveEnum direction, int duration) throws IOException {
+    public void timedMove(MoveEnum direction, int duration) {
         //Serial.print("Timed move ");
         if (direction == MoveEnum.MOV_FORWARD) {
             //Serial.println("forward");
@@ -295,10 +281,8 @@ public class Move extends Motors4WD {
      *
      * @param direction
      * @param angle
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public void calibrateRotationRate(int direction, int angle) throws IOException, InterruptedException {
+    public void calibrateRotationRate(int direction, int angle) {
         //Serial.print(locationString[direction]);
         //Serial.println(" calibration" );
         for (int speed = MIN_SPEED; speed <= 100; speed += SPEED_TABLE_INTERVAL) {
@@ -325,7 +309,7 @@ public class Move extends Motors4WD {
 //    Serial.print(" for ");
 //    Serial.print(time);
 //    Serial.println("ms");
-            I2CUtils.I2Cdelay((int)time);
+            I2CUtils.I2Cdelay((int) time);
             motorStop(MOTOR_LEFT);
             motorStop(MOTOR_RIGHT);
             I2CUtils.I2Cdelay(2000); // two second delay between speeds
@@ -336,9 +320,8 @@ public class Move extends Motors4WD {
      * Move Rotate
      *
      * @param angle
-     * @throws IOException
      */
-    public void moveRotate(int angle) throws IOException {
+    public void moveRotate(int angle) {
         changeMoveState(MoveEnum.MOV_ROTATE);
         //Serial.print("Rotating ");  Serial.println(angle);
         if (angle < 0) {

@@ -95,9 +95,8 @@ public class VCNL4000Device extends I2CRpi {
     /**
      *
      * @param cur
-     * @throws IOException
      */
-    public void setLEDcurrent(byte cur) throws IOException {
+    public void setLEDcurrent(byte cur) {
         if ((cur > 20) || (cur < 0)) {
             cur = 5; //# setting this to 50mA; online ppl report trouble with I2C bus at over 60mA
         }      //more here: http://forums.adafruit.com/viewtopic.php?f=19&t=24263&p=125769&hilit=vcnl#p125769
@@ -107,9 +106,8 @@ public class VCNL4000Device extends I2CRpi {
     /**
      * Activate continuous conversion
      *
-     * @throws IOException
      */
-    public void continuousConversionOn() throws IOException {
+    public void continuousConversionOn() {
 
         VCNL4000.AMBIENTPARAMETER.write(device, (byte) 0x89);
     }
@@ -117,9 +115,8 @@ public class VCNL4000Device extends I2CRpi {
     /**
      * Deactivate continuous conversion
      *
-     * @throws IOException
      */
-    public void continuousConversionOff() throws IOException {
+    public void continuousConversionOff() {
         VCNL4000.AMBIENTPARAMETER.write(device, (byte) 0x09);
     }
 
@@ -127,9 +124,8 @@ public class VCNL4000Device extends I2CRpi {
      * Set IR Frequency
      *
      * @param freq
-     * @throws IOException
      */
-    public void setSignalFreq(Freq freq) throws IOException {
+    public void setSignalFreq(Freq freq) {
         //# Setting the proximity IR test signal frequency. The proximity measurement is using a square IR 
         //# signal as measurement signal. Four different values are possible: 
         //# 00 = 3.125 MHz
@@ -142,37 +138,34 @@ public class VCNL4000Device extends I2CRpi {
     /**
      * Get IR IR Frequency
      *
-     * @return @throws IOException
+     * @return
      */
-    public int getSignalFreq() throws IOException {
+    public int getSignalFreq() {
         return VCNL4000.SIGNALFREQ.read(device);
     }
 
     /**
      * Adjust Proximity
      *
-     * @throws IOException
      */
-    public void setProximityAdjust() throws IOException {
+    public void setProximityAdjust() {
         VCNL4000.PROXIMITYADJUST.write(device, (byte) 0x81);
     }
 
     /**
      * Get Proximity
      *
-     * @return @throws IOException
+     * @return
      */
-    public int getProximityAdjust() throws IOException {
+    public int getProximityAdjust() {
         return VCNL4000.PROXIMITYADJUST.read(device);
     }
 
     /**
      *
      * @return proximity from object to device in cms
-     * @throws java.io.IOException
-     * @throws InterruptedException
      */
-    public short readProximity() throws IOException, InterruptedException {
+    public short readProximity() {
         byte temp = (byte) VCNL4000.COMMAND.read(device);
 
         VCNL4000.COMMAND.write(device, (byte) (temp | VCNL4000.MEASUREPROXIMITY.cmd));
@@ -192,9 +185,8 @@ public class VCNL4000Device extends I2CRpi {
     /**
      *
      * @return Ambient light indicator
-     * @throws java.io.IOException
      */
-    public short readAmbientLight() throws IOException {
+    public short readAmbientLight() {
         // read ambient light!
         byte temp = (byte) VCNL4000.COMMAND.read(device);
 
@@ -210,7 +202,7 @@ public class VCNL4000Device extends I2CRpi {
                 return data;
             }
 
-             I2CUtils.I2Cdelay(10);
+            I2CUtils.I2Cdelay(10);
         }
     }
 

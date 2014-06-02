@@ -7,8 +7,6 @@ import com.jcruz.jrobotpi.i2c.I2CRpi;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.PCA9685;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Control all servos connected to PCA9685
@@ -41,9 +39,8 @@ public class PCA9685Device extends I2CRpi {
     /**
      * Inicialize PWM
      *
-     * @throws IOException
      */
-    public void reset() throws IOException {
+    public void reset() {
         PCA9685.MODE1.write(device, (byte) 0x0);
     }
 
@@ -51,9 +48,8 @@ public class PCA9685Device extends I2CRpi {
      * Set PWM Frequency
      *
      * @param freq
-     * @throws IOException
      */
-    public void setPWMFreq(float freq) throws IOException {
+    public void setPWMFreq(float freq) {
         //Serial.print("Attempting to set freq ");
         //Serial.println(freq);
 
@@ -72,7 +68,7 @@ public class PCA9685Device extends I2CRpi {
         PCA9685.MODE1.write(device, (byte) newmode); // go to sleep
         PCA9685.PRESCALE.write(device, (byte) prescale); // set the prescaler
         PCA9685.MODE1.write(device, (byte) oldmode);
-        
+
         I2CUtils.I2Cdelay(5);
         PCA9685.MODE1.write(device, (byte) (oldmode | 0x80));  //  This sets the MODE1 register to turn on auto increment.
         // This is why the beginTransmission below was not working.
@@ -85,9 +81,8 @@ public class PCA9685Device extends I2CRpi {
      * @param num
      * @param on
      * @param off
-     * @throws IOException
      */
-    public void setPWM(byte num, short on, short off) throws IOException {
+    public void setPWM(byte num, short on, short off) {
         I2CUtils.write(device, (byte) (PCA9685.LED0_ON_L.cmd + 4 * num), (byte) (on & 0xFF));
 
         I2CUtils.write(device, (byte) (PCA9685.LED0_ON_H.cmd + 4 * num), (byte) (on >> 8));

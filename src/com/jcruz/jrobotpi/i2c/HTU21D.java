@@ -3,7 +3,6 @@
  */
 package com.jcruz.jrobotpi.i2c;
 
-import java.io.IOException;
 import jdk.dio.i2cbus.I2CDevice;
 
 /**
@@ -56,9 +55,8 @@ public enum HTU21D {
      *
      * @param device
      * @return
-     * @throws IOException
      */
-    public int read(I2CDevice device) throws IOException {
+    public int read(I2CDevice device) {
         return I2CUtils.read(device, this.cmd);
     }
 
@@ -67,9 +65,8 @@ public enum HTU21D {
      *
      * @param device
      * @return
-     * @throws IOException
      */
-    public short readShort(I2CDevice device) throws IOException {
+    public short readShort(I2CDevice device) {
         return I2CUtils.readShort(device, this.cmd);
     }
 
@@ -78,9 +75,8 @@ public enum HTU21D {
      *
      * @param device
      * @param value
-     * @throws IOException
      */
-    public void write(I2CDevice device, byte value) throws IOException {
+    public void write(I2CDevice device, byte value) {
         I2CUtils.write(device, (byte) this.cmd, value);
     }
 

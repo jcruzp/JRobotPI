@@ -3,7 +3,6 @@
  */
 package com.jcruz.jrobotpi.i2c;
 
-import java.io.IOException;
 import jdk.dio.i2cbus.I2CDevice;
 
 /**
@@ -84,9 +83,8 @@ public enum Wii {
      *
      * @param device
      * @return
-     * @throws IOException
      */
-    public int read(I2CDevice device) throws IOException {
+    public int read(I2CDevice device) {
         return I2CUtils.read(device, this.cmd);
     }
 
@@ -94,9 +92,8 @@ public enum Wii {
      *
      * @param device
      * @return
-     * @throws IOException
      */
-    public float readFloatArduino(I2CDevice device) throws IOException {
+    public float readFloatArduino(I2CDevice device) {
         return I2CUtils.readFloatArduino(device, this.cmd);
     }
 
@@ -104,9 +101,8 @@ public enum Wii {
      *
      * @param device
      * @return
-     * @throws IOException
      */
-    public short readShortArduino(I2CDevice device) throws IOException {
+    public short readShortArduino(I2CDevice device) {
         return I2CUtils.readShortArduino(device, this.cmd);
     }
 
@@ -114,9 +110,8 @@ public enum Wii {
      *
      * @param device
      * @param value
-     * @throws IOException
      */
-    public void write(I2CDevice device, byte value) throws IOException {
+    public void write(I2CDevice device, byte value) {
         I2CUtils.write(device, this.cmd, value);
     }
 }

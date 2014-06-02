@@ -308,24 +308,22 @@ public class JRobotPI extends MIDlet {
         @Override
         public void run() {
             int celsius = 0, fahrenheit = 0, hectorPascal = 0, inchesMercury = 0;
-            try {
-                short amb = vcnl4000.readAmbientLight();
-                xively.updateValue("Ambient_Light", String.valueOf(amb));
 
-                xively.updateValue("Humidity", String.valueOf((int) htu21d.readHumidity()));
+            short amb = vcnl4000.readAmbientLight();
+            xively.updateValue("Ambient_Light", String.valueOf(amb));
 
-                xively.updateValue("RPI_Temperature", String.valueOf((int) htu21d.readTemperature()));
+            xively.updateValue("Humidity", String.valueOf((int) htu21d.readHumidity()));
 
-                float[] result = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
-                celsius = (int) result[0];
-                xively.updateValue("Temperature", String.valueOf(celsius));
-                //fahrenheit = BMP180Device.celsiusToFahrenheit(celsius);
-                hectorPascal = (int) result[1];
-                xively.updateValue("Pressure", String.valueOf(hectorPascal));
+            xively.updateValue("RPI_Temperature", String.valueOf((int) htu21d.readTemperature()));
+
+            float[] result = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
+            celsius = (int) result[0];
+            xively.updateValue("Temperature", String.valueOf(celsius));
+            //fahrenheit = BMP180Device.celsiusToFahrenheit(celsius);
+            hectorPascal = (int) result[1];
+            xively.updateValue("Pressure", String.valueOf(hectorPascal));
                 //inchesMercury = BMP180Device.pascalToInchesMercury(hectorPascal);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+
             //System.out.format("Temperature: %.2f C, %.2f F\n", celsius, fahrenheit);
             //System.out.format("Pressure: %.2f hPa, %.2f inHg\n\n", hectorPascal, inchesMercury);
         }
@@ -338,23 +336,19 @@ public class JRobotPI extends MIDlet {
      */
     @Override
     public void destroyApp(boolean unconditional) {
-        try {
-            emic2.write(emic2Msgs[12]);
-            if (task != null) {
-                task.cancel();
-            }
-            pir.close();
-            vcnl4000.close();
-            servo.close();
-            move.close();
-            wiiremote.close();
-            htu21d.close();
-            bmp180.close();
-            hcsr04.close();
-            emic2.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        emic2.write(emic2Msgs[12]);
+        if (task != null) {
+            task.cancel();
         }
+        pir.close();
+        vcnl4000.close();
+        servo.close();
+        move.close();
+        wiiremote.close();
+        htu21d.close();
+        bmp180.close();
+        hcsr04.close();
+        emic2.close();
 
     }
 }

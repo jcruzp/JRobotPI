@@ -5,7 +5,6 @@
  */
 package com.jcruz.jrobotpi.i2c;
 
-import java.io.IOException;
 import jdk.dio.i2cbus.I2CDevice;
 
 /**
@@ -35,9 +34,8 @@ public enum MotorsDC {
      *
      * @param device
      * @param value
-     * @throws IOException
      */
-    public void write(I2CDevice device, int value) throws IOException {
+    public void write(I2CDevice device, int value) {
         I2CUtils.write(device, this.cmd, (byte) value);
     }
 }

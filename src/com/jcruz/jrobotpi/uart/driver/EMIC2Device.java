@@ -71,7 +71,6 @@ public class EMIC2Device {
     /**
      *
      * @param cad String to send to Emic-2
-     * @throws IOException
      */
     public void write(String cad) {
         cad = cad.concat("\r\n");
@@ -100,14 +99,13 @@ public class EMIC2Device {
     /**
      * Free Uart resource
      *
-     * @throws IOException
      */
-    public void close(){
+    public void close() {
         try {
             uart.close();
         } catch (IOException ex) {
             Logger.getLogger(EMIC2Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-        } 
+        }
     }
 
 }

@@ -4,6 +4,8 @@
 package com.jcruz.jrobotpi.i2c;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jdk.dio.DeviceConfig;
 import jdk.dio.DeviceManager;
 import jdk.dio.i2cbus.I2CDevice;
@@ -41,9 +43,12 @@ public class I2CRpi {
     /**
      * free device resource
      *
-     * @throws IOException
      */
-    public void close() throws IOException {
-        device.close();
+    public void close() {
+        try {
+            device.close();
+        } catch (IOException ex) {
+            Logger.getLogger(I2CRpi.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+        }
     }
 }

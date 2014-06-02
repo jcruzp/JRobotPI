@@ -60,9 +60,8 @@ public class TPA2016Device extends I2CRpi {
      * Set the gain in dB!
      *
      * @param g
-     * @throws IOException
      */
-    public void setGain(byte g) throws IOException {
+    public void setGain(byte g) {
         if (g > 30) {
             g = 30;
         }
@@ -76,9 +75,9 @@ public class TPA2016Device extends I2CRpi {
     /**
      * for querying the gain, returns in dB
      *
-     * @return @throws IOException
+     * @return
      */
-    public byte getGain() throws IOException {
+    public byte getGain() {
 
         return ((byte) TPA2016.GAIN.read(device));
     }
@@ -88,9 +87,8 @@ public class TPA2016Device extends I2CRpi {
      *
      * @param r
      * @param l
-     * @throws IOException
      */
-    public void enableChannel(boolean r, boolean l) throws IOException {
+    public void enableChannel(boolean r, boolean l) {
 
         byte setup = (byte) TPA2016.SETUP.read(device);
         if (r) {
@@ -111,9 +109,8 @@ public class TPA2016Device extends I2CRpi {
      * Set to OFF, 1:2, 1:4 or 1:8
      *
      * @param x
-     * @throws IOException
      */
-    public void setAGCCompression(AGCComp x) throws IOException {
+    public void setAGCCompression(AGCComp x) {
         if (x.value > 3) {
             return; // only 2 bits!
         }
@@ -126,9 +123,8 @@ public class TPA2016Device extends I2CRpi {
     /**
      *
      * @param release
-     * @throws IOException
      */
-    public void setReleaseControl(byte release) throws IOException {
+    public void setReleaseControl(byte release) {
         if (release > 0x3F) {
             return; // only 6 bits!
         }
@@ -138,9 +134,8 @@ public class TPA2016Device extends I2CRpi {
     /**
      *
      * @param attack
-     * @throws IOException
      */
-    public void setAttackControl(byte attack) throws IOException {
+    public void setAttackControl(byte attack) {
         if (attack > 0x3F) {
             return; // only 6 bits!
         }
@@ -150,9 +145,8 @@ public class TPA2016Device extends I2CRpi {
     /**
      *
      * @param hold
-     * @throws IOException
      */
-    public void setHoldControl(byte hold) throws IOException {
+    public void setHoldControl(byte hold) {
         if (hold > 0x3F) {
             return; // only 6 bits!
         }
@@ -162,9 +156,8 @@ public class TPA2016Device extends I2CRpi {
     /**
      * Turn on power limiter
      *
-     * @throws IOException
      */
-    public void setLimitLevelOn() throws IOException {
+    public void setLimitLevelOn() {
         byte agc = (byte) TPA2016.AGCLIMIT.read(device);
         agc &= ~(0x80);  // mask off top bit
         TPA2016.AGCLIMIT.write(device, agc);
@@ -173,9 +166,8 @@ public class TPA2016Device extends I2CRpi {
     /**
      * Turn off power limiter
      *
-     * @throws IOException
      */
-    public void setLimitLevelOff() throws IOException {
+    public void setLimitLevelOff() {
         byte agc = (byte) TPA2016.AGCLIMIT.read(device);
         agc |= 0x80;  // turn on top bit
         TPA2016.AGCLIMIT.write(device, agc);
@@ -185,9 +177,8 @@ public class TPA2016Device extends I2CRpi {
      * Set limit levels
      *
      * @param limit
-     * @throws IOException
      */
-    public void setLimitLevel(byte limit) throws IOException {
+    public void setLimitLevel(byte limit) {
         if (limit > 31) {
             return;
         }
@@ -203,9 +194,8 @@ public class TPA2016Device extends I2CRpi {
     /**
      *
      * @param x
-     * @throws IOException
      */
-    public void setAGCMaxGain(byte x) throws IOException {
+    public void setAGCMaxGain(byte x) {
         if (x > 12) {
             return; // max gain max is 12 (30dB)
         }

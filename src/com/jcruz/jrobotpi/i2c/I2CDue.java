@@ -4,6 +4,8 @@
 package com.jcruz.jrobotpi.i2c;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jdk.dio.DeviceManager;
 import jdk.dio.i2cbus.I2CDevice;
 import jdk.dio.i2cbus.I2CDeviceConfig;
@@ -35,20 +37,25 @@ public class I2CDue {
                     i2cdueAddress,
                     ADDR_SIZE_7,
                     100000);
+
             try {
                 arduino = (I2CDevice) DeviceManager.open(I2CDevice.class, config);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(I2CDue.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             }
+
         }
     }
 
     /**
      * Free connection to Arduino Due
      *
-     * @throws IOException
      */
-    public void close() throws IOException {
-        arduino.close();
+    public void close() {
+        try {
+            arduino.close();
+        } catch (IOException ex) {
+            Logger.getLogger(I2CDue.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+        }
     }
 }

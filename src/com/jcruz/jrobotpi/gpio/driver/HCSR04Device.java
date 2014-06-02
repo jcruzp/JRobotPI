@@ -31,7 +31,6 @@ public class HCSR04Device {
      *
      * @param _trigger
      * @param _echo
-     * @throws java.io.IOException
      */
     public HCSR04Device(int _trigger, int _echo) {
         try {
@@ -39,12 +38,12 @@ public class HCSR04Device {
             trigger = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
                     0, _trigger, GPIOPinConfig.DIR_OUTPUT_ONLY, GPIOPinConfig.MODE_OUTPUT_PUSH_PULL,
                     GPIOPinConfig.TRIGGER_NONE, false));// define device for echo pin at HCSR04
-        echo = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
-                0, _echo, GPIOPinConfig.DIR_INPUT_ONLY, GPIOPinConfig.MODE_INPUT_PULL_UP,
-                GPIOPinConfig.TRIGGER_NONE, false));
-        
+            echo = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
+                    0, _echo, GPIOPinConfig.DIR_INPUT_ONLY, GPIOPinConfig.MODE_INPUT_PULL_UP,
+                    GPIOPinConfig.TRIGGER_NONE, false));
+
             I2CUtils.I2Cdelay(500);  //wait for 0.5 seconds
-        
+
         } catch (IOException ex) {
             Logger.getLogger(HCSR04Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
         }
@@ -54,11 +53,10 @@ public class HCSR04Device {
      * Send a pulse to HCSR04 and compute the echo to obtain distance
      *
      * @return distance in cm/s
-     * @throws java.io.IOException
      */
     public double pulse() {
-        long distance=0;
-        long delta=0;
+        long distance = 0;
+        long delta = 0;
         try {
             trigger.setValue(true);         //Send a pulse trigger must be 1 and 0 with a 10 us wait
             I2CUtils.I2CdelayNano(0, PULSE);// wait 10 us
@@ -84,7 +82,6 @@ public class HCSR04Device {
     /**
      * free device GPIO
      *
-     * @throws IOException
      */
     public void close() {
         try {

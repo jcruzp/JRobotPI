@@ -64,10 +64,15 @@ public class BMP180Device extends I2CRpi {
      *
      * @throws IOException - If there is an I/O exception reading the device
      */
-    private void readCalibrationData() throws IOException {
+    private void readCalibrationData() {
         // Read all of the calibration data into a byte array
         ByteBuffer calibData = ByteBuffer.allocateDirect(CALIB_BYTES);
-        int result = device.read(BMP180.EEPROM_start.cmd, subAddressSize, calibData);
+        int result = 0;
+        try {
+            result = device.read(BMP180.EEPROM_start.cmd, subAddressSize, calibData);
+        } catch (IOException ex) {
+            Logger.getLogger(BMP180Device.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (result < CALIB_BYTES) {
             Logger.getGlobal().log(Level.SEVERE, "Error: {0} bytes read", result);
             return;
@@ -116,9 +121,8 @@ public class BMP180Device extends I2CRpi {
      * @param mode BMP180Mode
      * @return float array, element 0 = temperature Celsius, element 1 =
      * pressure, hPa
-     * @throws IOException - If there is an I/O exception reading the device
      */
-    public float[] getTemperaturePressure(BMP180Mode mode) throws IOException {
+    public float[] getTemperaturePressure(BMP180Mode mode) {
         float[] result = new float[2];
         result[0] = getTemperature();
         result[1] = getPressure(mode);
@@ -131,7 +135,7 @@ public class BMP180Device extends I2CRpi {
      * @return Temperature in degrees Celsius
      * @throws IOException - If there is an I/O exception reading the device
      */
-    private float getTemperature() throws IOException {
+    private float getTemperature() {
         Logger.getGlobal().log(Level.FINE, "Getting temperature");
         BMP180.controlRegister.write(device, (byte) BMP180.getTempCmd.cmd);
 
@@ -164,7 +168,7 @@ public class BMP180Device extends I2CRpi {
      * @return Pressure measures in hPa
      * @throws IOException - If there is an I/O exception reading the device
      */
-    private float getPressure(BMP180Mode mode) throws IOException {
+    private float getPressure(BMP180Mode mode) {
         Logger.getGlobal().log(Level.FINE, "Getting pressure");
         // The pressure command is calculated by the enum
         Logger.getGlobal().log(Level.FINE, "Mode: {0}", mode.name());
@@ -177,7 +181,12 @@ public class BMP180Device extends I2CRpi {
 
         // Read the uncompensated pressure value
         ByteBuffer uncompPress = ByteBuffer.allocateDirect(3);
-        int result = device.read(BMP180.pressAddr.cmd, subAddressSize, uncompPress);
+        int result = 0;
+        try {
+            result = device.read(BMP180.pressAddr.cmd, subAddressSize, uncompPress);
+        } catch (IOException ex) {
+            Logger.getLogger(BMP180Device.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (result < 3) {
             Logger.getGlobal().log(Level.SEVERE, "Error: {0} bytes read", result);
             return 0;
