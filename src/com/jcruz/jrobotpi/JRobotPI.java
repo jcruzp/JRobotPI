@@ -1,5 +1,5 @@
 /*
- * JRobotPI Java Firmaware v1.3.0
+ * JRobotPI Java Firmaware v2.0.0
  * State Machine to control Robot.
  * Use I2C bus for all sensors data and send data to Arduino Due with a I2C controller
  * to read all wii remote buttons and activate DC Motors.
