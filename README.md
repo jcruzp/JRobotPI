@@ -34,7 +34,7 @@ For now i have interface in java to this devices:
  Arduino Due (Dc Motors and Wii Remote Control)
 
 
-* I plan to work on this in the next days
+I plan to work on this in the next days
 More information see: https://sites.google.com/site/jrobotpi/hardware
 
 All sensors send data to Xively site and in this site I have defined a trigger for PIR_Motion device that listener to changes and send notifications to my Iphone using Prowl for that.
