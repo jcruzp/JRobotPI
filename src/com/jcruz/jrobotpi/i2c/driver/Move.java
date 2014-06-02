@@ -3,6 +3,7 @@
  */
 package com.jcruz.jrobotpi.i2c.driver;
 
+import com.jcruz.jrobotpi.i2c.I2CUtils;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -324,10 +325,10 @@ public class Move extends Motors4WD {
 //    Serial.print(" for ");
 //    Serial.print(time);
 //    Serial.println("ms");
-            Thread.sleep(time);
+            I2CUtils.I2Cdelay((int)time);
             motorStop(MOTOR_LEFT);
             motorStop(MOTOR_RIGHT);
-            Thread.sleep(2000); // two second delay between speeds
+            I2CUtils.I2Cdelay(2000); // two second delay between speeds
         }
     }
 

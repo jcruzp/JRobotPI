@@ -3,6 +3,7 @@
  */
 package com.jcruz.jrobotpi.gpio.driver;
 
+import com.jcruz.jrobotpi.i2c.I2CUtils;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,16 +27,15 @@ public class PIRDevice {
      * @param pirGPIO
      * @throws IOException
      */
-    public PIRDevice(int pirGPIO) throws IOException {
-        pir = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
-                0, pirGPIO, GPIOPinConfig.DIR_INPUT_ONLY, GPIOPinConfig.MODE_INPUT_PULL_DOWN,
-                GPIOPinConfig.TRIGGER_RISING_EDGE, false));
-
+    public PIRDevice(int pirGPIO){
         try {
-            Thread.sleep(3000);  //wait for 3 seconds
-            //System.out.println("PIR is ok...");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, null, ex);
+            pir = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
+                    0, pirGPIO, GPIOPinConfig.DIR_INPUT_ONLY, GPIOPinConfig.MODE_INPUT_PULL_DOWN,
+                    GPIOPinConfig.TRIGGER_RISING_EDGE, false));
+            
+            I2CUtils.I2Cdelay(3000);    //wait for 3 seconds
+        } catch (IOException ex) {
+            Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
         }
     }
 
@@ -46,8 +46,12 @@ public class PIRDevice {
      * @param pirListener
      * @throws IOException
      */
-    public void setListener(PinListener pirListener) throws IOException {
-        pir.setInputListener(pirListener);
+    public void setListener(PinListener pirListener) {
+        try {
+            pir.setInputListener(pirListener);
+        } catch (IOException ex) {
+            Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+        }
     }
 
     /**
@@ -55,7 +59,11 @@ public class PIRDevice {
      *
      * @throws IOException
      */
-    public void close() throws IOException {
-        pir.close();
+    public void close() {
+        try {
+            pir.close();
+        } catch (IOException ex) {
+            Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+        }
     }
 }

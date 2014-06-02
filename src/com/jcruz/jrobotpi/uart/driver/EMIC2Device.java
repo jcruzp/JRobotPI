@@ -62,7 +62,7 @@ public class EMIC2Device {
 //                        System.out.println(buffer.get(i));
                     waitForEmic = !((buffer.get(1) == 0x3A) || (buffer.get(2) == 0x3A));
                 } catch (IOException ex) {
-                    Logger.getLogger(EMIC2Device.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(EMIC2Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
                 }
             }
         }
@@ -73,12 +73,16 @@ public class EMIC2Device {
      * @param cad String to send to Emic-2
      * @throws IOException
      */
-    public void write(String cad) throws IOException {
+    public void write(String cad) {
         cad = cad.concat("\r\n");
         ByteBuffer buffer = ByteBuffer.allocateDirect(cad.length());
         buffer.put(cad.getBytes());
         buffer.clear();
-        uart.write(buffer);
+        try {
+            uart.write(buffer);
+        } catch (IOException ex) {
+            Logger.getLogger(EMIC2Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+        }
         waitResponse();
     }
 
@@ -98,8 +102,12 @@ public class EMIC2Device {
      *
      * @throws IOException
      */
-    public void close() throws IOException {
-        uart.close();
+    public void close(){
+        try {
+            uart.close();
+        } catch (IOException ex) {
+            Logger.getLogger(EMIC2Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+        } 
     }
 
 }

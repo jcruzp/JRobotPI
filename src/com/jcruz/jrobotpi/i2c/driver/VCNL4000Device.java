@@ -4,6 +4,7 @@
 package com.jcruz.jrobotpi.i2c.driver;
 
 import com.jcruz.jrobotpi.i2c.I2CRpi;
+import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.VCNL4000;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -184,7 +185,7 @@ public class VCNL4000Device extends I2CRpi {
                 data = (short) (data | VCNL4000.PROXIMITYDATA2.read(device));
                 return data;
             }
-            Thread.sleep(10);
+            I2CUtils.I2Cdelay(10);
         }
     }
 
@@ -209,11 +210,7 @@ public class VCNL4000Device extends I2CRpi {
                 return data;
             }
 
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(VCNL4000Device.class.getName()).log(Level.SEVERE, null, ex);
-            }
+             I2CUtils.I2Cdelay(10);
         }
     }
 

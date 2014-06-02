@@ -5,6 +5,7 @@
  */
 package com.jcruz.jrobotpi.gpio.driver;
 
+import com.jcruz.jrobotpi.i2c.I2CUtils;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,20 +33,20 @@ public class HCSR04Device {
      * @param _echo
      * @throws java.io.IOException
      */
-    public HCSR04Device(int _trigger, int _echo) throws IOException {
-        // define device for trigger pin at HCSR04
-        trigger = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
-                0, _trigger, GPIOPinConfig.DIR_OUTPUT_ONLY, GPIOPinConfig.MODE_OUTPUT_PUSH_PULL,
-                GPIOPinConfig.TRIGGER_NONE, false));
-        // define device for echo pin at HCSR04
+    public HCSR04Device(int _trigger, int _echo) {
+        try {
+            // define device for trigger pin at HCSR04
+            trigger = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
+                    0, _trigger, GPIOPinConfig.DIR_OUTPUT_ONLY, GPIOPinConfig.MODE_OUTPUT_PUSH_PULL,
+                    GPIOPinConfig.TRIGGER_NONE, false));// define device for echo pin at HCSR04
         echo = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
                 0, _echo, GPIOPinConfig.DIR_INPUT_ONLY, GPIOPinConfig.MODE_INPUT_PULL_UP,
                 GPIOPinConfig.TRIGGER_NONE, false));
-
-        try {
-            Thread.sleep(500);  //wait for 0.5 seconds
-        } catch (InterruptedException ex) {
-            Logger.getLogger(HCSR04Device.class.getName()).log(Level.SEVERE, null, ex);
+        
+            I2CUtils.I2Cdelay(500);  //wait for 0.5 seconds
+        
+        } catch (IOException ex) {
+            Logger.getLogger(HCSR04Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
         }
     }
 
@@ -55,25 +56,28 @@ public class HCSR04Device {
      * @return distance in cm/s
      * @throws java.io.IOException
      */
-    public double pulse() throws IOException {
-        trigger.setValue(true);         //Send a pulse trigger must be 1 and 0 with a 10 us wait
+    public double pulse() {
+        long distance=0;
+        long delta=0;
         try {
-            Thread.sleep(0, PULSE);         // wait 10 us
-        } catch (InterruptedException ex) {
+            trigger.setValue(true);         //Send a pulse trigger must be 1 and 0 with a 10 us wait
+            I2CUtils.I2CdelayNano(0, PULSE);// wait 10 us
+            trigger.setValue(false);
+            long starttime = System.nanoTime(); //ns
+            long stop = starttime;
+            long start = starttime;
+            //echo will go 0 to 1 and I need save time for that. 2 seconds difference
+            while ((!echo.getValue()) && (start < starttime + 1000000000L * 2)) {
+                start = System.nanoTime();
+            }
+            while ((echo.getValue()) && (stop < starttime + 1000000000L * 2)) {
+                stop = System.nanoTime();
+            }
+            delta = (stop - start);
+            distance = delta * SPEEDOFSOUND;       // echo from 0 to 1 depending object distance
+        } catch (IOException ex) {
+            Logger.getLogger(HCSR04Device.class.getName()).log(Level.SEVERE, null, ex);
         }
-        trigger.setValue(false);
-        long starttime = System.nanoTime(); //ns
-        long stop = starttime;
-        long start = starttime;
-        //echo will go 0 to 1 and I need save time for that. 2 seconds difference
-        while ((!echo.getValue()) && (start < starttime + 1000000000L * 2)) {
-            start = System.nanoTime();
-        }
-        while ((echo.getValue()) && (stop < starttime + 1000000000L * 2)) {
-            stop = System.nanoTime();
-        }
-        long delta = (stop - start);
-        long distance = delta * SPEEDOFSOUND;       // echo from 0 to 1 depending object distance 
         return distance / 2.0 / (1000000000L); // cm/s
     }
 
@@ -82,8 +86,12 @@ public class HCSR04Device {
      *
      * @throws IOException
      */
-    public void close() throws IOException {
-        trigger.close();
-        echo.close();;
+    public void close() {
+        try {
+            trigger.close();
+            echo.close();;
+        } catch (IOException ex) {
+            Logger.getLogger(HCSR04Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+        }
     }
 }

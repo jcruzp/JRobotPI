@@ -24,7 +24,17 @@ public class I2CUtils {
         try {
             Thread.sleep(mili);
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+        }
+    }
+    
+    /**
+     *
+     * @param mili
+     */
+    public static void I2CdelayNano(int mili, int nano) {
+        try {
+            Thread.sleep(mili, nano);
+        } catch (InterruptedException ex) {
         }
     }
 

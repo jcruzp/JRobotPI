@@ -38,12 +38,8 @@ public class HTU21DDevice extends I2CRpi {
     public float readHumidity() throws IOException {
         device.write(HTU21D.TRIGGER_HUMD_MEASURE_NOHOLD.cmd);
 
-        try {
-            //Hang out while measurement is taken. 50mS max, page 4 of datasheet.
-            Thread.sleep(200);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //Hang out while measurement is taken. 50mS max, page 4 of datasheet.
+        I2CUtils.I2Cdelay(200);
 
         ByteBuffer rxBuf = ByteBuffer.allocateDirect(3);
         device.read(rxBuf);
@@ -82,12 +78,8 @@ public class HTU21DDevice extends I2CRpi {
      */
     public float readTemperature() throws IOException {
         device.write(HTU21D.TRIGGER_TEMP_MEASURE_NOHOLD.cmd);
-        try {
-            //Hang out while measurement is taken. 50mS max, page 4 of datasheet.
-            Thread.sleep(200);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //Hang out while measurement is taken. 50mS max, page 4 of datasheet.
+        I2CUtils.I2Cdelay(200);
 
         ByteBuffer rxBuf = ByteBuffer.allocateDirect(3);
         device.read(rxBuf);

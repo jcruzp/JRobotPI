@@ -72,11 +72,8 @@ public class PCA9685Device extends I2CRpi {
         PCA9685.MODE1.write(device, (byte) newmode); // go to sleep
         PCA9685.PRESCALE.write(device, (byte) prescale); // set the prescaler
         PCA9685.MODE1.write(device, (byte) oldmode);
-        try {
-            Thread.sleep(5);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(PCA9685Device.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        I2CUtils.I2Cdelay(5);
         PCA9685.MODE1.write(device, (byte) (oldmode | 0x80));  //  This sets the MODE1 register to turn on auto increment.
         // This is why the beginTransmission below was not working.
         //  Serial.print("Mode now 0x"); Serial.println(read8(PCA9685_MODE1), HEX);

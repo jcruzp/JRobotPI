@@ -4,6 +4,7 @@
 package com.jcruz.jrobotpi.i2c.driver;
 
 import com.jcruz.jrobotpi.i2c.I2CDue;
+import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.Wii;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -322,11 +323,7 @@ public class WiiRemote extends I2CDue {
      */
     public double getWiimotePitch() throws IOException {
         accYwiimote = Wii.READ_ACCEL_WRY.readShortArduino(arduino);
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(WiiRemote.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        I2CUtils.I2Cdelay(1);
         accZwiimote = Wii.READ_ACCEL_WRZ.readShortArduino(arduino);
         return Math.toDegrees((Math.atan2(accYwiimote, accZwiimote) + Math.PI));
     }
@@ -337,11 +334,7 @@ public class WiiRemote extends I2CDue {
      */
     public double getWiimoteRoll() throws IOException {
         accXwiimote = Wii.READ_ACCEL_WRX.readShortArduino(arduino);
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(WiiRemote.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        I2CUtils.I2Cdelay(1);
         accZwiimote = Wii.READ_ACCEL_WRZ.readShortArduino(arduino);
         return Math.toDegrees((Math.atan2(accXwiimote, accZwiimote) + Math.PI));
     }
@@ -353,9 +346,9 @@ public class WiiRemote extends I2CDue {
      * @throws java.io.IOException
      * @throws java.lang.InterruptedException
      */
-    public double getNunchuckPitch() throws IOException, InterruptedException {
+    public double getNunchuckPitch() throws IOException {
         accYnunchuck = Wii.READ_ACCEL_NCY.readShortArduino(arduino);
-        Thread.sleep(1);
+        I2CUtils.I2Cdelay(1);
         accZnunchuck = Wii.READ_ACCEL_NCZ.readShortArduino(arduino);
         return Math.toDegrees((Math.atan2(accYnunchuck, accZnunchuck) + Math.PI));
     }
@@ -365,9 +358,9 @@ public class WiiRemote extends I2CDue {
      * @return @throws IOException
      * @throws InterruptedException
      */
-    public double getNunchuckRoll() throws IOException, InterruptedException {
+    public double getNunchuckRoll() throws IOException {
         accXnunchuck = Wii.READ_ACCEL_NCX.readShortArduino(arduino);
-        Thread.sleep(1);
+        I2CUtils.I2Cdelay(1);
         accZnunchuck = Wii.READ_ACCEL_NCZ.readShortArduino(arduino);
         return Math.toDegrees((Math.atan2(accXnunchuck, accZnunchuck) + Math.PI));
     }

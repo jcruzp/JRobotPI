@@ -2,6 +2,7 @@ package com.jcruz.jrobotpi.i2c.driver;
 
 import com.jcruz.jrobotpi.i2c.BMP180;
 import com.jcruz.jrobotpi.i2c.I2CRpi;
+import com.jcruz.jrobotpi.i2c.I2CUtils;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
@@ -135,10 +136,7 @@ public class BMP180Device extends I2CRpi {
         BMP180.controlRegister.write(device, (byte) BMP180.getTempCmd.cmd);
 
         // Delay before reading the temperature
-        try {
-            Thread.sleep(tempConvTime);
-        } catch (InterruptedException ex) {
-        }
+        I2CUtils.I2Cdelay(tempConvTime);
 
         UT = BMP180.tempAddr.readShort(device);
         Logger.getGlobal().log(Level.FINE, "Uncompensated temperature: {0}", UT);
@@ -175,10 +173,7 @@ public class BMP180Device extends I2CRpi {
         BMP180.controlRegister.write(device, mode.getCommand());
 
         // Delay before reading the pressure - use the value determined by the oversampling setting (mode)
-        try {
-            Thread.sleep(mode.getDelay());
-        } catch (InterruptedException ex) {
-        }
+        I2CUtils.I2Cdelay(mode.getDelay());
 
         // Read the uncompensated pressure value
         ByteBuffer uncompPress = ByteBuffer.allocateDirect(3);
