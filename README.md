@@ -1,7 +1,7 @@
 JRobotPI
 ========
 
-JRobotPI.java
+#JRobotPI.java
 
 Java ME 8 Midlet program, is the firmware to control the robot and all sensors, dc motors, servos and utilities modules.
 Implements a framework for developers make all robotic applications and extend libraries.
@@ -9,17 +9,18 @@ All sensors have an interface implemented in Java, some was converted from Phyto
 Don´t have multiples layers for communicate with sensors only use java jdk.dio packages i2cbus, uart and gpio. All native java ME 8 clases was used.
 
 The packages defined are:
-com.jcruz.jrobotpi.i2c : enum classes with all commands supported by each i2c connected device or sensor.
-com.jcruz.jrobotpi.i2c.driver: implemented all commands defined in enum classes.
-com.jcruz.jrobotpi.gpio.driver: implemented commands defined for gpio connected devices.
-com.jcruz.jrobotpi.uart.driver: implemented commands defined for uart connected devices.
-com.jcruz.jrobotpi.http:  enum classes with all commands supported by each http connected device or site.
-com.jcruz.jrobotpi.http.driver:  implemented all commands defined in enum classes.
+
+**com.jcruz.jrobotpi.i2c** : enum classes with all commands supported by each i2c connected device or sensor.
+**com.jcruz.jrobotpi.i2c.driver** : implemented all commands defined in enum classes.
+**com.jcruz.jrobotpi.gpio.driver** : implemented commands defined for gpio connected devices.
+**com.jcruz.jrobotpi.uart.driver** : implemented commands defined for uart connected devices.
+**com.jcruz.jrobotpi.http** : enum classes with all commands supported by each http connected device or site.
+**com.jcruz.jrobotpi.http.driver** : implemented all commands defined in enum classes.
 
 Basicly we needs an enum class where with all defined or supported commands and a driver class that implements all commands.
 With Netbeans IDE 8.0 I can install and run MIdlet JRobotPI.java directly to Raspberry PI, that have installed a Oracle Java ME Embedded 8 for Raspberry Pi Model B. 
 
-
+
 For now i have interface in java to this devices:
 
 |Device|Interface Type|
@@ -43,34 +44,18 @@ All sensors send data to Xively site and in this site I have defined a trigger f
 https://xively.com/feeds/918735601
 
 
+#Due_I2C.ino
 
-
-
-Due_I2C.ino
 Arduino DUE program for proxy to I2C (address 0x04)
+
 It implements two callbacks functions:
-OnRequest: Wii Remote Control and NunChuk bluetooth interface to I2C bus.
-OnReceive: Dc Motors interface to I2C bus.
-See Due-I2C Register Map for more information.
-Notes:
-SparkFun USB Host Shield must be connected with wires to Due SPI connector.
-Usb Shield
-Due SPI
-Signal
-11
-4
-MOSI
-12
-1
-MISO
-13
-3
-SCK
-
-Pins 11, 12, 13 of USB Shield must be disconnected from the connector stacking Arduino Due
-The motors used have a lot of "brush noise". This feeds back into the Arduino circuitry and causes unstable operation. This problem can be solved by soldering 3 noise suppression capacitors to the motor. 1 between the motor terminals, and one from each terminal to the motor casing.
-
+	
+	OnRequest: Wii Remote Control and NunChuk bluetooth interface to I2C bus.
+	OnReceive: Dc Motors interface to I2C bus.
+	
 For more info see : 
-Block Diagram: https://sites.google.com/site/jrobotpi/hardware
-In the section Wii Remote Control Commands you can see all mapped buttons to commands.
-Schematics: https://sites.google.com/site/jrobotpi/hardware/schematics
+	
+	Block Diagram: https://sites.google.com/site/jrobotpi/hardware
+	In the section Wii Remote Control Commands you can see all mapped buttons to commands.
+	
+	Schematics: https://sites.google.com/site/jrobotpi/hardware/schematics
