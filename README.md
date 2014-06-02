@@ -55,12 +55,12 @@ Arduino DUE program for proxy to I2C (address 0x04)
 
 It implements two callbacks functions
 	
-	OnRequest: Wii Remote Control and NunChuk bluetooth interface to I2C bus.
-	OnReceive: Dc Motors interface to I2C bus.
+    OnRequest: Wii Remote Control and NunChuk bluetooth interface to I2C bus.
+    OnReceive: Dc Motors interface to I2C bus.
 	
 For more info see 
 	
-	Block Diagram: https://sites.google.com/site/jrobotpi/hardware
-	In the section Wii Remote Control Commands you can see all mapped buttons to commands.
+    Block Diagram: https://sites.google.com/site/jrobotpi/hardware
+    In the section Wii Remote Control Commands you can see all mapped buttons to commands.
 	
-	Schematics: https://sites.google.com/site/jrobotpi/hardware/schematics
+    Schematics: https://sites.google.com/site/jrobotpi/hardware/schematics
