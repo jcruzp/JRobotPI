@@ -4,15 +4,11 @@ JRobotPI
 JRobotPI.java
 
 Java ME 8 Midlet program, is the firmware to control the robot and all sensors, dc motors, servos and utilities modules.
-
 Implements a framework for developers make all robotic applications and extend libraries.
-
 All sensors have an interface implemented in Java, some was converted from Phyton others from Arduino C code. 
-
 Don´t have multiples layers for communicate with sensors only use java jdk.dio packages i2cbus, uart and gpio. All native java ME 8 clases was used.
 
 The packages defined are:
-
 com.jcruz.jrobotpi.i2c : enum classes with all commands supported by each i2c connected device or sensor.
 com.jcruz.jrobotpi.i2c.driver: implemented all commands defined in enum classes.
 com.jcruz.jrobotpi.gpio.driver: implemented commands defined for gpio connected devices.
@@ -21,53 +17,60 @@ com.jcruz.jrobotpi.http:  enum classes with all commands supported by each http 
 com.jcruz.jrobotpi.http.driver:  implemented all commands defined in enum classes.
 
 Basicly we needs an enum class where with all defined or supported commands and a driver class that implements all commands.
-
 With Netbeans IDE 8.0 I can install and run MIdlet JRobotPI.java directly to Raspberry PI, that have installed a Oracle Java ME Embedded 8 for Raspberry Pi Model B. 
 
 
 For now i have interface in java to this devices:
- Emic 2 Text-to-Speech module
- 
- Stereo 2.8W Class D Audio Amplifier - I2C Control AGC - TPA2016 
-  will be change by Sparkfun Mono Audio Amp Breakout - TPA2005D1 to   avoid interference  (not develop yet *)
-  
- VCNL4000 Proximity/Light sensor
- 
- BMP180 Barometric Pressure/Temperature/Altitude Sensor
- 
- HTU21D Humidity Sensor Breakout
- 
- Ultrasonic Ranging Detector Mod HC-SR04 Distance Sensor
- 
- hc-sr501 PIR
- 
- Adafruit 16-Channel 12-bit PWM/Servo Shield - I2C interface
- 
- EM406 - GPS receiver
- 
- Arduino Due (Dc Motors and Wii Remote Control)
- 
 
+|Device|Interface Type|
+--------------|---------------|
+|Emic 2 Text-to-Speech module|UART|
+|Stereo 2.8W Class D Audio Amplifier - I2C Control AGC - TPA2016 will be change by Sparkfun Mono Audio Amp Breakout - TPA2005D1 to   avoid interference  (not develop yet *)|I2C|
+|VCNL4000 Proximity/Light sensor|I2C|
+|BMP180 Barometric Pressure/Temperature/Altitude Sensor|I2C|
+|HTU21D Humidity Sensor Breakout|I2C|
+|HMC5883L Digital Compass Module Triple Axis Magnetoresistive Sensor Module|I2C (not develop yet *)|
+|Ultrasonic Ranging Detector Mod HC-SR04 Distance Sensor|GPIO|
+|hc-sr501 PIR|GPIO|
+|Adafruit 16-Channel 12-bit PWM/Servo Shield - I2C interface|I2C|
+|EM406 - GPS receiver|UART (not develop yet *)|
+|Arduino Due (Dc Motors and Wii Remote Control)|I2C|
 
-I plan to work on this in the next days
+* I plan to work on this in the next days
 More information see: https://sites.google.com/site/jrobotpi/hardware
 
 All sensors send data to Xively site and in this site I have defined a trigger for PIR_Motion device that listener to changes and send notifications to my Iphone using Prowl for that.
 https://xively.com/feeds/918735601
 
 
+
+
+
 Due_I2C.ino
-
 Arduino DUE program for proxy to I2C (address 0x04)
-
 It implements two callbacks functions:
+OnRequest: Wii Remote Control and NunChuk bluetooth interface to I2C bus.
+OnReceive: Dc Motors interface to I2C bus.
+See Due-I2C Register Map for more information.
+Notes:
+SparkFun USB Host Shield must be connected with wires to Due SPI connector.
+Usb Shield
+Due SPI
+Signal
+11
+4
+MOSI
+12
+1
+MISO
+13
+3
+SCK
 
-  OnRequest: Wii Remote Control and NunChuk bluetooth interface to I2C bus.
-  OnReceive: Dc Motors interface to I2C bus.
+Pins 11, 12, 13 of USB Shield must be disconnected from the connector stacking Arduino Due
+The motors used have a lot of "brush noise". This feeds back into the Arduino circuitry and causes unstable operation. This problem can be solved by soldering 3 noise suppression capacitors to the motor. 1 between the motor terminals, and one from each terminal to the motor casing.
 
 For more info see : 
-
-  Block Diagram: https://sites.google.com/site/jrobotpi/hardware
-  In the section Wii Remote Control Commands you can see all mapped buttons to commands.
-
-  Schematics: https://sites.google.com/site/jrobotpi/hardware/schematics
+Block Diagram: https://sites.google.com/site/jrobotpi/hardware
+In the section Wii Remote Control Commands you can see all mapped buttons to commands.
+Schematics: https://sites.google.com/site/jrobotpi/hardware/schematics
