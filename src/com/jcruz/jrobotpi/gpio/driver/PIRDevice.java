@@ -51,6 +51,17 @@ public class PIRDevice {
             Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
         }
     }
+    
+    /**
+     * Remove listener for GPIO pin of PIR
+     */
+    public void removeListener() {
+        try {
+            pir.setInputListener(null);
+        } catch (IOException ex) {
+            Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+        }
+    }
 
     /**
      * Free PIR GPIO

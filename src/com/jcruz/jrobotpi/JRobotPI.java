@@ -340,6 +340,7 @@ public class JRobotPI extends MIDlet {
         if (task != null) {
             task.cancel();
         }
+        pir.removeListener();
         pir.close();
         vcnl4000.close();
         servo.close();
