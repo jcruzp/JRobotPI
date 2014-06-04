@@ -34,7 +34,7 @@ For now i have interface in java to this devices:
 |VCNL4000 Proximity/Light sensor|I2C|
 |BMP180 Barometric Pressure/Temperature/Altitude Sensor|I2C|
 |HTU21D Humidity Sensor Breakout|I2C|
-|HMC5883L Digital Compass Module Triple Axis Magnetoresistive Sensor Module|I2C (not develop yet *)|
+|HMC5883L Digital Compass Module Triple Axis Magnetoresistive Sensor Module|I2C|
 |Ultrasonic Ranging Detector Mod HC-SR04 Distance Sensor|GPIO|
 |hc-sr501 PIR|GPIO|
 |Adafruit 16-Channel 12-bit PWM/Servo Shield - I2C interface|I2C|
