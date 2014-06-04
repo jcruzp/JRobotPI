@@ -18,10 +18,13 @@ import com.jcruz.jrobotpi.i2c.driver.PCA9685Device;
 import com.jcruz.jrobotpi.i2c.driver.TPA2016Device;
 import com.jcruz.jrobotpi.i2c.driver.VCNL4000Device;
 import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
+import com.jcruz.jrobotpi.log.LoggingHandler;
 import com.jcruz.jrobotpi.uart.driver.EMIC2Device;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.microedition.midlet.MIDlet;
 import jdk.dio.gpio.PinEvent;
 import jdk.dio.gpio.PinListener;
@@ -32,6 +35,7 @@ import jdk.dio.gpio.PinListener;
  */
 public class JRobotPI extends MIDlet {
 
+    private LoggingHandler loggerHandler = LoggingHandler.getInstance();
     private HCSR04Device hcsr04 = null;
     private final int trigger = 23;
     private final int echo = 17;
@@ -106,7 +110,11 @@ public class JRobotPI extends MIDlet {
     @Override
     public void startApp() {
         try {
-            System.out.println("Starting JRobotPI v1.3.0...");
+            loggerHandler.start();
+
+            Logger.getGlobal().log(Level.INFO, "************************************");
+            Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v1.3.0...  *");
+            Logger.getGlobal().log(Level.INFO, "************************************");
 
             emic2 = new EMIC2Device();
             I2CUtils.I2Cdelay(3000);
@@ -334,7 +342,6 @@ public class JRobotPI extends MIDlet {
      *
      * @param unconditional
      */
-    @Override
     public void destroyApp(boolean unconditional) {
         emic2.write(emic2Msgs[12]);
         if (task != null) {
@@ -350,6 +357,9 @@ public class JRobotPI extends MIDlet {
         bmp180.close();
         hcsr04.close();
         emic2.close();
+        if (loggerHandler != null) {
+            loggerHandler.stop();
+        }
 
     }
 }

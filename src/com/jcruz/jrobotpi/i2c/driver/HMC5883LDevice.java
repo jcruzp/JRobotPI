@@ -36,16 +36,16 @@ public class HMC5883LDevice extends I2CRpi {
 
     public class MagnetometerScaled {
 
-        float XAxis;
-        float YAxis;
-        float ZAxis;
+        public float XAxis;
+        public float YAxis;
+        public float ZAxis;
     };
 
     public class MagnetometerRaw {
 
-        int XAxis;
-        int YAxis;
-        int ZAxis;
+        public int XAxis;
+        public int YAxis;
+        public int ZAxis;
     };
 
     private static final int HMC5883L_ADDRESS = 0x1E;
@@ -62,7 +62,7 @@ public class HMC5883LDevice extends I2CRpi {
         try {
             device.read(HMC5883L.DataRegBegin.cmd, 1, buffer);
         } catch (IOException ex) {
-            Logger.getLogger(BMP180Device.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BMP180Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
         }
        
         // Read each of the pairs of data as a signed short
@@ -125,6 +125,38 @@ public class HMC5883LDevice extends I2CRpi {
     public void SetMeasurementMode(Measurement mode) {
         HMC5883L.ModeReg.write(device, mode.value);
        // Write(ModeRegister, mode);
+    }
+    
+    public double calculateHeading(){
+            MagnetometerRaw raw = ReadRawAxis();
+            // Retrived the scaled values from the compass (scaled to the configured scale).
+            MagnetometerScaled scaled = ReadScaledAxis();
+
+            // Values are accessed like so:
+            //int MilliGauss_OnThe_XAxis = scaled.XAxis;// (or YAxis, or ZAxis)
+
+            // Calculate heading when the magnetometer is level, then correct for signs of axis.
+            double heading = Math.atan2((double) scaled.YAxis, (double) scaled.XAxis);
+
+ // Once you have your heading, you must then add your 'Declination Angle', which is the 'Error' of the magnetic field in your location.
+            // Find yours here: http://www.magnetic-declination.com/
+            // Mine is: 2� 37' W, which is 2.617 Degrees, or (which we need) 0.0456752665 radians, I will use 0.0457
+            // If you cannot find your Declination, comment out these two lines, your compass will be slightly off.
+            double declinationAngle = - 0.2021672989739025;
+            heading += declinationAngle;
+
+            // Correct for when signs are reversed.
+            if (heading < 0) {
+                heading += 2 * Math.PI;
+            }
+
+            // Check for wrap due to addition of declination.
+            if (heading > 2 * Math.PI) {
+                heading -= 2 * Math.PI;
+            }
+
+            // Convert radians to degrees for readability.
+            return  heading * 180 / Math.PI;
     }
 
 //    public void HMC5883L::Write(int address, int data) {
