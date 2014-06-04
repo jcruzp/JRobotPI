@@ -35,7 +35,7 @@ public class TestHMC5883 extends MIDlet {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(TestHMC5883.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
 
     }

@@ -81,7 +81,7 @@ public class EMIC2Device {
 //                        System.out.println(buffer.get(i));
                     waitForEmic = !((buffer.get(1) == 0x3A) || (buffer.get(2) == 0x3A));
                 } catch (IOException ex) {
-                    Logger.getLogger(EMIC2Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+                    Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
                 }
             }
         }
@@ -99,7 +99,7 @@ public class EMIC2Device {
         try {
             uart.write(buffer);
         } catch (IOException ex) {
-            Logger.getLogger(EMIC2Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
         waitResponse();
     }
@@ -123,7 +123,7 @@ public class EMIC2Device {
         try {
             uart.close();
         } catch (IOException ex) {
-            Logger.getLogger(EMIC2Device.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
     }
 

@@ -34,7 +34,7 @@ public class PIRDevice {
 
             I2CUtils.I2Cdelay(3000);    //wait for 3 seconds
         } catch (IOException ex) {
-            Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
     }
 
@@ -48,7 +48,7 @@ public class PIRDevice {
         try {
             pir.setInputListener(pirListener);
         } catch (IOException ex) {
-            Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
     }
     
@@ -59,7 +59,7 @@ public class PIRDevice {
         try {
             pir.setInputListener(null);
         } catch (IOException ex) {
-            Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class PIRDevice {
         try {
             pir.close();
         } catch (IOException ex) {
-            Logger.getLogger(PIRDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
     }
 }

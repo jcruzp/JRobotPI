@@ -59,7 +59,7 @@ public class XivelyDevice {
             rc = hc.getResponseCode();
 
         } catch (IOException ex) {
-            Logger.getLogger(XivelyDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         } finally {
             if (os != null) {
                 try {
@@ -99,7 +99,7 @@ public class XivelyDevice {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(XivelyDevice.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         } finally {
 
             if (hc != null) {

@@ -38,7 +38,7 @@ public class HTU21DDevice extends I2CRpi {
         try {
             device.write(HTU21D.TRIGGER_HUMD_MEASURE_NOHOLD.cmd);
         } catch (IOException ex) {
-            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
 
         //Hang out while measurement is taken. 50mS max, page 4 of datasheet.
@@ -48,7 +48,7 @@ public class HTU21DDevice extends I2CRpi {
         try {
             device.read(rxBuf);
         } catch (IOException ex) {
-            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
         rxBuf.clear();
 
@@ -86,7 +86,7 @@ public class HTU21DDevice extends I2CRpi {
         try {
             device.write(HTU21D.TRIGGER_TEMP_MEASURE_NOHOLD.cmd);
         } catch (IOException ex) {
-            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
         //Hang out while measurement is taken. 50mS max, page 4 of datasheet.
         I2CUtils.I2Cdelay(200);
@@ -95,7 +95,7 @@ public class HTU21DDevice extends I2CRpi {
         try {
             device.read(rxBuf);
         } catch (IOException ex) {
-            Logger.getLogger(HTU21DDevice.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
         rxBuf.clear();
 

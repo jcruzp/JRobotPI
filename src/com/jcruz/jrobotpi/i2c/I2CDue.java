@@ -41,7 +41,7 @@ public class I2CDue {
             try {
                 arduino = (I2CDevice) DeviceManager.open(I2CDevice.class, config);
             } catch (IOException ex) {
-                Logger.getLogger(I2CDue.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+                Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
             }
 
         }
@@ -55,7 +55,7 @@ public class I2CDue {
         try {
             arduino.close();
         } catch (IOException ex) {
-            Logger.getLogger(I2CDue.class.getName()).log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
     }
 }
