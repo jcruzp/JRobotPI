@@ -169,7 +169,6 @@ public class Motors4WD extends I2CDue {
     }
 
     void motorStop(int motor) {
-        // todo set speed to 0 ???
         motorSetSpeed(motor, 0);
         MotorsDC.CONFIG_MOTORS.write(arduino, CmdEnum.RELEASE.value + nroMotor(motor));
         I2CUtils.I2Cdelay(50);

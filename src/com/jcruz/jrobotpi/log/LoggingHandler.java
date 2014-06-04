@@ -38,6 +38,10 @@ public class LoggingHandler extends StreamHandler implements Runnable {
     
     private LoggingHandler() {}
     
+    /**
+     * Define our Log Handler
+     * @return
+     */
     public static synchronized LoggingHandler getInstance() {
         if (instance == null) {
             instance = new LoggingHandler();

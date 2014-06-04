@@ -56,7 +56,6 @@ public class TestJRobotPI extends MIDlet {
 //			System.out.println(arduino.read());
 //		} catch (Exception e) {
 //			//bus.close();			
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
             wiiremote = new WiiRemote();
@@ -130,7 +129,6 @@ public class TestJRobotPI extends MIDlet {
 //			System.out.println(arduino.read());
 //		} catch (Exception e) {
 //			//bus.close();			
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
             //int accelX;
@@ -344,7 +342,7 @@ public class TestJRobotPI extends MIDlet {
     TPA2016Device tpa;
 
     private void TestEMIC2() throws IOException, InterruptedException {
-        emic2 = new EMIC2Device();
+        emic2 = new EMIC2Device(null);
        
         Thread.sleep(3000);
         emic2.write("");

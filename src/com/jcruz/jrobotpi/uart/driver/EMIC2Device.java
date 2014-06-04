@@ -29,19 +29,38 @@ public class EMIC2Device {
     private UARTConfig config;
     private UART uart = null;
     private static boolean waitForEmic = true;
+    private String[] emic2Msgs=null;
 
     /**
      * Define a UART device config to interface to Emic-2
      *
+     * @param emic2Msgs
      * @throws IOException
      */
-    public EMIC2Device() throws IOException {
+    public EMIC2Device(String[] emic2Msgs) throws IOException {
         config = new UARTConfig(DeviceConfig.DEFAULT, DeviceConfig.DEFAULT, 9600,
                 DATABITS_8, PARITY_NONE, STOPBITS_1, FLOWCONTROL_NONE);
 
         uart = (UART) DeviceManager.open(UART.class, config);
         uart.setEventListener(0, new MyUartListener());
-
+        this.emic2Msgs=emic2Msgs;
+    }
+    
+    /**
+     *
+     * @param msgnum
+     */
+    public void Msg(int msgnum) {
+        write(emic2Msgs[msgnum]);
+    }
+    
+    /**
+     *
+     * @param num
+     * @return
+     */
+    public String getMsg(int num) {
+        return emic2Msgs[num];
     }
 
     /**
