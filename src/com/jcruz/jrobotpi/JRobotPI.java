@@ -47,6 +47,7 @@ public class JRobotPI extends MIDlet {
      *
      * @param unconditional
      */
+    @Override
     public void destroyApp(boolean unconditional) {
         if (menu!=null) menu.Stop();
         

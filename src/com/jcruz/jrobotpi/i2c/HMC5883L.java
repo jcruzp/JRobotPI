@@ -14,9 +14,24 @@ import jdk.dio.i2cbus.I2CDevice;
  */
 public enum HMC5883L {
    
+    /**
+     *
+     */
     ConfigRegA(0x00),
+
+    /**
+     *
+     */
     ConfigRegB(0x01),
+
+    /**
+     *
+     */
     ModeReg(0x02),
+
+    /**
+     *
+     */
     DataRegBegin(0x03);
     
     /**

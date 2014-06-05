@@ -50,7 +50,7 @@ public class Devices {
     public TPA2016Device tpa = null;
     public HMC5883LDevice hmc = null;
 
-    protected Timer task = null;
+    private Timer task = null;
 
     private final String[] emic2Msgs = {
         "S Emic 2 Ok.", //0
@@ -77,9 +77,13 @@ public class Devices {
         "S No Object detected.", //21
         "S PIR Activated", //22
         "S PIR Deactivated", //23
-        "S HMC5883L Ok. //24"    
+        "S HMC5883L Ok." //24   
     };
 
+    /**
+     *
+     * @throws IOException
+     */
     public Devices() throws IOException {
         emic2 = new EMIC2Device(emic2Msgs);
         I2CUtils.I2Cdelay(3000);
@@ -136,19 +140,29 @@ public class Devices {
         //This task send each 10 seconds all sensors data to Xively site
         //https://xively.com/feeds/918735601
         task = new Timer();
-        task.schedule(readDevices, 0, 10000);
+        task.schedule(readDevices, 0, 20000);
         emic2.write(emic2Msgs[11]);
     }
 
-    
+    /**
+     *
+     * @param pirActivate
+     */
     public void setPirActivate(boolean pirActivate) {
         this.pirActivate = pirActivate;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isPirActivate() {
         return pirActivate;
     }
     
+    /**
+     *
+     */
     public void Close(){
         emic2.Msg(12);
         if (task != null) {
@@ -185,7 +199,7 @@ public class Devices {
 
     }
 
-    private final TimerTask readDevices = new TimerTask() {
+    private TimerTask readDevices = new TimerTask() {
 
         @Override
         public void run() {

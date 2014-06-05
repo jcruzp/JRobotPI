@@ -131,29 +131,30 @@ public class MenuWiiRemote extends Devices {
             I2CUtils.I2Cdelay(10);
             move.moveSlower(1);
         }
-        I2CUtils.I2Cdelay(50);
+        I2CUtils.I2Cdelay(10);
         pitch = wiiremote.getWiimotePitch();
 //                            I2CUtils.I2Cdelay(50);
 //                            roll = wiiremote.getWiimoteRoll();
-        I2CUtils.I2Cdelay(50);
+        I2CUtils.I2Cdelay(10);
 //                            pitchNunchuk = wiiremote.getNunchuckPitch();
 //                            I2CUtils.I2Cdelay(50);
         rollNunchuk = wiiremote.getNunchuckRoll();
-        I2CUtils.I2Cdelay(50);
+        //I2CUtils.I2Cdelay(10);
+
         //Wiimote Pith control move backward and forward
         if (pitch < 160) {
             move.moveBackward();
+        //Wiimote Nunchuk Roll control move left and right    
         } else if (pitch > 200) {
-            move.moveForward();
+            if (rollNunchuk < 160) {
+                move.moveLeft();
+            } else if (rollNunchuk > 220) {
+                move.moveRight();
+            } else
+                move.moveForward();
+            
+            
         }
-
-        //Wiimote Nunchuk Roll control move left and right
-        if (rollNunchuk < 140) {
-            move.moveLeft();
-        } else if (rollNunchuk > 220) {
-            move.moveRight();
-        }
-
     }
 
     private void homeMenu() {
