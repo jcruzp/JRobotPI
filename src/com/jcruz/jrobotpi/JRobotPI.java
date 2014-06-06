@@ -17,10 +17,11 @@ import javax.microedition.midlet.MIDlet;
  * @author jcruz
  */
 public class JRobotPI extends MIDlet {
-
+    
     private LoggingHandler loggerHandler = LoggingHandler.getInstance();
     
-    private MenuWiiRemote menu=null;
+    private MenuWiiRemote menu = null;
+
     /**
      * Start App Midlet
      */
@@ -28,20 +29,20 @@ public class JRobotPI extends MIDlet {
     public void startApp() {
         try {
             loggerHandler.start();
-
+            Logger.getGlobal().setLevel(Level.ALL);
+            
             Logger.getGlobal().log(Level.INFO, "************************************");
             Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v2.0.1...  *");
             Logger.getGlobal().log(Level.INFO, "************************************");
 
             //TODO Convert to Thread
-            menu=new MenuWiiRemote();
+            menu = new MenuWiiRemote();
             menu.Start();
             
         } catch (IOException ex) {
-             Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
         }
     }
-    
 
     /**
      *
@@ -49,11 +50,13 @@ public class JRobotPI extends MIDlet {
      */
     @Override
     public void destroyApp(boolean unconditional) {
-        if (menu!=null) menu.Stop();
+        if (menu != null) {
+            menu.Stop();
+        }
         
         if (loggerHandler != null) {
             loggerHandler.stop();
         }
-
+        
     }
 }

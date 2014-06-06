@@ -45,6 +45,7 @@ public class LoggingHandler extends StreamHandler implements Runnable {
     public static synchronized LoggingHandler getInstance() {
         if (instance == null) {
             instance = new LoggingHandler();
+            instance.setLevel(Level.ALL);
         }
         return instance;
     }
