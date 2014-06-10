@@ -23,143 +23,143 @@
  */
 package com.jcruz.jrobotpi;
 
- import java.io.IOException; 
- import java.io.InputStream; 
- import java.io.PrintStream; 
-  
- import javax.microedition.io.Connector; 
- import javax.microedition.io.StreamConnection; 
- import javax.microedition.io.StreamConnectionNotifier; 
- import javax.microedition.midlet.MIDlet; 
-  
- /** 
-  * MIDlet working as simple personal WebServer. 
-  * Currently this serves simple HTTP GET operation. 
-  * 
-  * @author Kumar Mettu 
-  * @version 0.61 
-  */ 
-  
- public class WebServer extends MIDlet { 
-  
-     //private Display display; 
-  
-     StreamConnectionNotifier scn = null; 
-  
-     /** 
-      * Default constructor. 
-      */ 
-     public WebServer() { 
-        //display = Display..getDisplays(false); 
-     } 
-  
-     /** 
-      * This will be invoked when we start the MIDlet 
-      */ 
-     public void startApp() { 
-         try { 
-             scn =(StreamConnectionNotifier)Connector.open("socket://:8000"); 
-             while (true) { 
-                 StreamConnection sc = (StreamConnection)scn.acceptAndOpen(); 
-  
-                 // service the connection in a separate thread 
-                 Connection c = new Connection(sc); 
-                 c.start(); 
-             } 
-  
-  
-         } catch (IOException e) { 
-             //Handle Exceptions any other way you like. 
-             //No-op 
-         } 
-     } 
-  
-     /** 
-      * Pause, discontinue .... 
-      */ 
-     public void pauseApp() { 
-         try { 
-             if (scn != null) 
-                 scn.close(); 
-         } catch(Exception e) { 
-         } 
-  
-     } 
-  
-     /** 
-      * Destroy. Cleanup everything. 
-      */ 
-     public void destroyApp(boolean unconditional) { 
-         try { 
-             if (scn != null) 
-                 scn.close(); 
-         } catch(Exception e) { 
-         } 
-     } 
-  
-     /** 
-      * Thread to handle client request. 
-      */ 
-     class Connection extends Thread 
-     { 
-  
-         public Connection(StreamConnection c) { 
-             client = c; 
-         } 
-  
-         /** 
-          * Handles client request. 
-          */ 
-         public void run() { 
-             InputStream s = null; 
-             PrintStream out = null; 
-             StringBuffer b = new StringBuffer(); 
-             try { 
-  
-                 s = client.openInputStream(); 
-  
-                  //Ignore reading request to reduce the amount of data 
-                  //transfered to Phone. 
-                 /*int ch; 
-                 while((ch = s.read()) != -1) { 
-                     b.append((char) ch); 
-                 } 
-                 System.out.println(b.toString());*/ 
-  
-                 out = new PrintStream(client.openOutputStream()); 
-                 String response = 
-                              "<HTML>"+ 
-                              "<HEAD>"+ 
-                                 "<TITLE>Kumar's Location</TITLE>"+ 
-                              "<HEAD>"+ 
-                              "<BODY>Prueba Socket ME. "+ 
-                                      "Thanks for Visiting.</BODY>"+ 
-                              "</HTML>"; 
-                 out.println("HTTP/1.0 200 OK\n"); 
-                 out.println(response); 
-  
-             } 
-             catch (Throwable ioe) { 
-                 //Handle Exceptions any other way you like. 
-                 //No-op 
-             } 
-             finally { 
-                 try { 
-                     if (s != null) 
-                         s.close(); 
-                     if (out != null) 
-                         out.close(); 
-                     if (client != null) 
-                         client.close(); 
-                 } 
-                 catch (IOException ioee) { 
-           //Handle Exceptions any other way you like. 
-           //No-op 
-                 } 
-             } 
-         } 
-  
-         private StreamConnection client; 
-     } 
-  
- } 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.StreamConnection;
+import javax.microedition.io.StreamConnectionNotifier;
+import javax.microedition.midlet.MIDlet;
+
+/**
+ * MIDlet working as simple personal WebServer. Currently this serves simple
+ * HTTP GET operation.
+ *
+ * @author Kumar Mettu
+ * @version 0.61
+ */
+public class WebServer extends MIDlet {
+
+    private StreamConnectionNotifier scn = null;
+    
+
+    /**
+     * Default constructor.
+     */
+    public WebServer() {
+
+    }
+
+    /**
+     * This will be invoked when we start the MIDlet
+     */
+    public void startApp() {
+
+        try {
+            scn = (StreamConnectionNotifier) Connector.open("socket://:8000");
+
+            while (true) {
+                StreamConnection sc = (StreamConnection) scn.acceptAndOpen();
+
+                Connection c = new Connection(sc);
+                c.start();
+
+                // service the connection in a separate thread 
+            }
+
+        } catch (IOException e) {
+            //Handle Exceptions any other way you like. 
+            //No-op 
+        }
+    }
+
+    /**
+     * Pause, discontinue ....
+     */
+    public void pauseApp() {
+        try {
+            if (scn != null) {
+                scn.close();
+            }
+        } catch (Exception e) {
+        }
+
+    }
+
+    /**
+     * Destroy. Cleanup everything.
+     */
+    public void destroyApp(boolean unconditional) {
+        try {
+            if (scn != null) {
+                scn.close();
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    /**
+     * Thread to handle client request.
+     */
+    class Connection extends Thread {
+
+        public Connection(StreamConnection c) {
+            client = c;
+        }
+
+        /**
+         * Handles client request.
+         */
+        public void run() {
+            String str;
+            PrintStream out = null;
+            try {
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        client.openInputStream()));
+                str = in.readLine();
+                System.out.println(str);
+                in.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            try {
+                out = new PrintStream(client.openOutputStream());
+                String response
+                        = "<HTML>"
+                        + "<HEAD>"
+                        + "<TITLE>Web Server</TITLE>"
+                        + "</HEAD>"
+                        + "<BODY>Prueba Socket ME. <br>"
+                        + "Thanks for Visiting.</BODY>"
+                        + "</HTML>";
+                out.println("HTTP/1.0 200 OK");
+                out.println("Content-Type: text/html");
+                out.println("Server: Bot");
+                // this blank line signals the end of the headers
+                out.println("");
+                out.println(response);
+                out.flush();
+
+            } catch (IOException ioe) {
+            } finally {
+                try {
+
+                    if (out != null) {
+                        out.close();
+                    }
+                    if (client != null) {
+                        client.close();
+                    }
+                } catch (IOException ioee) {
+                    //Handle Exceptions any other way you like. 
+                    //No-op 
+                }
+            }
+        }
+
+    }
+    private StreamConnection client;
+
+}
