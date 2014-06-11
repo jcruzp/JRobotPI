@@ -27,6 +27,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
@@ -43,7 +45,7 @@ import javax.microedition.midlet.MIDlet;
 public class WebServer extends MIDlet {
 
     private StreamConnectionNotifier scn = null;
-    private StreamConnection client;
+    private Connection c;
 
     /**
      * Default constructor.
@@ -55,7 +57,6 @@ public class WebServer extends MIDlet {
     /**
      * This will be invoked when we start the MIDlet
      */
-    @Override
     public void startApp() {
 
         try {
@@ -64,14 +65,14 @@ public class WebServer extends MIDlet {
             while (true) {
                 StreamConnection sc = (StreamConnection) scn.acceptAndOpen();
 
-                Connection c = new Connection(sc);
+                c = new Connection(sc);
                 c.start();
 
                 // service the connection in a separate thread 
             }
 
         } catch (IOException e) {
-            //Handle Exceptions any other way you like. 
+            e.printStackTrace();
             //No-op 
         }
     }
@@ -79,29 +80,25 @@ public class WebServer extends MIDlet {
     /**
      * Pause, discontinue ....
      */
-    @Override
     public void pauseApp() {
-        try {
-            if (scn != null) {
-                scn.close();
-            }
-        } catch (IOException e) {
-        }
+//        try {
+//            if (scn != null) {
+//                scn.close();
+//            }
+//        } catch (Exception e) {
+//        }
 
     }
 
     /**
      * Destroy. Cleanup everything.
-     *
-     * @param unconditional
      */
-    @Override
     public void destroyApp(boolean unconditional) {
         try {
             if (scn != null) {
                 scn.close();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
         }
     }
 
@@ -110,6 +107,8 @@ public class WebServer extends MIDlet {
      */
     class Connection extends Thread {
 
+        private volatile StreamConnection client;
+
         public Connection(StreamConnection c) {
             client = c;
         }
@@ -117,25 +116,23 @@ public class WebServer extends MIDlet {
         /**
          * Handles client request.
          */
-        @Override
         public void run() {
-            String str;
-            PrintStream out = null;
-//            try {
-//                BufferedReader in = new BufferedReader(new InputStreamReader(
-//                        client.openInputStream()));
-//                str = in.readLine();
-//                System.out.println(str);
-//                in.close();
-//            } catch (IOException ex) {
-//                ex.printStackTrace();
-//            }
-            try {
-                out = new PrintStream(client.openOutputStream());
+            String str = "";
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(
+                    client.openInputStream()))) {
+                str = in.readLine();
+                System.out.println(str);
+                str = in.readLine();
+                System.out.println(str);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            try (PrintStream out = new PrintStream(client.openOutputStream())) {
                 String response
                         = "<HTML>"
                         + "<HEAD>"
                         + "<TITLE>Web Server</TITLE>"
+                        + "<link rel='shortcut icon' href='data:image/x-icon;,' type='image/x-icon'>"
                         + "</HEAD>"
                         + "<BODY>Prueba Socket ME. <br>"
                         + "Thanks for Visiting.</BODY>"
@@ -147,20 +144,15 @@ public class WebServer extends MIDlet {
                 out.println("");
                 out.println(response);
                 out.flush();
-
-            } catch (IOException ioe) {
+            } catch (IOException ex) {
+                ex.printStackTrace();
             } finally {
-                try {
-
-                    if (out != null) {
-                        out.close();
-                    }
-                    if (client != null) {
+                if (client != null) {
+                    try {
                         client.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
-                } catch (IOException ioee) {
-                    //Handle Exceptions any other way you like. 
-                    //No-op 
                 }
             }
         }
