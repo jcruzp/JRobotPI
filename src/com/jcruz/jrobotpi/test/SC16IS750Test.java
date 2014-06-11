@@ -23,9 +23,8 @@
  */
 package com.jcruz.jrobotpi.test;
 
-import com.jcruz.jrobotpi.i2c.I2CUtils;
-import com.jcruz.jrobotpi.i2c.driver.HMC5883LDevice;
 import com.jcruz.jrobotpi.i2c.driver.SC16IS750Device;
+import com.jcruz.jrobotpi.log.LoggingHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,14 +36,22 @@ import javax.microedition.midlet.MIDlet;
  */
 public class SC16IS750Test extends MIDlet {
 
+    private LoggingHandler loggerHandler = LoggingHandler.getInstance();
+
     @Override
     public void startApp() {
+        loggerHandler.start();
+        Logger.getGlobal().setLevel(Level.ALL);
+
+        Logger.getGlobal().log(Level.INFO, "************************************");
         try {
-            SC16IS750Device sc= new SC16IS750Device();
+            SC16IS750Device sc = new SC16IS750Device();
             sc.write("STest It");
+            sc.write("STest It 2");
+            sc.write("STest It 3");
             sc.close();
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            ex.printStackTrace();
         }
 
     }

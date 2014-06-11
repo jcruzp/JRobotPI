@@ -5,7 +5,7 @@
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
- * in  the Software without restriction, including without limitation the rights
+ * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
@@ -30,10 +30,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jdk.dio.DeviceConfig;
-import jdk.dio.DeviceManager;
-import jdk.dio.i2cbus.I2CDevice;
-import jdk.dio.i2cbus.I2CDeviceConfig;
 
 /**
  * Interface to SC16IS750 I2C/SPI to UART I use I2C interface to connect Emic-2
@@ -43,9 +39,7 @@ import jdk.dio.i2cbus.I2CDeviceConfig;
  */
 public class SC16IS750Device extends I2CRpi {
 
-    private static final int SC16IS750_write = 0x90;
-    private final I2CDeviceConfig configRead;
-    private final I2CDevice deviceRead;
+    private static final int SC16IS750_write = 0x48;
 
     /**
      *
@@ -53,14 +47,6 @@ public class SC16IS750Device extends I2CRpi {
      */
     public SC16IS750Device() throws IOException {
         super(SC16IS750_write);
-
-        configRead = new I2CDeviceConfig(DeviceConfig.DEFAULT,
-                SC16IS750_write + 1,
-                DeviceConfig.DEFAULT,
-                DeviceConfig.DEFAULT);
-
-        deviceRead = (I2CDevice) DeviceManager.open(I2CDevice.class, configRead);
-
         configUARTregs();
     }
 
@@ -92,11 +78,9 @@ public class SC16IS750Device extends I2CRpi {
 
         I2CUtils.I2Cdelay(2000);
 
-        Logger.getGlobal().log(Level.INFO, "FIFO Control Register (C1): {0}", String.valueOf(SC16IS750.FCR.read(deviceRead)));
-
-        Logger.getGlobal().log(Level.INFO, "Line Control Register(3): {0}", String.valueOf(SC16IS750.LCR.read(deviceRead)));
-
-        Logger.getGlobal().log(Level.INFO, "Modem Control Register(0): {0}", String.valueOf(SC16IS750.MCR.read(deviceRead)));
+        Logger.getGlobal().log(Level.INFO, "FIFO Control Register: " + SC16IS750.FCR.read(device));
+        Logger.getGlobal().log(Level.INFO, "Line Control Register: " + SC16IS750.LCR.read(device));
+        Logger.getGlobal().log(Level.INFO, "Modem Control Register: " + SC16IS750.MCR.read(device));
 
     }
 
@@ -109,15 +93,16 @@ public class SC16IS750Device extends I2CRpi {
         ByteBuffer buffer = ByteBuffer.allocateDirect(cad.length());
         buffer.put(cad.getBytes());
         buffer.clear();
-//        try {
-//            device.write(SC16IS750.XHR.cmd, 1 ,buffer);
-//        } catch (IOException ex) {
-//            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
-//        }
-
-        for (int i = 0; i < cad.length() - 1; i++) {
-            SC16IS750.XHR.write(device, buffer.get(i));
+        try {
+            device.write(SC16IS750.XHR.cmd, 1, buffer);
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
         }
 
+//        int work = 0;
+//        while (work != 2) {
+//            work = SC16IS750.RXLVL.read(device);
+//        }
+        while (SC16IS750.XHR.read(device) != 0x3A);
     }
 }

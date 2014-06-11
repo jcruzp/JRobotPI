@@ -43,7 +43,7 @@ import javax.microedition.midlet.MIDlet;
 public class WebServer extends MIDlet {
 
     private StreamConnectionNotifier scn = null;
-    
+    private StreamConnection client;
 
     /**
      * Default constructor.
@@ -55,6 +55,7 @@ public class WebServer extends MIDlet {
     /**
      * This will be invoked when we start the MIDlet
      */
+    @Override
     public void startApp() {
 
         try {
@@ -78,25 +79,29 @@ public class WebServer extends MIDlet {
     /**
      * Pause, discontinue ....
      */
+    @Override
     public void pauseApp() {
         try {
             if (scn != null) {
                 scn.close();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
         }
 
     }
 
     /**
      * Destroy. Cleanup everything.
+     *
+     * @param unconditional
      */
+    @Override
     public void destroyApp(boolean unconditional) {
         try {
             if (scn != null) {
                 scn.close();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
         }
     }
 
@@ -112,18 +117,19 @@ public class WebServer extends MIDlet {
         /**
          * Handles client request.
          */
+        @Override
         public void run() {
             String str;
             PrintStream out = null;
-            try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(
-                        client.openInputStream()));
-                str = in.readLine();
-                System.out.println(str);
-                in.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+//            try {
+//                BufferedReader in = new BufferedReader(new InputStreamReader(
+//                        client.openInputStream()));
+//                str = in.readLine();
+//                System.out.println(str);
+//                in.close();
+//            } catch (IOException ex) {
+//                ex.printStackTrace();
+//            }
             try {
                 out = new PrintStream(client.openOutputStream());
                 String response
@@ -160,6 +166,5 @@ public class WebServer extends MIDlet {
         }
 
     }
-    private StreamConnection client;
 
 }
