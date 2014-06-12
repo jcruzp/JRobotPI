@@ -23,13 +23,8 @@
  */
 package com.jcruz.jrobotpi.test;
 
-import com.jcruz.jrobotpi.i2c.HMC5883L;
-import com.jcruz.jrobotpi.i2c.I2CUtils;
-import com.jcruz.jrobotpi.i2c.driver.HMC5883LDevice;
 import com.jcruz.jrobotpi.uart.driver.GPSEM406Device;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.microedition.midlet.MIDlet;
 
 /**
