@@ -85,7 +85,7 @@ public class GPSEM406Device {
         buffer.clear();
         try {
             uart.write(buffer);
-             I2CUtils.I2Cdelay(10000);
+            I2CUtils.I2Cdelay(10000);
             System.out.println("Configurado");
 
 //            int checkSum;
