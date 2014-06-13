@@ -89,7 +89,6 @@ public class SC16IS750Device extends I2CRpi {
      * @param cad String to send to Emic-2
      */
     public void write(String cad) {
-        cad = cad.concat("\r\n");
         ByteBuffer buffer = ByteBuffer.allocateDirect(cad.length());
         buffer.put(cad.getBytes());
         buffer.clear();
@@ -98,11 +97,15 @@ public class SC16IS750Device extends I2CRpi {
         } catch (IOException ex) {
             Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
         }
-
-//        int work = 0;
-//        while (work != 2) {
-//            work = SC16IS750.RXLVL.read(device);
-//        }
-        while (SC16IS750.XHR.read(device) != 0x3A);
     }
+    
+    /**
+     *
+     * Wait for response from UART. It respond to all commands with car
+     * @param car
+     */
+    public void waitResponse(int car) {
+        while (SC16IS750.XHR.read(device) != car);
+    }
+    
 }

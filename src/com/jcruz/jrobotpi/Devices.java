@@ -29,14 +29,14 @@ import com.jcruz.jrobotpi.http.driver.XivelyDevice;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.driver.BMP180Device;
 import com.jcruz.jrobotpi.i2c.driver.BMP180Mode;
+import com.jcruz.jrobotpi.i2c.driver.EMICI2CDevice;
 import com.jcruz.jrobotpi.i2c.driver.HMC5883LDevice;
 import com.jcruz.jrobotpi.i2c.driver.HTU21DDevice;
 import com.jcruz.jrobotpi.i2c.driver.Move;
 import com.jcruz.jrobotpi.i2c.driver.PCA9685Device;
-import com.jcruz.jrobotpi.i2c.driver.TPA2016Device;
+//import com.jcruz.jrobotpi.i2c.driver.TPA2016Device;
 import com.jcruz.jrobotpi.i2c.driver.VCNL4000Device;
 import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
-import com.jcruz.jrobotpi.uart.driver.EMIC2Device;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -64,8 +64,8 @@ public class Devices {
     public Move move = null;
     public PCA9685Device servo = null;
     public VCNL4000Device vcnl4000 = null;
-    public EMIC2Device emic2 = null;
-    public TPA2016Device tpa = null;
+    public EMICI2CDevice emic2 = null;
+   // public TPA2016Device tpa = null;
     public HMC5883LDevice hmc = null;
 
     private Timer task = null;
@@ -103,7 +103,7 @@ public class Devices {
      * @throws IOException
      */
     public Devices() throws IOException {
-        emic2 = new EMIC2Device(emic2Msgs);
+        emic2 = new EMICI2CDevice(emic2Msgs);
         I2CUtils.I2Cdelay(3000);
         emic2.write("");
         //emic2.write("W200");
@@ -155,7 +155,7 @@ public class Devices {
 //            tpa.setGain((byte) 30);
 //            tpa.close();
         
-        //This task send each 10 seconds all sensors data to Xively site
+        //This task send each 20 seconds all sensors data to Xively site
         //https://xively.com/feeds/918735601
         task = new Timer();
         task.schedule(readDevices, 0, 20000);
