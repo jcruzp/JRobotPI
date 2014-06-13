@@ -50,6 +50,7 @@ public class GPSEM406Device {
 
     private UARTConfig config;
     private UART uart = null;
+    private static String nmea = "";
 
     /**
      * Define a UART device config to interface to Emic-2
@@ -63,10 +64,9 @@ public class GPSEM406Device {
         uart = (UART) DeviceManager.open(UART.class, config);
         GPS_Switch_Mode_To_NMEA();
         uart.setEventListener(0, new MyUartListener());
-        //this.emic2Msgs=emic2Msgs;
     }
 
-    public static byte[] hexStringToByteArray(String s) {
+    private static byte[] hexStringToByteArray(String s) {
         int len = s.length();
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
@@ -197,56 +197,69 @@ public class GPSEM406Device {
     }
 
     private String formatTime(String time) {
-        return time.substring(0, 2) + ":" + time.substring(2, 4) + ":" + time.substring(4, 6);
+        if (time != null) {
+            return time.substring(0, 2) + ":" + time.substring(2, 4) + ":" + time.substring(4, 6);
+        } else {
+            return "";
+        }
     }
 
     private String formatLat(String[] pos) {
-        return pos[0].substring(0, 2) + "* " + pos[0].substring(2, 4) + "' " + pos[0].substring(5, 9) + "\" " + pos[1];
+        if ((pos[0] != null) && (pos[1] != null)) {
+            return pos[0].substring(0, 2) + "* " + pos[0].substring(2, 4) + "' " + pos[0].substring(5, 9) + "\" " + pos[1];
+        } else {
+            return "";
+        }
     }
 
     private String formatLong(String[] pos) {
-        return pos[0].substring(0, 3) + "* " + pos[0].substring(3, 5) + "' " + pos[0].substring(6, 10) + "\" " + pos[1];
+        if ((pos[0] != null) && (pos[1] != null)) {
+            return pos[0].substring(0, 3) + "* " + pos[0].substring(3, 5) + "' " + pos[0].substring(6, 10) + "\" " + pos[1];
+        } else {
+            return "";
+        }
     }
 
     private String formatAlt(String[] alt) {
-        return alt[0] + " " + alt[1];
+        if ((alt[0] != null) && (alt[1] != null)) {
+            return alt[0] + " " + alt[1];
+        } else {
+            return "";
+        }
     }
 
-    private synchronized void process(String message) {
-        // System.out.print(message);
-
-        StringTokenizer tokens = new StringTokenizer(message, ",");
+    private void process(String message) {
+        try {
+            StringTokenizer tokens = new StringTokenizer(message, ",");
         // pull off the first token and check if it is the message we want
-
-        if (tokens.nextToken().contains("GPGGA")) {
-            
+            //$GPGGA,130612.255,,,,,0,00,,,M,0.0,M,,00
             String time = null;
             String longitude[] = {null, null};
             String latitude[] = {null, null};
             String altitude[] = {null, null};
+            tokens.nextToken(); // $GPGGA position
             // Next token is the time
             time = tokens.nextToken();
-            System.out.print("Time: " + formatTime(time));
             latitude[0] = tokens.nextToken();
-            System.out.print("Test:");
-            System.out.println(latitude[0]);
             latitude[1] = tokens.nextToken();
-            longitude[0] = tokens.nextToken();
-            longitude[1] = tokens.nextToken();
-            // Skip the next three tokens
-            tokens.nextToken(); // Position indicator
-            tokens.nextToken(); // Satellites used
-            tokens.nextToken(); // Horizontal Dilution of precision
-            altitude[0] = tokens.nextToken();
-            altitude[1] = tokens.nextToken();
+            if ((latitude[0].equals("0")) || (latitude[1].equals("00"))) {
+                System.out.println("Time: " + formatTime(time) + " GPS no enlazado al satélite...");
+            } else {
+                longitude[0] = tokens.nextToken();
+                longitude[1] = tokens.nextToken();
+                // Skip the next three tokens
+                tokens.nextToken(); // Position indicator
+                tokens.nextToken(); // Satellites used
+                tokens.nextToken(); // Horizontal Dilution of precision
+                altitude[0] = tokens.nextToken();
+                altitude[1] = tokens.nextToken();
 
-//        System.out.print("Time: " + formatTime(time) + "\n"
-//                + " Latitude: " + formatLat(latitude) + " Longitude: " + formatLong(longitude) + "\n"
-//                + " Altitude: " + formatAlt(altitude) + "\n");
-            
-            System.out.print("Time: " + time + "\n"
-                    + " Latitude: " + latitude + " Longitude: " + longitude + "\n"
-                    + " Altitude: " + altitude + "\n");
+                System.out.println("Time: " + formatTime(time) + "\n"
+                        + " Latitude: " + formatLat(latitude) + " Longitude: " + formatLong(longitude) + "\n"
+                        + " Altitude: " + formatAlt(altitude) + "\n");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -258,30 +271,33 @@ public class GPSEM406Device {
     class MyUartListener implements UARTEventListener {
 
         @Override
-        public synchronized void  eventDispatched(UARTEvent event) {
+        public synchronized void eventDispatched(UARTEvent event) {
             if (event.getID() == INPUT_DATA_AVAILABLE) {
-                ByteBuffer buffer = ByteBuffer.allocateDirect(200);
-                StringBuilder result = new StringBuilder();
+                ByteBuffer buffer = ByteBuffer.allocateDirect(10);
+                //StringBuilder result = new StringBuilder();
                 try {
                     int nrocar = uart.read(buffer);
                     char c;
 
                     for (int i = 0; i < nrocar; i++) {
                         c = (char) buffer.get(i);
-                        result.append(c);
+                        //result.append(c);
+                        nmea=nmea.concat(String.valueOf(c));
                     }
 
-                   System.out.print("Antes:" + result.toString());
-                    if (result.indexOf("GPGGA") != -1) {
-                         System.out.print("Despues:"+result.toString());
-                        process(result.toString());
-                        result=null;
-                        buffer=null;
-                        
-                    }
+                    if (nmea.contains("\r\n")) {
+                        //System.out.println(nmea);
+                        if (nmea.contains("$GPGGA")) {
+                            process(nmea);
+                        }
+                        nmea = "";
+                    }; 
+                    //else {
+                    //    nmea = nmea.concat(result.toString());
+                    //}
 
-                } catch (IOException ex) {
-                    System.out.println("IOException reading: " + ex);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
 
             }
