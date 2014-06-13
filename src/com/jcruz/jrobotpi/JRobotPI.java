@@ -41,7 +41,7 @@ public class JRobotPI extends MIDlet {
     
     private LoggingHandler loggerHandler = LoggingHandler.getInstance();
     
-    private MenuWiiRemote menu = null;
+    private Processor processor = null;
 
     /**
      * Start App Midlet
@@ -57,8 +57,8 @@ public class JRobotPI extends MIDlet {
             Logger.getGlobal().log(Level.INFO, "************************************");
 
             //TODO Convert to Thread
-            menu = new MenuWiiRemote();
-            menu.Start();
+            processor = new Processor();
+            processor.Start();
             
         } catch (IOException ex) {
             Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
@@ -71,8 +71,8 @@ public class JRobotPI extends MIDlet {
      */
     @Override
     public void destroyApp(boolean unconditional) {
-        if (menu != null) {
-            menu.Stop();
+        if (processor != null) {
+            processor.Stop();
         }
         
         if (loggerHandler != null) {

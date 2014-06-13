@@ -28,7 +28,6 @@ import com.jcruz.jrobotpi.gpio.driver.PIRDevice;
 import com.jcruz.jrobotpi.http.driver.XivelyDevice;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.driver.BMP180Device;
-import com.jcruz.jrobotpi.i2c.driver.BMP180Mode;
 import com.jcruz.jrobotpi.i2c.driver.EMICI2CDevice;
 import com.jcruz.jrobotpi.i2c.driver.HMC5883LDevice;
 import com.jcruz.jrobotpi.i2c.driver.HTU21DDevice;
@@ -38,8 +37,6 @@ import com.jcruz.jrobotpi.i2c.driver.PCA9685Device;
 import com.jcruz.jrobotpi.i2c.driver.VCNL4000Device;
 import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 import jdk.dio.gpio.PinEvent;
 import jdk.dio.gpio.PinListener;
 
@@ -48,7 +45,7 @@ import jdk.dio.gpio.PinListener;
  * @author eve0002474
  */
 public class Devices {
-    
+
     public HCSR04Device hcsr04 = null;
     private final int trigger = 23;
     private final int echo = 17;
@@ -65,12 +62,10 @@ public class Devices {
     public PCA9685Device servo = null;
     public VCNL4000Device vcnl4000 = null;
     public EMICI2CDevice emic2 = null;
-   // public TPA2016Device tpa = null;
+    // public TPA2016Device tpa = null;
     public HMC5883LDevice hmc = null;
 
-    private Timer task = null;
-
-    private final String[] emic2Msgs = {
+    public final String[] emic2Msgs = {
         "S Emic 2 Ok.", //0
         "S Inicializing devices.", //1
         "S HCSR04 Ok.", //2
@@ -136,7 +131,7 @@ public class Devices {
 
         xively = new XivelyDevice();
         emic2.write(emic2Msgs[9]);
-        
+
         hmc = new HMC5883LDevice();
         hmc.SetScale(1.3F);
         hmc.SetMeasurementMode(HMC5883LDevice.Measurement.Continuous);
@@ -154,12 +149,6 @@ public class Devices {
 //            //Set audio volume to max value
 //            tpa.setGain((byte) 30);
 //            tpa.close();
-        
-        //This task send each 20 seconds all sensors data to Xively site
-        //https://xively.com/feeds/918735601
-        task = new Timer();
-        task.schedule(readDevices, 0, 20000);
-        emic2.write(emic2Msgs[11]);
     }
 
     /**
@@ -177,15 +166,12 @@ public class Devices {
     public boolean isPirActivate() {
         return pirActivate;
     }
-    
+
     /**
      *
      */
-    public void Close(){
+    public void Close() {
         emic2.Msg(12);
-        if (task != null) {
-            task.cancel();
-        }
         pir.removeListener();
         pir.close();
         hmc.close();
@@ -199,8 +185,6 @@ public class Devices {
         emic2.close();
     }
 
-    
-    
     //Check PIR Sensor for motion detect
     class MyPinListener implements PinListener {
 
@@ -217,33 +201,4 @@ public class Devices {
 
     }
 
-    private TimerTask readDevices = new TimerTask() {
-
-        @Override
-        public void run() {
-            int celsius = 0, fahrenheit = 0, hectorPascal = 0, inchesMercury = 0;
-
-            short amb = vcnl4000.readAmbientLight();
-            xively.updateValue("Ambient_Light", String.valueOf(amb));
-
-            xively.updateValue("Humidity", String.valueOf((int) htu21d.readHumidity()));
-
-            xively.updateValue("RPI_Temperature", String.valueOf((int) htu21d.readTemperature()));
-
-            float[] result = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
-            celsius = (int) result[0];
-            xively.updateValue("Temperature", String.valueOf(celsius));
-            //fahrenheit = BMP180Device.celsiusToFahrenheit(celsius);
-            hectorPascal = (int) result[1];
-            xively.updateValue("Pressure", String.valueOf(hectorPascal));
-                //inchesMercury = BMP180Device.pascalToInchesMercury(hectorPascal);
-            short heading=(short) hmc.calculateHeading();
-            xively.updateValue("Heading", String.valueOf(heading));
-
-            //System.out.format("Temperature: %.2f C, %.2f F\n", celsius, fahrenheit);
-            //System.out.format("Pressure: %.2f hPa, %.2f inHg\n\n", hectorPascal, inchesMercury);
-        }
-
-    };
-    
 }

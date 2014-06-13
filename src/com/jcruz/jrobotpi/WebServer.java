@@ -27,6 +27,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
@@ -40,35 +42,43 @@ import javax.microedition.midlet.MIDlet;
  * @author Kumar Mettu
  * @version 0.61
  */
-public class WebServer extends MIDlet {
+public class WebServer implements Runnable {
 
     private StreamConnectionNotifier scn = null;
     private Connection c;
+    private volatile boolean shouldRun;
 
     /**
      * Default constructor.
      */
-    public WebServer() {
+    WebServer() {
 
+    }
+    
+    /**
+     * Start server. Creates datagram connection and starts thread.
+     */
+    public boolean start() {
+        shouldRun=true;
+        try {
+            scn = (StreamConnectionNotifier) Connector.open("socket://:8000");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return true;
     }
 
     /**
      * This will be invoked when we start the MIDlet
      */
-    public void startApp() {
-
+    public void run() {
         try {
-            scn = (StreamConnectionNotifier) Connector.open("socket://:8000");
-
-            while (true) {
+            while (shouldRun) {
                 StreamConnection sc = (StreamConnection) scn.acceptAndOpen();
-
                 c = new Connection(sc);
                 c.start();
-
                 // service the connection in a separate thread 
             }
-
         } catch (IOException e) {
             e.printStackTrace();
             //No-op 
@@ -76,22 +86,10 @@ public class WebServer extends MIDlet {
     }
 
     /**
-     * Pause, discontinue ....
-     */
-    public void pauseApp() {
-//        try {
-//            if (scn != null) {
-//                scn.close();
-//            }
-//        } catch (Exception e) {
-//        }
-
-    }
-
-    /**
      * Destroy. Cleanup everything.
      */
-    public void destroyApp(boolean unconditional) {
+    public void stop() {
+        shouldRun = false;
         try {
             if (scn != null) {
                 scn.close();
