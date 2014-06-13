@@ -57,6 +57,7 @@ public class WebServer implements Runnable {
     
     /**
      * Start server. Creates datagram connection and starts thread.
+     * @return 
      */
     public boolean start() {
         shouldRun=true;

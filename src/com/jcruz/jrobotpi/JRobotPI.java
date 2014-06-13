@@ -53,7 +53,7 @@ public class JRobotPI extends MIDlet {
             Logger.getGlobal().setLevel(Level.ALL);
             
             Logger.getGlobal().log(Level.INFO, "************************************");
-            Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v2.0.1...  *");
+            Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v2.0.3...  *");
             Logger.getGlobal().log(Level.INFO, "************************************");
 
             //TODO Convert to Thread
