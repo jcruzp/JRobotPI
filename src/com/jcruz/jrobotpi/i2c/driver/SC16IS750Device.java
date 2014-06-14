@@ -95,17 +95,18 @@ public class SC16IS750Device extends I2CRpi {
         try {
             device.write(SC16IS750.XHR.cmd, 1, buffer);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+            ex.printStackTrace();
         }
     }
-    
-    /**
-     *
-     * Wait for response from UART. It respond to all commands with car
-     * @param car
-     */
-    public void waitResponse(int car) {
-        while (SC16IS750.XHR.read(device) != car);
+
+    public int bytesToRead(){
+        return SC16IS750.RXLVL.read(device);
     }
     
+    public int read(){
+        return SC16IS750.XHR.read(device);
+    }
+            
+    
+
 }

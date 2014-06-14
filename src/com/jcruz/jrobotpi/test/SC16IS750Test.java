@@ -46,9 +46,18 @@ public class SC16IS750Test extends MIDlet {
         Logger.getGlobal().log(Level.INFO, "************************************");
         try {
             SC16IS750Device sc = new SC16IS750Device();
-            sc.write("STest It");
-            sc.write("STest It 2");
-            sc.write("STest It 3");
+            sc.write("STest It 1\r\n");
+            
+            sc.write("STest It 2\r\n");
+            
+            sc.write("STest It 3\r\n");
+            
+            sc.write("STest It 4\r\n");
+            
+            sc.write("STest It 5\r\n");
+            
+            sc.write("STest It 6\r\n");
+            
             sc.close();
         } catch (IOException ex) {
             ex.printStackTrace();

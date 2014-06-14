@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.jcruz.jrobotpi;
+package com.jcruz.jrobotpi.test;
 
+import com.jcruz.jrobotpi.i2c.driver.EMICI2CDevice;
 import com.jcruz.jrobotpi.log.LoggingHandler;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -31,53 +32,65 @@ import javax.microedition.midlet.MIDlet;
 
 /**
  *
- * JRobotPI Java Firmware v2.0.2
- * State Machine to control Robot.
- * Use I2C bus for all sensors data and send data to Arduino Due with a I2C controller
- * to read all wii remote buttons and activate DC Motors.
  * @author jcruz
  */
-public class JRobotPI extends MIDlet {
-    
+public class TestEmicI2C extends MIDlet {
+
     private LoggingHandler loggerHandler = LoggingHandler.getInstance();
     
-    private Processor processor = null;
+    public final String[] emic2Msgs = {
+        "S Emic 2 Ok.", //0
+        "S Inicializing devices.", //1
+        "S HCSR04 Ok.", //2
+        "S BMP180 Ok.", //3
+        "S HTU21D Ok.", //4
+        "S Wii Remote Ok.", //5
+        "S DC Motors Ok.", //6
+        "S Servo Ok.", //7
+        "S VCNL4000 Ok.", //8
+        "S Xively Ok.", //9    
+        "S PIR and your listener Ok.", //10
+        "S Task to read devices created.",//11
+        "S Close devices comunication.", //12
+        "S Menu activated.", //13
+        "S Menu deactivated.", //14
+        "S Prepare to move.", //15
+        "S Stop move.", //16
+        "S Prepare to detect objects.", //17
+        "S Stop searching objects.", //18
+        "S Scanning.", //19
+        "S Object detected at ", //20
+        "S No Object detected.", //21
+        "S PIR Activated", //22
+        "S PIR Deactivated", //23
+        "S HMC5883L Ok." //24   
+    };
 
-    /**
-     * Start App Midlet
-     */
     @Override
     public void startApp() {
-        try {
-            loggerHandler.start();
-            Logger.getGlobal().setLevel(Level.INFO);
-            
-            Logger.getGlobal().log(Level.INFO, "************************************");
-            Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v2.0.3...  *");
-            Logger.getGlobal().log(Level.INFO, "************************************");
+        loggerHandler.start();
+        Logger.getGlobal().setLevel(Level.ALL);
 
-            //TODO Convert to Thread
-            processor = new Processor();
-            processor.Start();
+        Logger.getGlobal().log(Level.INFO, "************************************");
+        try {
+            EMICI2CDevice sc = new EMICI2CDevice(emic2Msgs);
             
+        sc.writeCommand("W200");
+        sc.writeCommand("L0");
+        sc.writeCommand("N0");
+            sc.Msg(1);
+            sc.Msg(2);
+            sc.Msg(3);
+            sc.Msg(4);
+            
+            sc.close();
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+            ex.printStackTrace();
         }
+
     }
 
-    /**
-     *
-     * @param unconditional
-     */
     @Override
     public void destroyApp(boolean unconditional) {
-        if (processor != null) {
-            processor.Stop();
-        }
-        
-        if (loggerHandler != null) {
-            loggerHandler.stop();
-        }
-        
     }
 }

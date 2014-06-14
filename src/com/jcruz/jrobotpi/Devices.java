@@ -100,10 +100,11 @@ public class Devices {
     public Devices() throws IOException {
         emic2 = new EMICI2CDevice(emic2Msgs);
         I2CUtils.I2Cdelay(3000);
-        emic2.write("");
-        //emic2.write("W200");
-        emic2.write("L0");
-        emic2.write("N0");
+        
+        //emic2.write("");
+        emic2.writeCommand("W200");
+        emic2.writeCommand("L0");
+        emic2.writeCommand("N0");
 
         emic2.write(emic2Msgs[0]);
         emic2.write(emic2Msgs[1]);

@@ -37,15 +37,15 @@ import java.util.TimerTask;
 public class Processor extends Devices {
 
     //Activate option menu
-    private boolean menuOn = false;
+    private static boolean menuOn = false;
     //Control menu options
-    private int opcMenu = 1;
-    private int opcMenuSave = 0;
+    private static int opcMenu = 1;
+    private static int opcMenuSave = 0;
     private final int nroOpcsMenu = 6;
     //Activate option move
-    private boolean menuMove = false;
+    private static boolean menuMove = false;
     //Activate option scan
-    private boolean menuScan = false;
+    private static boolean menuScan = false;
     //Control servo movement
     private short servoOff = 100;
     private short servoOffSave = 1;
@@ -59,7 +59,7 @@ public class Processor extends Devices {
     //Define move left and right with nunchuk
     private double rollNunchuk = 0.0;
     //Deactivate menu
-    private boolean stopMenu = false;
+    private static boolean stopMenu = false;
     //This task send each 20 seconds all sensors data to Xively site
     //https://xively.com/feeds/918735601
     private Timer task = null;

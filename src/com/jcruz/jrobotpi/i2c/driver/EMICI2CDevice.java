@@ -72,9 +72,36 @@ public class EMICI2CDevice {
         cad = cad.concat("\r\n");
         sc.write(cad);
         // Wait for response from Emic-2. It respond to all commands with :
-        sc.waitResponse(0x3A);
+        waitResponse(2);
+    }
+    
+    public void writeCommand(String cad) {
+        cad = cad.concat("\r\n");
+        sc.write(cad);
+        // Wait for response from Emic-2. It respond to all commands with :
+        waitResponse(5);
     }
 
+    /**
+     *
+     * Wait for response from UART. It respond to all commands with car
+     *
+     * @param car
+     */
+    public void waitResponse(int nrobytes) {
+        int work = 0;
+        //wait two chars :\n
+        while (work!=nrobytes) {
+            work = sc.bytesToRead();
+        }
+        for(;0<work;work--)
+        //while (0 < work) {
+           //read it from input buffer  
+           sc.read();
+        //   work--;
+        //}
+    }
+    
     /**
      * Free Uart resource
      *
