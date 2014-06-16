@@ -23,43 +23,40 @@
  */
 package com.jcruz.jrobotpi;
 
+import com.jcruz.jrobotpi.Devices.Sensors;
+import com.oracle.json.Json;
+import com.oracle.json.JsonBuilderFactory;
+import com.oracle.json.JsonObjectBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
 
 /**
- * MIDlet working as simple personal WebServer. Currently this serves simple
- * HTTP GET operation.
+ * Simple WebServer for read values using REST
  *
- * @author Kumar Mettu
- * @version 0.61
+ * @author
  */
 public class WebServer implements Runnable {
 
     private StreamConnectionNotifier scn = null;
     private Connection c;
     private volatile boolean shouldRun;
+    private String[] restTags = {"AMBIENTLIGHT", "HUMIDITY", "RPI_TEMPERATURE", "TEMPERATURE", "PRESSURE", "HEADING"};
 
     /**
-     * Default constructor.
-     */
-    WebServer() {
-
-    }
-    
-    /**
-     * Start server. Creates datagram connection and starts thread.
-     * @return 
+     * Start server. Creates http connection and starts thread.
+     *
+     * @return
      */
     public boolean start() {
-        shouldRun=true;
+        shouldRun = true;
         try {
             scn = (StreamConnectionNotifier) Connector.open("socket://:8000");
+            new Thread(this).start();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -67,8 +64,9 @@ public class WebServer implements Runnable {
     }
 
     /**
-     * This will be invoked when we start the MIDlet
+     *
      */
+    @Override
     public void run() {
         try {
             while (shouldRun) {
@@ -78,6 +76,7 @@ public class WebServer implements Runnable {
                 // service the connection in a separate thread 
             }
         } catch (IOException e) {
+            stop();
             e.printStackTrace();
             //No-op 
         }
@@ -92,7 +91,7 @@ public class WebServer implements Runnable {
             if (scn != null) {
                 scn.close();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
         }
     }
 
@@ -108,35 +107,53 @@ public class WebServer implements Runnable {
         }
 
         /**
-         * Handles client request.
+         * Handles client request. REST Server
          */
         public void run() {
-            String str = "";
+            String str;
+            JsonObjectBuilder jsonvalue = null;
             try (BufferedReader in = new BufferedReader(new InputStreamReader(
                     client.openInputStream()))) {
                 str = in.readLine();
                 System.out.println(str);
-                str = in.readLine();
-                System.out.println(str);
+                //str = in.readLine();
+                //System.out.println(str);
+
+                JsonBuilderFactory factory = Json.createBuilderFactory(null);
+
+                jsonvalue = factory.createObjectBuilder();
+
+                if (str.contains(Sensors.AmbientLight.getName())) {
+                    jsonvalue.add(Sensors.AmbientLight.getName(), Sensors.AmbientLight.getValue());
+                }
+                if (str.contains(Sensors.Heading.getName())) {
+                    jsonvalue.add(Sensors.Heading.getName(), Sensors.Heading.getValue());
+                }
+                if (str.contains(Sensors.Humidity.getName())) {
+                    jsonvalue.add(Sensors.Humidity.getName(), Sensors.Humidity.getValue());
+                }
+                if (str.contains(Sensors.Pressure.getName())) {
+                    jsonvalue.add(Sensors.Pressure.getName(), Sensors.Pressure.getValue());
+                }
+                if (str.contains(Sensors.RPI_Temperature.getName())) {
+                    jsonvalue.add(Sensors.RPI_Temperature.getName(), Sensors.RPI_Temperature.getValue());
+                }
+                if (str.contains(Sensors.Temperature.getName())) {
+                    jsonvalue.add(Sensors.Temperature.getName(), Sensors.Temperature.getValue());
+                }
+
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
             try (PrintStream out = new PrintStream(client.openOutputStream())) {
-                String response
-                        = "<HTML>"
-                        + "<HEAD>"
-                        + "<TITLE>Web Server</TITLE>"
-                        + "<link rel='shortcut icon' href='data:image/x-icon;,' type='image/x-icon'>"
-                        + "</HEAD>"
-                        + "<BODY>Prueba Socket ME. <br>"
-                        + "Thanks for Visiting.</BODY>"
-                        + "</HTML>";
                 out.println("HTTP/1.0 200 OK");
-                out.println("Content-Type: text/html");
-                out.println("Server: Bot");
+                //out.println("Cache-Control: max-age=5");
+                out.println("Content-Type: application/json; charset=utf-8");
+                //out.println("Content-Encoding: gzip");
+                //out.println("Server: Bot");
                 // this blank line signals the end of the headers
                 out.println("");
-                out.println(response);
+                out.println(jsonvalue.build().toString());
                 out.flush();
             } catch (IOException ex) {
                 ex.printStackTrace();

@@ -243,7 +243,7 @@ public class GPSEM406Device {
             latitude[0] = tokens.nextToken();
             latitude[1] = tokens.nextToken();
             if ((latitude[0].equals("0")) || (latitude[1].equals("00"))) {
-                System.out.println("Time: " + formatTime(time) + " GPS no enlazado al satélite...");
+                System.out.println("Time: " + formatTime(time) + "No GPS satellite link...");
             } else {
                 longitude[0] = tokens.nextToken();
                 longitude[1] = tokens.nextToken();

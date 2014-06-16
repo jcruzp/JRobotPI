@@ -27,7 +27,9 @@ import com.jcruz.jrobotpi.gpio.driver.HCSR04Device;
 import com.jcruz.jrobotpi.gpio.driver.PIRDevice;
 import com.jcruz.jrobotpi.http.driver.XivelyDevice;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
+import com.jcruz.jrobotpi.i2c.Wii;
 import com.jcruz.jrobotpi.i2c.driver.BMP180Device;
+import com.jcruz.jrobotpi.i2c.driver.BMP180Mode;
 import com.jcruz.jrobotpi.i2c.driver.EMICI2CDevice;
 import com.jcruz.jrobotpi.i2c.driver.HMC5883LDevice;
 import com.jcruz.jrobotpi.i2c.driver.HTU21DDevice;
@@ -39,6 +41,7 @@ import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
 import java.io.IOException;
 import jdk.dio.gpio.PinEvent;
 import jdk.dio.gpio.PinListener;
+import jdk.dio.i2cbus.I2CDevice;
 
 /**
  *
@@ -55,15 +58,15 @@ public class Devices {
     private boolean pirActivate = true;
 
     public XivelyDevice xively = null;
-    public BMP180Device bmp180 = null;
-    public HTU21DDevice htu21d = null;
+    public static BMP180Device bmp180 = null;
+    public static HTU21DDevice htu21d = null;
     public WiiRemote wiiremote = null;
     public Move move = null;
     public PCA9685Device servo = null;
-    public VCNL4000Device vcnl4000 = null;
+    public static VCNL4000Device vcnl4000 = null;
     public EMICI2CDevice emic2 = null;
     // public TPA2016Device tpa = null;
-    public HMC5883LDevice hmc = null;
+    public static HMC5883LDevice hmc = null;
 
     public final String[] emic2Msgs = {
         "S Emic 2 Ok.", //0
@@ -92,6 +95,91 @@ public class Devices {
         "S PIR Deactivated", //23
         "S HMC5883L Ok." //24   
     };
+    
+    /**
+     * Enum used to read all sensors data
+     */
+    public enum Sensors {
+
+        /**
+         * Read Ambient Light
+         */
+        AmbientLight {
+                    int getValue() {
+                        return vcnl4000.readAmbientLight();
+                    }
+                    
+                    String getName(){
+                        return ("AMBIENTLIGHT");
+                    }
+                },
+        /**
+         * Read Humidity
+         */
+        Humidity {
+                    int getValue() {
+                        return (int) htu21d.readHumidity();
+                    }
+                    
+                     String getName(){
+                        return ("HUMIDITY");
+                    }
+                },
+        
+        /**
+         * Read RPI_Temperature
+         */
+        RPI_Temperature {
+                    int getValue() {
+                        return (int) htu21d.readTemperature();
+                    }
+                    
+                    String getName(){
+                        return ("RPI_TEMPERATURE");
+                    }
+                },
+        
+        /**
+         * Read Temperature
+         */
+        Temperature {
+                    int getValue() {
+                        return (int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[0];
+                    }
+                    String getName(){
+                        return ("TEMPERATURE");
+                    }
+                },
+        
+        /**
+         * Read Pressure
+         */
+        Pressure {
+                    int getValue() {
+                        return (int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[1];
+                    }
+                    String getName(){
+                        return ("PRESSURE");
+                    }
+                },
+        
+        /**
+         * Read Heading
+         */
+        Heading {
+                    int getValue() {
+                        return (int) hmc.calculateHeading();
+                    }
+                    String getName(){
+                        return ("HEADING");
+                    }
+                };
+        
+
+        abstract int getValue();
+        abstract String getName();
+    };
+    
 
     /**
      *
@@ -117,10 +205,10 @@ public class Devices {
         htu21d = new HTU21DDevice();
         emic2.write(emic2Msgs[4]);
 
-        wiiremote = new WiiRemote();
-        emic2.write(emic2Msgs[5]);
+        //wiiremote = new WiiRemote();
+        //emic2.write(emic2Msgs[5]);
 
-        move = new Move();
+        //move = new Move();
 
         emic2.write(emic2Msgs[6]);
         servo = new PCA9685Device();

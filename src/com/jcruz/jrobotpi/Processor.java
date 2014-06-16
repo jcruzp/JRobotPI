@@ -87,11 +87,11 @@ public class Processor extends Devices {
     public void Start() {
         webserver.start();
         while (!stopMenu) {
-            I2CUtils.I2Cdelay(10);
+           // I2CUtils.I2Cdelay(10);
             //Menu Options Home (menu) / B (move) / A (scan) / 1 (PIR)
-            keyMenu();
+           // keyMenu();
             //Process all menu options
-            processMenu();
+           // processMenu();
         }
     }
 
@@ -116,24 +116,24 @@ public class Processor extends Devices {
 
         @Override
         public void run() {
-            int celsius = 0, fahrenheit = 0, hectorPascal = 0, inchesMercury = 0;
+            //int celsius = 0, fahrenheit = 0, hectorPascal = 0, inchesMercury = 0;
 
-            short amb = vcnl4000.readAmbientLight();
-            xively.updateValue("Ambient_Light", String.valueOf(amb));
+            //short amb = vcnl4000.readAmbientLight();
+            xively.updateValue("Ambient_Light", String.valueOf(Sensors.AmbientLight.getValue()));
 
-            xively.updateValue("Humidity", String.valueOf((int) htu21d.readHumidity()));
+            xively.updateValue("Humidity", String.valueOf(Sensors.Humidity.getValue()));
 
-            xively.updateValue("RPI_Temperature", String.valueOf((int) htu21d.readTemperature()));
+            xively.updateValue("RPI_Temperature", String.valueOf(Sensors.RPI_Temperature.getValue()));
 
-            float[] result = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
-            celsius = (int) result[0];
-            xively.updateValue("Temperature", String.valueOf(celsius));
+            //float[] result = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
+            //celsius = (int) result[0];
+            xively.updateValue("Temperature", String.valueOf(Sensors.Temperature.getValue()));
             //fahrenheit = BMP180Device.celsiusToFahrenheit(celsius);
-            hectorPascal = (int) result[1];
-            xively.updateValue("Pressure", String.valueOf(hectorPascal));
+            //hectorPascal = (int) result[1];
+            xively.updateValue("Pressure", String.valueOf(Sensors.Pressure.getValue()));
             //inchesMercury = BMP180Device.pascalToInchesMercury(hectorPascal);
-            short heading = (short) hmc.calculateHeading();
-            xively.updateValue("Heading", String.valueOf(heading));
+            //short heading = (short) hmc.calculateHeading();
+            xively.updateValue("Heading", String.valueOf(Sensors.Heading.getValue()));
 
             //System.out.format("Temperature: %.2f C, %.2f F\n", celsius, fahrenheit);
             //System.out.format("Pressure: %.2f hPa, %.2f inHg\n\n", hectorPascal, inchesMercury);
