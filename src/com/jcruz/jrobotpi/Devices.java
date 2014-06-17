@@ -38,6 +38,7 @@ import com.jcruz.jrobotpi.i2c.driver.PCA9685Device;
 //import com.jcruz.jrobotpi.i2c.driver.TPA2016Device;
 import com.jcruz.jrobotpi.i2c.driver.VCNL4000Device;
 import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
+import com.jcruz.jrobotpi.uart.driver.GPSEM406Device;
 import java.io.IOException;
 import jdk.dio.gpio.PinEvent;
 import jdk.dio.gpio.PinListener;
@@ -67,6 +68,8 @@ public class Devices {
     public EMICI2CDevice emic2 = null;
     // public TPA2016Device tpa = null;
     public static HMC5883LDevice hmc = null;
+    public static GPSEM406Device gps = null;
+    
 
     public final String[] emic2Msgs = {
         "S Emic 2 Ok.", //0
@@ -92,8 +95,9 @@ public class Devices {
         "S Object detected at ", //20
         "S No Object detected.", //21
         "S PIR Activated", //22
-        "S PIR Deactivated", //23
-        "S HMC5883L Ok." //24   
+        "S PIR Deactivated.", //23
+        "S HMC5883L Ok.", //24  
+        "S GPS Ok" //25   
     };
     
     /**
@@ -173,8 +177,41 @@ public class Devices {
                     String getName(){
                         return ("HEADING");
                     }
-                };
+                },
+        /**
+         * Read Latitude
+         */
+        Latitude {
+                    int getValue() {
+                        return 0;
+                    }
+                    String getName(){
+                        return ("LATITUDE");
+                    }
+                },
+        /**
+         * Read Longitude
+         */
+        Longitude {
+                    int getValue() {
+                        return 0;
+                    }
+                    String getName(){
+                        return ("LONGITUDE");
+                    }
+                },
         
+        /**
+         * Read Altitude
+         */
+        Altitude {
+                    int getValue() {
+                        return 0;
+                    }
+                    String getName(){
+                        return ("ALTITUDE");
+                    }
+                };
 
         abstract int getValue();
         abstract String getName();
@@ -230,6 +267,10 @@ public class Devices {
         pir = new PIRDevice(triggerPir);
         pir.setListener(new MyPinListener());
         emic2.write(emic2Msgs[10]);
+        
+        gps=new GPSEM406Device();
+        emic2.write(emic2Msgs[25]);
+        
 
 //            //Inicialize audio amp
 //            tpa = new TPA2016Device();
@@ -271,6 +312,7 @@ public class Devices {
         htu21d.close();
         bmp180.close();
         hcsr04.close();
+        gps.close();
         emic2.close();
     }
 

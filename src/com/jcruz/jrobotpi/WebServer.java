@@ -45,7 +45,7 @@ public class WebServer implements Runnable {
     private StreamConnectionNotifier scn = null;
     private Connection c;
     private volatile boolean shouldRun;
-    private String[] restTags = {"AMBIENTLIGHT", "HUMIDITY", "RPI_TEMPERATURE", "TEMPERATURE", "PRESSURE", "HEADING"};
+
 
     /**
      * Start server. Creates http connection and starts thread.
@@ -147,10 +147,9 @@ public class WebServer implements Runnable {
             }
             try (PrintStream out = new PrintStream(client.openOutputStream())) {
                 out.println("HTTP/1.0 200 OK");
-                //out.println("Cache-Control: max-age=5");
+                out.println("Cache-Control: max-age=5");
                 out.println("Content-Type: application/json; charset=utf-8");
-                //out.println("Content-Encoding: gzip");
-                //out.println("Server: Bot");
+                out.println("Server: JRobotPI");
                 // this blank line signals the end of the headers
                 out.println("");
                 out.println(jsonvalue.build().toString());
