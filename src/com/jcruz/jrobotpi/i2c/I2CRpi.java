@@ -68,7 +68,7 @@ public class I2CRpi {
         try {
             device.close();
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            ex.printStackTrace();
         }
     }
 }

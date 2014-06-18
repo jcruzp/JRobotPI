@@ -335,7 +335,7 @@ public class GPSEM406Device {
         try {
             uart.close();
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+            ex.printStackTrace();
         }
     }
 
