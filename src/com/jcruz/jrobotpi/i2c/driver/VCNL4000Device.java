@@ -86,7 +86,7 @@ public class VCNL4000Device extends I2CRpi {
         }
 
         VCNL4000.IRLED.write(device, (byte) 20);        // set to 20 * 10mA = 200mA
-        Logger.getGlobal().log(Level.INFO, "IR LED current = {0} mA", String.valueOf(VCNL4000.IRLED.read(device) * 10));
+        Logger.getGlobal().log(Level.INFO, "IR LED current = " + String.valueOf(VCNL4000.IRLED.read(device) * 10) + " mA");
 
         //write8(VCNL4000_SIGNALFREQ, 3);
         Logger.getGlobal().log(Level.INFO, "Proximity measurement frequency = ");
@@ -105,8 +105,7 @@ public class VCNL4000Device extends I2CRpi {
         }
 
         VCNL4000.PROXIMITYADJUST.write(device, (byte) 0x81);
-        Logger.getGlobal().log(Level.INFO, "Proximity adjustment register = ");
-        Logger.getGlobal().log(Level.INFO, String.valueOf(VCNL4000.PROXIMITYADJUST.read(device)));
+        Logger.getGlobal().log(Level.INFO, "Proximity adjustment register = "+String.valueOf(VCNL4000.PROXIMITYADJUST.read(device)));
 
         // arrange for continuous conversion
         //write8(VCNL4000_AMBIENTPARAMETER, 0x89);

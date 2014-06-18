@@ -24,6 +24,8 @@
 package com.jcruz.jrobotpi.i2c.driver;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Interface to EMIC-2 sound synthetizer
@@ -53,6 +55,7 @@ public class EMICI2CDevice {
      */
     public void Msg(int msgnum) {
         write(emic2Msgs[msgnum]);
+        Logger.getGlobal().log(Level.INFO,emic2Msgs[msgnum].substring(2));
     }
     
     /**

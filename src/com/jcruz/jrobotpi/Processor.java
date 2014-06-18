@@ -76,9 +76,10 @@ public class Processor extends Devices {
         //Task to update Xively
         task = new Timer();
         task.schedule(readDevices, 0, 20000);
-        emic2.write(emic2Msgs[11]);
+        emic2.Msg(11);
         //Create webserver
         webserver = new WebServer();
+        emic2.Msg(26);
     }
 
     /**
@@ -87,11 +88,11 @@ public class Processor extends Devices {
     public void Start() {
         webserver.start();
         while (!stopMenu) {
-           // I2CUtils.I2Cdelay(10);
-            //Menu Options Home (menu) / B (move) / A (scan) / 1 (PIR)
-           // keyMenu();
-            //Process all menu options
-           // processMenu();
+//            I2CUtils.I2Cdelay(10);
+//            //Menu Options Home (menu) / B (move) / A (scan) / 1 (PIR)
+//            keyMenu();
+//            //Process all menu options
+//            processMenu();
         }
     }
 
@@ -119,21 +120,21 @@ public class Processor extends Devices {
             //int celsius = 0, fahrenheit = 0, hectorPascal = 0, inchesMercury = 0;
 
             //short amb = vcnl4000.readAmbientLight();
-            xively.updateValue("Ambient_Light", String.valueOf(Sensors.AmbientLight.getValue()));
+            xively.updateValue("Ambient_Light", Sensors.AmbientLight.getValue());
 
-            xively.updateValue("Humidity", String.valueOf(Sensors.Humidity.getValue()));
+            xively.updateValue("Humidity", Sensors.Humidity.getValue());
 
-            xively.updateValue("RPI_Temperature", String.valueOf(Sensors.RPI_Temperature.getValue()));
+            xively.updateValue("RPI_Temperature", Sensors.RPI_Temperature.getValue());
 
             //float[] result = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
             //celsius = (int) result[0];
-            xively.updateValue("Temperature", String.valueOf(Sensors.Temperature.getValue()));
+            xively.updateValue("Temperature", Sensors.Temperature.getValue());
             //fahrenheit = BMP180Device.celsiusToFahrenheit(celsius);
             //hectorPascal = (int) result[1];
-            xively.updateValue("Pressure", String.valueOf(Sensors.Pressure.getValue()));
+            xively.updateValue("Pressure", Sensors.Pressure.getValue());
             //inchesMercury = BMP180Device.pascalToInchesMercury(hectorPascal);
             //short heading = (short) hmc.calculateHeading();
-            xively.updateValue("Heading", String.valueOf(Sensors.Heading.getValue()));
+            xively.updateValue("Heading", Sensors.Heading.getValue());
 
             //System.out.format("Temperature: %.2f C, %.2f F\n", celsius, fahrenheit);
             //System.out.format("Pressure: %.2f hPa, %.2f inHg\n\n", hectorPascal, inchesMercury);
@@ -236,25 +237,25 @@ public class Processor extends Devices {
         if (opcMenu != opcMenuSave) {
             switch (opcMenu) {
                 case 1:
-                    short amb = vcnl4000.readAmbientLight();
-                    emic2.write("SAmbient Light" + String.valueOf(amb));
+                    //short amb = vcnl4000.readAmbientLight();
+                    emic2.write("SAmbient Light" + Sensors.AmbientLight.getValue());
                     break;
                 case 2:
-                    float[] result2 = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
-                    emic2.write("SPressure" + String.valueOf((int) result2[1]));
+                    //float[] result2 = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
+                    emic2.write("SPressure" + Sensors.Pressure.getValue());
                     break;
                 case 3:
-                    emic2.write("SHumidity" + String.valueOf((int) htu21d.readHumidity()));
+                    emic2.write("SHumidity" + Sensors.Humidity.getValue());
                     break;
                 case 4:
-                    emic2.write("SRaspberry PI Temperature" + String.valueOf((int) htu21d.readTemperature()));
+                    emic2.write("SRaspberry PI Temperature" + Sensors.RPI_Temperature.getValue());
                     break;
                 case 5:
-                    float[] result1 = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
-                    emic2.write("STemperature" + String.valueOf((int) result1[0]));
+                    //float[] result1 = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
+                    emic2.write("STemperature" + Sensors.Temperature.getValue());
                     break;
                 case 6:
-                    emic2.write("SHeading" + String.valueOf((int) hmc.calculateHeading()) + " Degrees");
+                    emic2.write("SHeading" + Sensors.Heading.getValue() + " Degrees");
                     break;
             }
             opcMenuSave = opcMenu;

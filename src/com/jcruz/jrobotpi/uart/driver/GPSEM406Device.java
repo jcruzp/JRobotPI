@@ -51,6 +51,11 @@ public class GPSEM406Device {
     private UARTConfig config;
     private UART uart = null;
     private static String nmea = "";
+    
+    private String time = null;
+    private String longitude[] = {null, null};
+    private String latitude[] = {null, null};
+    private String altitude[] = {null, null};
 
     /**
      * Define a UART device config to interface to Emic-2
@@ -85,8 +90,8 @@ public class GPSEM406Device {
         buffer.clear();
         try {
             uart.write(buffer);
-             I2CUtils.I2Cdelay(10000);
-            System.out.println("Configurado");
+            I2CUtils.I2Cdelay(10000);
+            
 
 //            int checkSum;
 //            
@@ -154,6 +159,7 @@ public class GPSEM406Device {
 //            buffer.put(magicHead);
 //            buffer.clear();
 //            uart.write(buffer);
+//            I2CUtils.I2Cdelay(5000);
 //            //}
 // 
 //// send message body, calculating checksum as we go
@@ -167,12 +173,14 @@ public class GPSEM406Device {
 //            checkSum = checkSum & (0x7FFF);
 //            buffer2.clear();
 //            uart.write(buffer2);
+//            I2CUtils.I2Cdelay(5000);
 //            
 //            ByteBuffer buffer3 = ByteBuffer.allocateDirect(2);
 //            buffer3.put((byte)(checkSum >> 8));
 //            buffer3.put((byte) (checkSum & 0xff));
 //            buffer3.clear();
 //            uart.write(buffer3);
+//            I2CUtils.I2Cdelay(5000);
 //            
 //            // send the 2 byte checksum
 //            //Serial1.print(byte(checkSum >> 8));
@@ -182,15 +190,17 @@ public class GPSEM406Device {
 //            buffer4.put(magicTail);
 //            buffer4.clear();
 //            uart.write(buffer4);
+//            I2CUtils.I2Cdelay(5000);
 //            
-//// send the 2 byte tail
-////        for (int index = 0; index < 2; index++) {
-////                Serial1.print(byte(magicTail[index]));
+////// send the 2 byte tail
+//////        for (int index = 0; index < 2; index++) {
+//////                Serial1.print(byte(magicTail[index]));
+//////        }
+////        } catch (IOException ex) {
+////            ex.printStackTrace();
 ////        }
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-// 
+//// 
+            System.out.println("GPS Config Ok...");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -233,10 +243,7 @@ public class GPSEM406Device {
             StringTokenizer tokens = new StringTokenizer(message, ",");
         // pull off the first token and check if it is the message we want
             //$GPGGA,130612.255,,,,,0,00,,,M,0.0,M,,00
-            String time = null;
-            String longitude[] = {null, null};
-            String latitude[] = {null, null};
-            String altitude[] = {null, null};
+            
             tokens.nextToken(); // $GPGGA position
             // Next token is the time
             time = tokens.nextToken();
@@ -254,13 +261,29 @@ public class GPSEM406Device {
                 altitude[0] = tokens.nextToken();
                 altitude[1] = tokens.nextToken();
 
-                System.out.println("Time: " + formatTime(time) + "\n"
-                        + " Latitude: " + formatLat(latitude) + " Longitude: " + formatLong(longitude) + "\n"
-                        + " Altitude: " + formatAlt(altitude) + "\n");
+                System.out.println("Time: " + getTime() + "\n"
+                        + " Latitude: " + getLatitude() + " Longitude: " + getLongitude() + "\n"
+                        + " Altitude: " + getAltitude() + "\n");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public String getTime() {
+        return formatTime(time);
+    }
+
+    public String getLongitude() {
+        return formatLong(longitude);
+    }
+
+    public String getLatitude() {
+        return formatLat(latitude);
+    }
+
+    public String getAltitude() {
+        return formatAlt(altitude);
     }
 
     /**

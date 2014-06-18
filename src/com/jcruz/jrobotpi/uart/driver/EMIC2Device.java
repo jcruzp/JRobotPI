@@ -72,6 +72,7 @@ public class EMIC2Device {
      */
     public void Msg(int msgnum) {
         write(emic2Msgs[msgnum]);
+        Logger.getGlobal().log(Level.INFO,emic2Msgs[msgnum].substring(2));
     }
     
     /**

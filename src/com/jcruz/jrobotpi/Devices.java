@@ -97,7 +97,8 @@ public class Devices {
         "S PIR Activated", //22
         "S PIR Deactivated.", //23
         "S HMC5883L Ok.", //24  
-        "S GPS Ok" //25   
+        "S GPS Ok.", //25  
+        "S REST Server Ok." //26    
     };
     
     /**
@@ -109,24 +110,24 @@ public class Devices {
          * Read Ambient Light
          */
         AmbientLight {
-                    int getValue() {
-                        return vcnl4000.readAmbientLight();
+                    String getValue() {
+                        return String.valueOf(vcnl4000.readAmbientLight());
                     }
                     
                     String getName(){
-                        return ("AMBIENTLIGHT");
+                        return ("Ambient_Light");
                     }
                 },
         /**
          * Read Humidity
          */
         Humidity {
-                    int getValue() {
-                        return (int) htu21d.readHumidity();
+                    String getValue() {
+                        return String.valueOf((int) htu21d.readHumidity());
                     }
                     
                      String getName(){
-                        return ("HUMIDITY");
+                        return ("Humidity");
                     }
                 },
         
@@ -134,12 +135,12 @@ public class Devices {
          * Read RPI_Temperature
          */
         RPI_Temperature {
-                    int getValue() {
-                        return (int) htu21d.readTemperature();
+                    String getValue() {
+                        return String.valueOf((int) htu21d.readTemperature());
                     }
                     
                     String getName(){
-                        return ("RPI_TEMPERATURE");
+                        return ("RPI_Temperature");
                     }
                 },
         
@@ -147,11 +148,11 @@ public class Devices {
          * Read Temperature
          */
         Temperature {
-                    int getValue() {
-                        return (int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[0];
+                    String getValue() {
+                        return String.valueOf((int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[0]);
                     }
                     String getName(){
-                        return ("TEMPERATURE");
+                        return ("Temperature");
                     }
                 },
         
@@ -159,11 +160,11 @@ public class Devices {
          * Read Pressure
          */
         Pressure {
-                    int getValue() {
-                        return (int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[1];
+                    String getValue() {
+                        return String.valueOf((int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[1]);
                     }
                     String getName(){
-                        return ("PRESSURE");
+                        return ("Pressure");
                     }
                 },
         
@@ -171,33 +172,33 @@ public class Devices {
          * Read Heading
          */
         Heading {
-                    int getValue() {
-                        return (int) hmc.calculateHeading();
+                    String getValue() {
+                        return String.valueOf((int) hmc.calculateHeading());
                     }
                     String getName(){
-                        return ("HEADING");
+                        return ("Heading");
                     }
                 },
         /**
          * Read Latitude
          */
         Latitude {
-                    int getValue() {
-                        return 0;
+                    String getValue() {
+                        return gps.getLatitude();
                     }
                     String getName(){
-                        return ("LATITUDE");
+                        return ("Latitude");
                     }
                 },
         /**
          * Read Longitude
          */
         Longitude {
-                    int getValue() {
-                        return 0;
+                    String getValue() {
+                        return gps.getLongitude();
                     }
                     String getName(){
-                        return ("LONGITUDE");
+                        return ("Longitude");
                     }
                 },
         
@@ -205,15 +206,15 @@ public class Devices {
          * Read Altitude
          */
         Altitude {
-                    int getValue() {
-                        return 0;
+                    String getValue() {
+                        return gps.getAltitude();
                     }
                     String getName(){
-                        return ("ALTITUDE");
+                        return ("Altitude");
                     }
                 };
 
-        abstract int getValue();
+        abstract String getValue();
         abstract String getName();
     };
     
@@ -231,45 +232,45 @@ public class Devices {
         emic2.writeCommand("L0");
         emic2.writeCommand("N0");
 
-        emic2.write(emic2Msgs[0]);
-        emic2.write(emic2Msgs[1]);
+        emic2.Msg(0);
+        emic2.Msg(1);
         hcsr04 = new HCSR04Device(trigger, echo);
-        emic2.write(emic2Msgs[2]);
+        emic2.Msg(2);
 
         bmp180 = new BMP180Device();
-        emic2.write(emic2Msgs[3]);
+        emic2.Msg(3);
 
         htu21d = new HTU21DDevice();
-        emic2.write(emic2Msgs[4]);
+        emic2.Msg(4);
 
-        //wiiremote = new WiiRemote();
-        //emic2.write(emic2Msgs[5]);
-
-        //move = new Move();
-
-        emic2.write(emic2Msgs[6]);
+//        wiiremote = new WiiRemote();
+//        emic2.write(emic2Msgs[5]);
+//
+//        move = new Move();
+//        emic2.write(emic2Msgs[6]);
+        
         servo = new PCA9685Device();
         servo.setPWMFreq(60);
-        emic2.write(emic2Msgs[7]);
+        emic2.Msg(7);
 
         vcnl4000 = new VCNL4000Device();
-        emic2.write(emic2Msgs[8]);
+        emic2.Msg(8);
 
         xively = new XivelyDevice();
-        emic2.write(emic2Msgs[9]);
+        emic2.Msg(9);
 
         hmc = new HMC5883LDevice();
         hmc.SetScale(1.3F);
         hmc.SetMeasurementMode(HMC5883LDevice.Measurement.Continuous);
-        emic2.write(emic2Msgs[24]);
+        emic2.Msg(24);
 
         //Inicialize PIR motion detect
         pir = new PIRDevice(triggerPir);
         pir.setListener(new MyPinListener());
-        emic2.write(emic2Msgs[10]);
+        emic2.Msg(10);
         
         gps=new GPSEM406Device();
-        emic2.write(emic2Msgs[25]);
+        emic2.Msg(25);
         
 
 //            //Inicialize audio amp

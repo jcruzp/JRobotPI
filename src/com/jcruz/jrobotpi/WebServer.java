@@ -141,6 +141,16 @@ public class WebServer implements Runnable {
                 if (str.contains(Sensors.Temperature.getName())) {
                     jsonvalue.add(Sensors.Temperature.getName(), Sensors.Temperature.getValue());
                 }
+                if (str.contains(Sensors.Latitude.getName())) {
+                    jsonvalue.add(Sensors.Latitude.getName(), Sensors.Latitude.getValue());
+                }
+                if (str.contains(Sensors.Longitude.getName())) {
+                    jsonvalue.add(Sensors.Longitude.getName(), Sensors.Longitude.getValue());
+                }
+                if (str.contains(Sensors.Altitude.getName())) {
+                    jsonvalue.add(Sensors.Altitude.getName(), Sensors.Altitude.getValue());
+                }
+                
 
             } catch (IOException ex) {
                 ex.printStackTrace();
