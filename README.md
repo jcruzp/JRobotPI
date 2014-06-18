@@ -22,6 +22,7 @@ The packages defined are:
 **com.jcruz.jrobotpi.uart.driver** : implemented commands defined for uart connected devices.
 **com.jcruz.jrobotpi.http** : enum classes with all commands supported by each http connected device or site.
 **com.jcruz.jrobotpi.http.driver** : implemented all commands defined in enum classes.
+**com.jcruz.jrobotpi.log** : implemented log handler.
 
 Basicly we needs an enum class where with all defined or supported commands and a driver class that implements all commands.
 With Netbeans IDE 8.0 I can install and run MIdlet JRobotPI.java directly to Raspberry PI, that have installed a Oracle Java ME Embedded 8 for Raspberry Pi Model B. 
@@ -31,17 +32,20 @@ For now i have interface in java to this devices:
 
 |Device|Interface Type|
 --------------|---------------|
-|Emic 2 Text-to-Speech module|UART|
-|Stereo 2.8W Class D Audio Amplifier - I2C Control AGC - TPA2016 will be change by Sparkfun Mono Audio Amp Breakout - TPA2005D1 to   avoid interference  (not develop yet *)|I2C|
+|Emic 2 Text-to-Speech module|I2C to UART|
+|SC16IS750 I2C/SPI-to-UART IC|I2C|
+|Stereo 2.8W Class D Audio Amplifier - I2C Control AGC - TPA2016 will be change by Sparkfun Mono Audio Amp Breakout - TPA2005D1 to   avoid interference  |I2C|
 |VCNL4000 Proximity/Light sensor|I2C|
 |BMP180 Barometric Pressure/Temperature/Altitude Sensor|I2C|
 |HTU21D Humidity Sensor Breakout|I2C|
 |HMC5883L Digital Compass Module Triple Axis Magnetoresistive Sensor Module|I2C|
 |Ultrasonic Ranging Detector Mod HC-SR04 Distance Sensor|GPIO|
-|hc-sr501 PIR|GPIO|
+|HC-SR501 PIR (left) |GPIO|
+|HC-SR501 PIR (Right) |GPIO|
 |Adafruit 16-Channel 12-bit PWM/Servo Shield - I2C interface|I2C|
-|EM406 - GPS receiver|UART (not develop yet *)|
+|EM406 - GPS receiver|UART|
 |Arduino Due (Dc Motors and Wii Remote Control)|I2C|
+|Flame Sensor DFR0076|GPIO|
 
 
 I plan to work on this in the next days
@@ -49,6 +53,8 @@ More information see: https://sites.google.com/site/jrobotpi/hardware
 
 All sensors send data to Xively site and in this site I have defined a trigger for PIR_Motion device that listener to changes and send notifications to my Iphone using Prowl for that.
 https://xively.com/feeds/918735601
+
+You can access all sensors data, using REST commands, I include a light webserver.
 
 
 ###Due_I2C.ino
