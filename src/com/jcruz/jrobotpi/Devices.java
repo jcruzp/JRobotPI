@@ -82,7 +82,7 @@ public class Devices {
         "S Servo Ok.", //7
         "S VCNL4000 Ok.", //8
         "S Xively Ok.", //9    
-        "S PIR and your listener Ok.", //10
+        "S PIR and it listener Ok.", //10
         "S Task to read devices created.",//11
         "S Close devices comunication.", //12
         "S Menu activated.", //13
@@ -212,7 +212,18 @@ public class Devices {
                     String getName(){
                         return ("Altitude");
                     }
-                };
+                },
+        
+        Stop {
+            
+                    String getValue() {
+                        return "";
+                    }
+                    String getName(){
+                        return ("Stop");
+                    }
+        
+        };
 
         abstract String getValue();
         abstract String getName();
@@ -313,8 +324,8 @@ public class Devices {
         htu21d.close();
         bmp180.close();
         hcsr04.close();
-        //gps.close();
-        //emic2.close();
+        gps.close();
+        emic2.close();
     }
 
     //Check PIR Sensor for motion detect

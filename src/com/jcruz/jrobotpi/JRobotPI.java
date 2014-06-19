@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.microedition.midlet.MIDlet;
-import javax.microedition.midlet.MIDletStateChangeException;
 
 /**
  *
@@ -63,28 +62,20 @@ public class JRobotPI extends MIDlet {
             
         } catch (IOException ex) {
             Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+        } finally {
+           destroyApp(true);
         }
     }
 
-    /**
-     *
-     */
-    @Override
-    public void pauseApp() {
-        
-        System.out.println("End program 2...");
-    }
 
-    @Override
     public void destroyApp(boolean unconditional){
-        System.out.println("End program...");
         if (processor != null) {
             processor.Stop();
         }
-        
+        Logger.getGlobal().log(Level.INFO, "End Program...");
         if (loggerHandler != null) {
             loggerHandler.stop();
         } 
-        
+        notifyDestroyed ();
     }
 }

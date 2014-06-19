@@ -72,6 +72,7 @@ public class Processor extends Devices {
      * @throws IOException
      */
     public Processor() throws IOException {
+        //Initialize all devices
         super();
         //Task to update Xively
         task = new Timer();
@@ -87,14 +88,13 @@ public class Processor extends Devices {
      */
     public void Start() {
         webserver.start();
-        while (!stopMenu) {
+        while ((!stopMenu) && (webserver.isShouldRun())) {
             I2CUtils.I2Cdelay(10);
 //            //Menu Options Home (menu) / B (move) / A (scan) / 1 (PIR)
 //            keyMenu();
 //            //Process all menu options
 //            processMenu();
         }
-        I2CUtils.I2Cdelay(10);
     }
 
     /**

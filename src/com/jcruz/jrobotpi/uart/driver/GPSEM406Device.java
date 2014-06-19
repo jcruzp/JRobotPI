@@ -51,7 +51,7 @@ public class GPSEM406Device {
     private UARTConfig config;
     private UART uart = null;
     private static String nmea = "";
-    
+
     private String time = null;
     private String longitude[] = {null, null};
     private String latitude[] = {null, null};
@@ -68,7 +68,7 @@ public class GPSEM406Device {
 
         uart = (UART) DeviceManager.open(UART.class, config);
         GPS_Switch_Mode_To_NMEA();
-        uart.setEventListener(0, new MyUartListener());
+        uart.setEventListener(UARTEvent.INPUT_DATA_AVAILABLE, new MyUartListener());
     }
 
     private static byte[] hexStringToByteArray(String s) {
@@ -91,7 +91,6 @@ public class GPSEM406Device {
         try {
             uart.write(buffer);
             I2CUtils.I2Cdelay(10000);
-            
 
 //            int checkSum;
 //            
@@ -202,7 +201,7 @@ public class GPSEM406Device {
 //// 
             System.out.println("GPS Config Ok...");
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
         }
     }
 
@@ -243,7 +242,7 @@ public class GPSEM406Device {
             StringTokenizer tokens = new StringTokenizer(message, ",");
         // pull off the first token and check if it is the message we want
             //$GPGGA,130612.255,,,,,0,00,,,M,0.0,M,,00
-            
+
             tokens.nextToken(); // $GPGGA position
             // Next token is the time
             time = tokens.nextToken();
@@ -266,7 +265,7 @@ public class GPSEM406Device {
                         + " Altitude: " + getAltitude() + "\n");
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
         }
     }
 
@@ -305,7 +304,7 @@ public class GPSEM406Device {
                     for (int i = 0; i < nrocar; i++) {
                         c = (char) buffer.get(i);
                         //result.append(c);
-                        nmea=nmea.concat(String.valueOf(c));
+                        nmea = nmea.concat(String.valueOf(c));
                     }
 
                     if (nmea.contains("\r\n")) {
@@ -314,13 +313,13 @@ public class GPSEM406Device {
                             process(nmea);
                         }
                         nmea = "";
-                    }; 
+                    };
                     //else {
                     //    nmea = nmea.concat(result.toString());
                     //}
 
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
                 }
 
             }
@@ -333,9 +332,10 @@ public class GPSEM406Device {
      */
     public void close() {
         try {
+            uart.setEventListener(UARTEvent.INPUT_DATA_AVAILABLE, null);
             uart.close();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
         }
     }
 
