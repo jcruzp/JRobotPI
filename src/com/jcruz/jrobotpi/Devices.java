@@ -308,13 +308,13 @@ public class Devices {
         hmc.close();
         vcnl4000.close();
         servo.close();
-        move.close();
-        wiiremote.close();
+        //move.close();
+        //wiiremote.close();
         htu21d.close();
         bmp180.close();
         hcsr04.close();
-        gps.close();
-        emic2.close();
+        //gps.close();
+        //emic2.close();
     }
 
     //Check PIR Sensor for motion detect

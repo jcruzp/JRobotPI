@@ -289,8 +289,8 @@ public class TestJRobotPI extends MIDlet {
             fahrenheit = BMP180Device.celsiusToFahrenheit(celsius);
             hectorPascal = result[1];
             inchesMercury = BMP180Device.pascalToInchesMercury(hectorPascal);
-            System.out.format("Temperature: %.2f C, %.2f F\n", celsius, fahrenheit);
-            System.out.format("Pressure: %.2f hPa, %.2f inHg\n\n", hectorPascal, inchesMercury);
+            //System.out.format("Temperature: %.2f C, %.2f F\n", celsius, fahrenheit);
+            //System.out.format("Pressure: %.2f hPa, %.2f inHg\n\n", hectorPascal, inchesMercury);
         }
 
     };

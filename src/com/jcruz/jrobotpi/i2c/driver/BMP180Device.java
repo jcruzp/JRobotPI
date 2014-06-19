@@ -97,7 +97,7 @@ public class BMP180Device extends I2CRpi {
             Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
         if (result < CALIB_BYTES) {
-            Logger.getGlobal().log(Level.SEVERE, "Error: {0} bytes read", result);
+            Logger.getGlobal().log(Level.SEVERE, "Error: " + result + " bytes read");
             return;
         }
         // Read each of the pairs of data as a signed short
@@ -123,17 +123,17 @@ public class BMP180Device extends I2CRpi {
         MD = calibData.getShort();
 
         // Debug Statements
-        Logger.getGlobal().log(Level.FINE, "AC1 = {0}", AC1);
-        Logger.getGlobal().log(Level.FINE, "AC2 = {0}", AC2);
-        Logger.getGlobal().log(Level.FINE, "AC3 = {0}", AC3);
-        Logger.getGlobal().log(Level.FINE, "AC4 = {0}", AC4);
-        Logger.getGlobal().log(Level.FINE, "AC5 = {0}", AC5);
-        Logger.getGlobal().log(Level.FINE, "AC6 = {0}", AC6);
-        Logger.getGlobal().log(Level.FINE, "B1 = {0}", B1);
-        Logger.getGlobal().log(Level.FINE, "B2 = {0}", B2);
-        Logger.getGlobal().log(Level.FINE, "MB = {0}", MB);
-        Logger.getGlobal().log(Level.FINE, "MC = {0}", MC);
-        Logger.getGlobal().log(Level.FINE, "MD = {0}", MD);
+        Logger.getGlobal().log(Level.FINE, "AC1 = " +AC1);
+        Logger.getGlobal().log(Level.FINE, "AC2 = " + AC2);
+        Logger.getGlobal().log(Level.FINE, "AC3 = " + AC3);
+        Logger.getGlobal().log(Level.FINE, "AC4 = " + AC4);
+        Logger.getGlobal().log(Level.FINE, "AC5 = "+ AC5);
+        Logger.getGlobal().log(Level.FINE, "AC6 = "+ AC6);
+        Logger.getGlobal().log(Level.FINE, "B1 = "+ B1);
+        Logger.getGlobal().log(Level.FINE, "B2 = "+ B2);
+        Logger.getGlobal().log(Level.FINE, "MB = "+ MB);
+        Logger.getGlobal().log(Level.FINE, "MC = "+ MC);
+        Logger.getGlobal().log(Level.FINE, "MD = "+ MD);
     }
 
     /**
@@ -175,10 +175,10 @@ public class BMP180Device extends I2CRpi {
         float celsius = (float) ((B5 + 8) >> 4) / 10;
 
         // Debug statements
-        Logger.getGlobal().log(Level.FINE, "X1 = {0}", X1);
-        Logger.getGlobal().log(Level.FINE, "X2 = {0}", X2);
-        Logger.getGlobal().log(Level.FINE, "B5 = {0}", B5);
-        Logger.getGlobal().log(Level.FINE, "True temperature: {0}C", celsius);
+        Logger.getGlobal().log(Level.FINE, "X1 = " + X1);
+        Logger.getGlobal().log(Level.FINE, "X2 = " +  X2);
+        Logger.getGlobal().log(Level.FINE, "B5 = " + B5);
+        Logger.getGlobal().log(Level.FINE, "True temperature: "+ celsius +" C");
 
         return celsius;
     }
@@ -194,8 +194,8 @@ public class BMP180Device extends I2CRpi {
     private float getPressure(BMP180Mode mode) {
         Logger.getGlobal().log(Level.FINE, "Getting pressure");
         // The pressure command is calculated by the enum
-        Logger.getGlobal().log(Level.FINE, "Mode: {0}", mode.name());
-        Logger.getGlobal().log(Level.FINE, "Pressure Command: {0}", mode.getCommand());
+        Logger.getGlobal().log(Level.FINE, "Mode: " + mode.name());
+        Logger.getGlobal().log(Level.FINE, "Pressure Command: " + mode.getCommand());
 
         BMP180.controlRegister.write(device, mode.getCommand());
 
@@ -211,7 +211,7 @@ public class BMP180Device extends I2CRpi {
             Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
         }
         if (result < 3) {
-            Logger.getGlobal().log(Level.SEVERE, "Error: {0} bytes read", result);
+            Logger.getGlobal().log(Level.SEVERE, "Error: " + result+" bytes read" );
             return 0;
         }
 
@@ -220,7 +220,7 @@ public class BMP180Device extends I2CRpi {
         byte[] data = new byte[3];
         uncompPress.get(data);
         UP = ((((data[0] << 16) & 0xFF0000) + ((data[1] << 8) & 0xFF00) + (data[2] & 0xFF)) >> (8 - mode.getOSS()));
-        Logger.getGlobal().log(Level.FINE, "Uncompensated pressure: {0}", UP);
+        Logger.getGlobal().log(Level.FINE, "Uncompensated pressure: " + UP);
 
         // Calculate the true pressure
         int B6 = B5 - 4000;
@@ -235,16 +235,16 @@ public class BMP180Device extends I2CRpi {
         int B7 = (UP - B3) * (50000 >> mode.getOSS());
 
         // Debug statements
-        Logger.getGlobal().log(Level.FINE, "B6 = {0}", B6);
-        Logger.getGlobal().log(Level.FINE, "X1 = {0}", X1);
-        Logger.getGlobal().log(Level.FINE, "X2 = {0}", X2);
-        Logger.getGlobal().log(Level.FINE, "X3 = {0}", X3);
-        Logger.getGlobal().log(Level.FINE, "B3 = {0}", B3);
-        Logger.getGlobal().log(Level.FINE, "X1 = {0}", X1);
-        Logger.getGlobal().log(Level.FINE, "X2 = {0}", X2);
-        Logger.getGlobal().log(Level.FINE, "X3 = {0}", X3);
-        Logger.getGlobal().log(Level.FINE, "B4 = {0}", B4);
-        Logger.getGlobal().log(Level.FINE, "B7 = {0}", B7);
+        Logger.getGlobal().log(Level.FINE, "B6 = " + B6);
+        Logger.getGlobal().log(Level.FINE, "X1 = " + X1);
+        Logger.getGlobal().log(Level.FINE, "X2 = " + X2);
+        Logger.getGlobal().log(Level.FINE, "X3 = " + X3);
+        Logger.getGlobal().log(Level.FINE, "B3 = " + B3);
+        Logger.getGlobal().log(Level.FINE, "X1 = " + X1);
+        Logger.getGlobal().log(Level.FINE, "X2 = " + X2);
+        Logger.getGlobal().log(Level.FINE, "X3 = " + X3);
+        Logger.getGlobal().log(Level.FINE, "B4 = " + B4);
+        Logger.getGlobal().log(Level.FINE, "B7 = " + B7);
 
         int Pa;
         if (B7 < 0x80000000) {
@@ -252,7 +252,7 @@ public class BMP180Device extends I2CRpi {
         } else {
             Pa = (B7 / B4) * 2;
         }
-        Logger.getGlobal().log(Level.FINE, "Pa = {0}", Pa);
+        Logger.getGlobal().log(Level.FINE, "Pa = " + Pa);
 
         X1 = (Pa >> 8) * (Pa >> 8);
         X1 = (X1 * 3038) >> 16;
@@ -261,9 +261,9 @@ public class BMP180Device extends I2CRpi {
         Pa += ((X1 + X2 + 3791) >> 4);
 
         // Debug statements
-        Logger.getGlobal().log(Level.FINE, "X1 = {0}", X1);
-        Logger.getGlobal().log(Level.FINE, "X2 = {0}", X2);
-        Logger.getGlobal().log(Level.FINE, "Pa = {0}", Pa);
+        Logger.getGlobal().log(Level.FINE, "X1 = " + X1);
+        Logger.getGlobal().log(Level.FINE, "X2 = " + X2);
+        Logger.getGlobal().log(Level.FINE, "Pa = " + Pa);
 
         return (float) (Pa) / 100;
     }
