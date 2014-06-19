@@ -166,7 +166,7 @@ public class BMP180Device extends I2CRpi {
         I2CUtils.I2Cdelay(tempConvTime);
 
         UT = BMP180.tempAddr.readShort(device);
-        Logger.getGlobal().log(Level.FINE, "Uncompensated temperature: {0}", UT);
+        Logger.getGlobal().log(Level.FINE, "Uncompensated temperature: " + UT);
 
         // Calculate the actual temperature
         int X1 = ((UT - AC6) * AC5) >> 15;
