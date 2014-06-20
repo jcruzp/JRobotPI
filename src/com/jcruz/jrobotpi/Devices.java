@@ -54,9 +54,13 @@ public class Devices {
     private final int trigger = 23;
     private final int echo = 17;
 
-    public PIRDevice pir = null;
-    private final int triggerPir = 25;
+    public PIRDevice pirl = null;
+    private final int triggerPirl = 25;
+    public PIRDevice pirr = null;
+    private final int triggerPirr = 24;
     private boolean pirActivate = true;
+    
+    private final int flametrigger = 22;
 
     public XivelyDevice xively = null;
     public static BMP180Device bmp180 = null;
@@ -82,7 +86,7 @@ public class Devices {
         "S Servo Ok.", //7
         "S VCNL4000 Ok.", //8
         "S Xively Ok.", //9    
-        "S PIR and it listener Ok.", //10
+        "S PIR left and it listener Ok.", //10
         "S Task to read devices created.",//11
         "S Close devices comunication.", //12
         "S Menu activated.", //13
@@ -98,7 +102,8 @@ public class Devices {
         "S PIR Deactivated.", //23
         "S HMC5883L Ok.", //24  
         "S GPS Ok.", //25  
-        "S REST Server Ok." //26    
+        "S REST Server Ok.", //26    
+        "S PIR right and it listener Ok." //27        
     };
     
     /**
@@ -254,11 +259,11 @@ public class Devices {
         htu21d = new HTU21DDevice();
         emic2.Msg(4);
 
-//        wiiremote = new WiiRemote();
-//        emic2.write(emic2Msgs[5]);
-//
-//        move = new Move();
-//        emic2.write(emic2Msgs[6]);
+        wiiremote = new WiiRemote();
+        emic2.write(emic2Msgs[5]);
+
+        move = new Move();
+        emic2.write(emic2Msgs[6]);
         
         servo = new PCA9685Device();
         servo.setPWMFreq(60);
@@ -275,10 +280,15 @@ public class Devices {
         hmc.SetMeasurementMode(HMC5883LDevice.Measurement.Continuous);
         emic2.Msg(24);
 
-        //Inicialize PIR motion detect
-        pir = new PIRDevice(triggerPir);
-        pir.setListener(new MyPinListener());
+        //Inicialize PIR Left motion detect
+        pirl = new PIRDevice(triggerPirl);
+        pirl.setListener(new MyPinListener());
         emic2.Msg(10);
+        
+        //Inicialize PIR Right motion detect
+        pirr = new PIRDevice(triggerPirr);
+        pirr.setListener(new MyPinListener());
+        emic2.Msg(27);
         
         gps=new GPSEM406Device();
         emic2.Msg(25);
@@ -314,13 +324,13 @@ public class Devices {
      */
     public void Close() {
         emic2.Msg(12);
-        pir.removeListener();
-        pir.close();
+        pirl.removeListener();
+        pirl.close();
         hmc.close();
         vcnl4000.close();
         servo.close();
-        //move.close();
-        //wiiremote.close();
+        move.close();
+        wiiremote.close();
         htu21d.close();
         bmp180.close();
         hcsr04.close();

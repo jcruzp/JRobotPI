@@ -90,10 +90,10 @@ public class Processor extends Devices {
         webserver.start();
         while ((!stopMenu) && (webserver.isShouldRun())) {
             I2CUtils.I2Cdelay(10);
-//            //Menu Options Home (menu) / B (move) / A (scan) / 1 (PIR)
-//            keyMenu();
-//            //Process all menu options
-//            processMenu();
+            //Menu Options Home (menu) / B (move) / A (scan) / 1 (PIR)
+            keyMenu();
+            //Process all menu options
+            processMenu();
         }
     }
 
