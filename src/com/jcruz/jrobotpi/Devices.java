@@ -24,7 +24,7 @@
 package com.jcruz.jrobotpi;
 
 import com.jcruz.jrobotpi.gpio.driver.HCSR04Device;
-import com.jcruz.jrobotpi.gpio.driver.PIRDevice;
+import com.jcruz.jrobotpi.gpio.driver.GPIODevice;
 import com.jcruz.jrobotpi.http.driver.XivelyDevice;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.Wii;
@@ -54,13 +54,14 @@ public class Devices {
     private final int trigger = 23;
     private final int echo = 17;
 
-    public PIRDevice pirl = null;
-    private final int triggerPirl = 25;
-    public PIRDevice pirr = null;
-    private final int triggerPirr = 24;
+    public GPIODevice pirl = null;
+    private final int pinPirl = 25;
+    public GPIODevice pirr = null;
+    private final int pinPirr = 24;
     private boolean pirActivate = true;
     
-    private final int flametrigger = 22;
+    public GPIODevice flame = null;
+    private final int flamepin = 22;
 
     public XivelyDevice xively = null;
     public static BMP180Device bmp180 = null;
@@ -103,7 +104,11 @@ public class Devices {
         "S HMC5883L Ok.", //24  
         "S GPS Ok.", //25  
         "S REST Server Ok.", //26    
-        "S PIR right and it listener Ok." //27        
+        "S PIR right and it listener Ok.", //27        
+        "S Flame sensor Ok.", //28            
+        "S Prepare to search flame.", //29
+        "S Stop searching flame.", //30
+        "S Alert Flame detected." //31
     };
     
     /**
@@ -281,14 +286,20 @@ public class Devices {
         emic2.Msg(24);
 
         //Inicialize PIR Left motion detect
-        pirl = new PIRDevice(triggerPirl);
+        pirl = new GPIODevice(pinPirl);
         pirl.setListener(new MyPinListener());
         emic2.Msg(10);
         
         //Inicialize PIR Right motion detect
-        pirr = new PIRDevice(triggerPirr);
+        pirr = new GPIODevice(pinPirr);
         pirr.setListener(new MyPinListener());
         emic2.Msg(27);
+        
+        //Inicialize Flame Sensor
+        flame = new GPIODevice(flamepin);
+        flame.setListener(new FlameSensor());
+        emic2.Msg(28);
+        
         
         gps=new GPSEM406Device();
         emic2.Msg(25);
@@ -326,6 +337,10 @@ public class Devices {
         emic2.Msg(12);
         pirl.removeListener();
         pirl.close();
+        pirr.removeListener();
+        pirr.close();
+        flame.removeListener();
+        flame.close();
         hmc.close();
         vcnl4000.close();
         servo.close();
@@ -350,6 +365,22 @@ public class Devices {
                 }
 
             }
+        }
+
+    }
+    
+    //Check Flame Sensor and update Xively
+    class FlameSensor implements PinListener {
+
+        @Override
+        public void valueChanged(PinEvent event) {
+            //if (pirActivate) {
+                xively.updateValue("Flame_Sensor", event.getValue() ? "1" : "0");
+                if (event.getValue()) {
+                    xively.updateValue("Flame_Sensor", "0");
+                }
+
+            //}
         }
 
     }

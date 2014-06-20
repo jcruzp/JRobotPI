@@ -63,7 +63,7 @@ public class GPSEM406Device {
      * @throws IOException
      */
     public GPSEM406Device() throws IOException {
-        config = new UARTConfig(DeviceConfig.DEFAULT, DeviceConfig.DEFAULT, 9600,
+        config = new UARTConfig(DeviceConfig.DEFAULT, DeviceConfig.DEFAULT, 4800,
                 DATABITS_8, PARITY_NONE, STOPBITS_1, FLOWCONTROL_NONE);
 
         uart = (UART) DeviceManager.open(UART.class, config);
@@ -249,7 +249,7 @@ public class GPSEM406Device {
             latitude[0] = tokens.nextToken();
             latitude[1] = tokens.nextToken();
             if ((latitude[0].equals("0")) || (latitude[1].equals("00"))) {
-                System.out.println("Time: " + formatTime(time) + "No GPS satellite link...");
+                System.out.println("Time: " + formatTime(time) + " - No GPS satellite link...");
             } else {
                 longitude[0] = tokens.nextToken();
                 longitude[1] = tokens.nextToken();

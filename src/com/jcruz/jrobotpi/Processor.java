@@ -29,6 +29,8 @@ import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,19 +38,25 @@ import java.util.TimerTask;
  */
 public class Processor extends Devices {
 
-    //Activate option menu
-    private static boolean menuOn = false;
+    
     //Control menu options
     private static int opcMenu = 1;
     private static int opcMenuSave = 0;
     private final int nroOpcsMenu = 6;
+    
+    //Activate option sensors
+    private static boolean menuSensors = false;
     //Activate option move
     private static boolean menuMove = false;
     //Activate option scan
     private static boolean menuScan = false;
+    //Activate option flame
+    private static boolean menuFlame = false;
+    
     //Control servo movement
     private short servoOff = 100;
     private short servoOffSave = 1;
+    
     //Save read distance to objects
     private int distance = 0;
     //Top distance in cmts to object, above that no objects
@@ -147,8 +155,8 @@ public class Processor extends Devices {
     private void keyMenu() {
         I2CUtils.I2Cdelay(10);
         if (wiiremote.getButton2Press(WiiRemote.Button2Enum.HOME)) {
-            menuOn = !menuOn;
-            emic2.Msg(menuOn ? 13 : 14);
+            menuSensors = !menuSensors;
+            emic2.Msg(menuSensors ? 13 : 14);
             opcMenu = 1;
             opcMenuSave = 0;
         } else if (wiiremote.getButton1Press(WiiRemote.Button1Enum.B)) {
@@ -163,6 +171,9 @@ public class Processor extends Devices {
         } else if (wiiremote.getButton2Press(WiiRemote.Button2Enum.ONE)) {
             setPirActivate(!isPirActivate());
             emic2.Msg(isPirActivate() ? 22 : 23);
+        } else if (wiiremote.getButton2Press(WiiRemote.Button2Enum.TWO)) {
+            menuFlame = !menuFlame;
+            emic2.Msg(menuFlame ? 29 : 30);
         }
 
     }
@@ -227,7 +238,7 @@ public class Processor extends Devices {
         }
     }
 
-    private void homeMenu() {
+    private void sensorsMenu() {
         //Process option menu
         if (wiiremote.getButton1Press(WiiRemote.Button1Enum.UP)) {
             opcMenu = Math.max(1, opcMenu - 1);
@@ -263,6 +274,32 @@ public class Processor extends Devices {
         }
 
     }
+    
+    private void flameMenu() {
+        //Move servo left
+        if (wiiremote.getButton1Press(WiiRemote.Button1Enum.LEFT)) {
+            servoOff = (short) Math.max(100, servoOff - 50);
+            //MOve servo right    
+        } else if (wiiremote.getButton1Press(WiiRemote.Button1Enum.RIGHT)) {
+            servoOff = (short) Math.min(600, servoOff + 50);
+        }
+        //If move to new position
+        if (servoOff != servoOffSave) {
+
+            servo.setPWM((byte) 0, (short) 0, servoOff);
+            try {
+                //Emic2Msg(emic2Msgs[19]);
+                //Read distance to object
+                if (flame.getPir().getValue())               
+                    emic2.write(emic2.getMsg(31));
+            } catch (IOException ex) {
+                Logger.getLogger(Processor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            servoOffSave = servoOff;
+        }
+
+    }
 
     //Process option Scan
     private void processMenu() {
@@ -272,8 +309,11 @@ public class Processor extends Devices {
         if (menuMove) {
             moveMenu();
         }
-        if (menuOn) {
-            homeMenu();
+        if (menuSensors) {
+            sensorsMenu();
+        }
+         if (menuFlame) {
+            flameMenu();
         }
     }
 

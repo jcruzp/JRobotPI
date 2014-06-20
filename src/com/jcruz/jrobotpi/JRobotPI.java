@@ -50,7 +50,7 @@ public class JRobotPI extends MIDlet {
     public void startApp() {
         try {
             loggerHandler.start();
-            Logger.getGlobal().setLevel(Level.INFO);
+            Logger.getGlobal().setLevel(Level.ALL);
             
             Logger.getGlobal().log(Level.INFO, "************************************");
             Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v2.0.3...  *");
