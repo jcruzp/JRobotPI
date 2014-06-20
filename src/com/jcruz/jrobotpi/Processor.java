@@ -24,7 +24,6 @@
 package com.jcruz.jrobotpi;
 
 import com.jcruz.jrobotpi.i2c.I2CUtils;
-import com.jcruz.jrobotpi.i2c.driver.BMP180Mode;
 import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
 import java.io.IOException;
 import java.util.Timer;

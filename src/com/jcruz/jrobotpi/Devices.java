@@ -27,7 +27,6 @@ import com.jcruz.jrobotpi.gpio.driver.HCSR04Device;
 import com.jcruz.jrobotpi.gpio.driver.GPIODevice;
 import com.jcruz.jrobotpi.http.driver.XivelyDevice;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
-import com.jcruz.jrobotpi.i2c.Wii;
 import com.jcruz.jrobotpi.i2c.driver.BMP180Device;
 import com.jcruz.jrobotpi.i2c.driver.BMP180Mode;
 import com.jcruz.jrobotpi.i2c.driver.EMICI2CDevice;
@@ -42,7 +41,6 @@ import com.jcruz.jrobotpi.uart.driver.GPSEM406Device;
 import java.io.IOException;
 import jdk.dio.gpio.PinEvent;
 import jdk.dio.gpio.PinListener;
-import jdk.dio.i2cbus.I2CDevice;
 
 /**
  *
