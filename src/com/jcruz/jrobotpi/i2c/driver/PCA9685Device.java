@@ -27,6 +27,8 @@ import com.jcruz.jrobotpi.i2c.I2CRpi;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.PCA9685;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Control all servos connected to PCA9685
@@ -77,11 +79,9 @@ public class PCA9685Device extends I2CRpi {
         prescaleval /= 4096.0F;
         prescaleval /= freq;
         prescaleval -= 1.0;
-        System.out.print("Estimated pre-scale: ");
-        System.out.println(prescaleval);
+        Logger.getGlobal().log(Level.FINE,"Estimated pre-scale: " + prescaleval);
         float prescale = (float) Math.floor(prescaleval + 0.5);
-        System.out.print("Final pre-scale: ");
-        System.out.println(prescale);
+        Logger.getGlobal().log(Level.FINE,"Final pre-scale: " + prescale);
 
         int oldmode = PCA9685.MODE1.read(device);
         int newmode = (oldmode & 0x7F) | 0x10; // sleep

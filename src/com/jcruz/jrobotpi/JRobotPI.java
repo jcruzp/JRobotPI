@@ -50,10 +50,10 @@ public class JRobotPI extends MIDlet {
     public void startApp() {
         try {
             loggerHandler.start();
-            Logger.getGlobal().setLevel(Level.ALL);
+            Logger.getGlobal().setLevel(Level.INFO);
             
             Logger.getGlobal().log(Level.INFO, "************************************");
-            Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v2.0.3...  *");
+            Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v2.1.0...  *");
             Logger.getGlobal().log(Level.INFO, "************************************");
 
             //TODO Convert to Thread
@@ -61,7 +61,7 @@ public class JRobotPI extends MIDlet {
             processor.Start();
             
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         } finally {
            destroyApp(true);
         }

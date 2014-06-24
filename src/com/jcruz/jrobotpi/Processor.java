@@ -275,6 +275,12 @@ public class Processor extends Devices {
     }
     
     private void flameMenu() {
+        try {
+                
+                if (flame.getPin().getValue())               
+                    emic2.write(emic2.getMsg(31));
+            } catch (IOException ex) {
+            }
         //Move servo left
         if (wiiremote.getButton1Press(WiiRemote.Button1Enum.LEFT)) {
             servoOff = (short) Math.max(100, servoOff - 50);
@@ -284,18 +290,8 @@ public class Processor extends Devices {
         }
         //If move to new position
         if (servoOff != servoOffSave) {
-
-            servo.setPWM((byte) 0, (short) 0, servoOff);
-            try {
-                //Emic2Msg(emic2Msgs[19]);
-                //Read distance to object
-                if (flame.getPir().getValue())               
-                    emic2.write(emic2.getMsg(31));
-            } catch (IOException ex) {
-                Logger.getLogger(Processor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            servoOffSave = servoOff;
+           servo.setPWM((byte) 0, (short) 0, servoOff);
+           servoOffSave = servoOff;
         }
 
     }

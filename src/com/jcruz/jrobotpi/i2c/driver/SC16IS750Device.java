@@ -52,7 +52,7 @@ public class SC16IS750Device extends I2CRpi {
 
     private void configUARTregs() {
         //Config UART
-        Logger.getGlobal().log(Level.INFO, "Config UART of SC16IS750");
+        Logger.getGlobal().log(Level.FINE, "Config UART of SC16IS750");
 
         //Line Control Register: Enable Writing DLH & DLL
         //& set no Parity, 1 stop bit, and 8 bit word length
@@ -78,9 +78,9 @@ public class SC16IS750Device extends I2CRpi {
 
         I2CUtils.I2Cdelay(2000);
 
-        Logger.getGlobal().log(Level.INFO, "FIFO Control Register: " + SC16IS750.FCR.read(device));
-        Logger.getGlobal().log(Level.INFO, "Line Control Register: " + SC16IS750.LCR.read(device));
-        Logger.getGlobal().log(Level.INFO, "Modem Control Register: " + SC16IS750.MCR.read(device));
+        Logger.getGlobal().log(Level.FINE, "FIFO Control Register: " + SC16IS750.FCR.read(device));
+        Logger.getGlobal().log(Level.FINE, "Line Control Register: " + SC16IS750.LCR.read(device));
+        Logger.getGlobal().log(Level.FINE, "Modem Control Register: " + SC16IS750.MCR.read(device));
 
     }
 

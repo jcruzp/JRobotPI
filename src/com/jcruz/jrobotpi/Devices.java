@@ -23,6 +23,7 @@
  */
 package com.jcruz.jrobotpi;
 
+import com.jcruz.jrobotpi.gpio.driver.DFR0076Device;
 import com.jcruz.jrobotpi.gpio.driver.HCSR04Device;
 import com.jcruz.jrobotpi.gpio.driver.GPIODevice;
 import com.jcruz.jrobotpi.http.driver.XivelyDevice;
@@ -56,10 +57,11 @@ public class Devices {
     private final int pinPirl = 25;
     public GPIODevice pirr = null;
     private final int pinPirr = 24;
-    private boolean pirActivate = true;
+    private boolean pirActivate = false;
     
-    public GPIODevice flame = null;
+    public DFR0076Device flame = null;
     private final int flamepin = 22;
+    private boolean flameActivate =false;
 
     public XivelyDevice xively = null;
     public static BMP180Device bmp180 = null;
@@ -285,17 +287,17 @@ public class Devices {
 
         //Inicialize PIR Left motion detect
         pirl = new GPIODevice(pinPirl);
-        pirl.setListener(new MyPinListener());
+        pirl.setListener(new PirSensor());
         emic2.Msg(10);
         
         //Inicialize PIR Right motion detect
         pirr = new GPIODevice(pinPirr);
-        pirr.setListener(new MyPinListener());
+        pirr.setListener(new PirSensor());
         emic2.Msg(27);
         
         //Inicialize Flame Sensor
-        flame = new GPIODevice(flamepin);
-        flame.setListener(new FlameSensor());
+        flame = new DFR0076Device(flamepin);
+        //flame.setListener(new FlameSensor());
         emic2.Msg(28);
         
         
@@ -328,6 +330,16 @@ public class Devices {
         return pirActivate;
     }
 
+    public boolean isFlameActivate() {
+        return flameActivate;
+    }
+
+    public void setFlameActivate(boolean flameActivate) {
+        this.flameActivate = flameActivate;
+    }
+    
+    
+
     /**
      *
      */
@@ -352,7 +364,7 @@ public class Devices {
     }
 
     //Check PIR Sensor for motion detect
-    class MyPinListener implements PinListener {
+    class PirSensor implements PinListener {
 
         @Override
         public void valueChanged(PinEvent event) {
@@ -372,13 +384,16 @@ public class Devices {
 
         @Override
         public void valueChanged(PinEvent event) {
-            //if (pirActivate) {
-                xively.updateValue("Flame_Sensor", event.getValue() ? "1" : "0");
+            if (flameActivate) {
+                //xively.updateValue("Flame_Sensor", event.getValue() ? "1" : "0");
+                
                 if (event.getValue()) {
-                    xively.updateValue("Flame_Sensor", "0");
+                    emic2.write(emic2.getMsg(31));
+                    
+                    //xively.updateValue("Flame_Sensor", "0");
                 }
 
-            //}
+            }
         }
 
     }

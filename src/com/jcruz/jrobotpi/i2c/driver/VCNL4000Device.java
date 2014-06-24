@@ -86,26 +86,26 @@ public class VCNL4000Device extends I2CRpi {
         }
 
         VCNL4000.IRLED.write(device, (byte) 20);        // set to 20 * 10mA = 200mA
-        Logger.getGlobal().log(Level.INFO, "IR LED current = " + String.valueOf(VCNL4000.IRLED.read(device) * 10) + " mA");
+        Logger.getGlobal().log(Level.FINE, "IR LED current = " + String.valueOf(VCNL4000.IRLED.read(device) * 10) + " mA");
 
         //write8(VCNL4000_SIGNALFREQ, 3);
-        Logger.getGlobal().log(Level.INFO, "Proximity measurement frequency = ");
+        Logger.getGlobal().log(Level.FINE, "Proximity measurement frequency = ");
         byte freq = (byte) VCNL4000.SIGNALFREQ.read(device);
         if (freq == Freq.F3M125.value) {
-            Logger.getGlobal().log(Level.INFO, "3.125 MHz");
+            Logger.getGlobal().log(Level.FINE, "3.125 MHz");
         }
         if (freq == Freq.F1M5625.value) {
-            Logger.getGlobal().log(Level.INFO, "1.5625 MHz");
+            Logger.getGlobal().log(Level.FINE, "1.5625 MHz");
         }
         if (freq == Freq.F781K25.value) {
-            Logger.getGlobal().log(Level.INFO, "781.25 KHz");
+            Logger.getGlobal().log(Level.FINE, "781.25 KHz");
         }
         if (freq == Freq.F390K625.value) {
-            Logger.getGlobal().log(Level.INFO, "390.625 KHz");
+            Logger.getGlobal().log(Level.FINE, "390.625 KHz");
         }
 
         VCNL4000.PROXIMITYADJUST.write(device, (byte) 0x81);
-        Logger.getGlobal().log(Level.INFO, "Proximity adjustment register = "+String.valueOf(VCNL4000.PROXIMITYADJUST.read(device)));
+        Logger.getGlobal().log(Level.FINE, "Proximity adjustment register = "+String.valueOf(VCNL4000.PROXIMITYADJUST.read(device)));
 
         // arrange for continuous conversion
         //write8(VCNL4000_AMBIENTPARAMETER, 0x89);
