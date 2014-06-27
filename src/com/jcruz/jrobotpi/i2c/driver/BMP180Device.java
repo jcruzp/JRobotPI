@@ -94,7 +94,7 @@ public class BMP180Device extends I2CRpi {
         try {
             result = device.read(BMP180.EEPROM_start.cmd, subAddressSize, calibData);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
         if (result < CALIB_BYTES) {
             Logger.getGlobal().log(Level.SEVERE, "Error: " + result + " bytes read");

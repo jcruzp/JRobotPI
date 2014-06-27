@@ -83,7 +83,7 @@ public class I2CUtils {
         try {
             device.read(cmd, 1, rxBuf);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
+           Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
         return asInt(rxBuf.get(0));
     }
@@ -101,7 +101,7 @@ public class I2CUtils {
         try {
             device.read(cmd, 4, rxBuf);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
         rxBuf.clear();
         for (int i = 0; i < 4; i++) {
@@ -123,7 +123,7 @@ public class I2CUtils {
         try {
             device.read(cmd, 2, rxBuf);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
         rxBuf.clear();
         for (int i = 0; i < 2; i++) {
@@ -144,7 +144,7 @@ public class I2CUtils {
         try {
             device.read(cmd, 1, rxBuf);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
         rxBuf.clear();
         return rxBuf.getShort();
@@ -163,7 +163,7 @@ public class I2CUtils {
         try {
             device.write(txBuf);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
     }
 }

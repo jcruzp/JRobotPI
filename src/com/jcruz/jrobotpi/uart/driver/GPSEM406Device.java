@@ -199,9 +199,9 @@ public class GPSEM406Device {
 ////            ex.printStackTrace();
 ////        }
 //// 
-            System.out.println("GPS Config Ok...");
+            Logger.getGlobal().log(Level.FINE,"GPS Config Ok...");
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
     }
 
@@ -240,7 +240,7 @@ public class GPSEM406Device {
     private void process(String message) {
         try {
             StringTokenizer tokens = new StringTokenizer(message, ",");
-        // pull off the first token and check if it is the message we want
+            // pull off the first token and check if it is the message we want
             //$GPGGA,130612.255,,,,,0,00,,,M,0.0,M,,00
 
             tokens.nextToken(); // $GPGGA position
@@ -249,7 +249,7 @@ public class GPSEM406Device {
             latitude[0] = tokens.nextToken();
             latitude[1] = tokens.nextToken();
             if ((latitude[0].equals("0")) || (latitude[1].equals("00"))) {
-                System.out.println("Time: " + formatTime(time) + " - No GPS satellite link...");
+                Logger.getGlobal().log(Level.FINE, "Time: " + formatTime(time) + " - No GPS satellite link...");
             } else {
                 longitude[0] = tokens.nextToken();
                 longitude[1] = tokens.nextToken();
@@ -260,12 +260,12 @@ public class GPSEM406Device {
                 altitude[0] = tokens.nextToken();
                 altitude[1] = tokens.nextToken();
 
-                System.out.println("Time: " + getTime() + "\n"
+                Logger.getGlobal().log(Level.FINE, "Time: " + getTime() + "\n"
                         + " Latitude: " + getLatitude() + " Longitude: " + getLongitude() + "\n"
                         + " Altitude: " + getAltitude() + "\n");
             }
         } catch (Exception ex) {
-            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+            //Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
         }
     }
 
@@ -296,7 +296,6 @@ public class GPSEM406Device {
         public synchronized void eventDispatched(UARTEvent event) {
             if (event.getID() == INPUT_DATA_AVAILABLE) {
                 ByteBuffer buffer = ByteBuffer.allocateDirect(10);
-                //StringBuilder result = new StringBuilder();
                 try {
                     int nrocar = uart.read(buffer);
                     char c;
@@ -313,13 +312,10 @@ public class GPSEM406Device {
                             process(nmea);
                         }
                         nmea = "";
-                    };
-                    //else {
-                    //    nmea = nmea.concat(result.toString());
-                    //}
+                    }
 
-                } catch (Exception ex) {
-                    Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+                } catch (IOException ex) {
+                    Logger.getGlobal().log(Level.WARNING, ex.getMessage());
                 }
 
             }
@@ -335,7 +331,7 @@ public class GPSEM406Device {
             uart.setEventListener(UARTEvent.INPUT_DATA_AVAILABLE, null);
             uart.close();
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
     }
 
