@@ -49,8 +49,9 @@ public class I2CDue {
 
     /**
      * Define the connection to Arduino Due
-     *
+     * 
      */
+    //TODO Change to Singleton Object Pattern
     public I2CDue() {
         if (arduino == null) {
             config = new I2CDeviceConfig(1,
