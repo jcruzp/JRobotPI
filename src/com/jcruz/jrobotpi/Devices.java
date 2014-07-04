@@ -49,68 +49,122 @@ import jdk.dio.gpio.PinListener;
  */
 public class Devices {
 
+    /**
+     * Define HCSR04 Device object
+     */
     public HCSR04Device hcsr04 = null;
     private final int trigger = 23;
     private final int echo = 17;
 
+    /**
+     * Define PIR Left object
+     */
     public GPIODevice pirl = null;
     private final int pinPirl = 25;
+
+    /**
+     * Define PIR Right object
+     */
     public GPIODevice pirr = null;
     private final int pinPirr = 24;
     private boolean pirActivate = false;
-    
+
+    /**
+     * Define DFR0076 Device object
+     */
     public DFR0076Device flame = null;
     private final int flamepin = 22;
-    private boolean flameActivate =false;
+    private boolean flameActivate = false;
 
+    /**
+     * Xively Device object
+     */
     public XivelyDevice xively = null;
+
+    /**
+     * Define BMP180 Device object
+     */
     public static BMP180Device bmp180 = null;
+
+    /**
+     * Define HTU21D Device object
+     */
     public static HTU21DDevice htu21d = null;
+
+    /**
+     * Define WiiRemote object
+     */
     public WiiRemote wiiremote = null;
+
+    /**
+     * Define Move object
+     */
     public Move move = null;
+
+    /**
+     * Define PCA9685 Device object
+     */
     public PCA9685Device servo = null;
+
+    /**
+     * Define VCNL4000 Device object
+     */
     public static VCNL4000Device vcnl4000 = null;
+
+    /**
+     * Define EMICI2C Device object
+     */
     public EMICI2CDevice emic2 = null;
     // public TPA2016Device tpa = null;
-    public static HMC5883LDevice hmc = null;
-    public static GPSEM406Device gps = null;
-    
 
+    /**
+     * Define HMC5883L Device object
+     */
+    public static HMC5883LDevice hmc = null;
+
+    /**
+     * Define GPSEM406 Device object
+     */
+    public static GPSEM406Device gps = null;
+
+    /**
+     * Define all messages for Emic
+     */
     public final String[] emic2Msgs = {
-        "S Emic 2 Ok.", //0
-        "S Inicializing devices.", //1
-        "S HCSR04 Ok.", //2
-        "S BMP180 Ok.", //3
-        "S HTU21D Ok.", //4
-        "S Wii Remote Ok.", //5
-        "S DC Motors Ok.", //6
-        "S Servo Ok.", //7
-        "S VCNL4000 Ok.", //8
-        "S Xively Ok.", //9    
-        "S PIR left and it listener Ok.", //10
-        "S Task to read devices created.",//11
-        "S Close devices comunication.", //12
-        "S Menu activated.", //13
-        "S Menu deactivated.", //14
-        "S Prepare to move.", //15
-        "S Stop move.", //16
-        "S Prepare to detect objects.", //17
-        "S Stop searching objects.", //18
-        "S Scanning.", //19
-        "S Object detected at ", //20
-        "S No Object detected.", //21
-        "S PIR Activated", //22
-        "S PIR Deactivated.", //23
-        "S HMC5883L Ok.", //24  
-        "S GPS Ok.", //25  
-        "S REST Server Ok.", //26    
-        "S PIR right and it listener Ok.", //27        
-        "S Flame sensor Ok.", //28            
-        "S Prepare to search flame.", //29
-        "S Stop searching flame.", //30
-        "S Alert Flame detected." //31
+        "Emic 2 Ok.", //0
+        "Inicializing devices.", //1
+        "HCSR04 Ok.", //2
+        "BMP180 Ok.", //3
+        "HTU21D Ok.", //4
+        "Wii Remote Ok.", //5
+        "DC Motors Ok.", //6
+        "Servo Ok.", //7
+        "VCNL4000 Ok.", //8
+        "Xively Ok.", //9    
+        "PIR left and it listener Ok.", //10
+        "Task to read devices created.",//11
+        "Close devices comunication.", //12
+        "Menu activated.", //13
+        "Menu deactivated.", //14
+        "Prepare to move.", //15
+        "Stop move.", //16
+        "Prepare to detect objects.", //17
+        "Stop searching objects.", //18
+        "Scanning.", //19
+        "Object detected at ", //20
+        "No Object detected.", //21
+        "PIR Activated", //22
+        "PIR Deactivated.", //23
+        "HMC5883L Ok.", //24  
+        "GPS Ok.", //25  
+        "REST Server Ok.", //26    
+        "PIR right and it listener Ok.", //27        
+        "Flame sensor Ok.", //28            
+        "Prepare to search flame.", //29
+        "Stop searching flame.", //30
+        "Alert Flame detected." //31
     };
-    
+
     /**
      * Enum used to read all sensors data
      */
@@ -119,135 +173,118 @@ public class Devices {
         /**
          * Read Ambient Light
          */
-        AmbientLight {
+        AmbientLight("Ambient Light ", "Ambient_Light") {
                     String getValue() {
                         return String.valueOf(vcnl4000.readAmbientLight());
-                    }
-                    
-                    String getName(){
-                        return ("Ambient_Light");
                     }
                 },
         /**
          * Read Humidity
          */
-        Humidity {
+        Humidity("Humidity ", "Humidity") {
                     String getValue() {
                         return String.valueOf((int) htu21d.readHumidity());
                     }
-                    
-                     String getName(){
-                        return ("Humidity");
-                    }
                 },
-        
         /**
          * Read RPI_Temperature
          */
-        RPI_Temperature {
+        RPI_Temperature("Raspberry PI Temperature ", "RPI_Temperature") {
                     String getValue() {
                         return String.valueOf((int) htu21d.readTemperature());
                     }
-                    
-                    String getName(){
-                        return ("RPI_Temperature");
-                    }
                 },
-        
         /**
          * Read Temperature
          */
-        Temperature {
+        Temperature("Temperature ", "Temperature") {
                     String getValue() {
                         return String.valueOf((int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[0]);
                     }
-                    String getName(){
-                        return ("Temperature");
-                    }
                 },
-        
         /**
          * Read Pressure
          */
-        Pressure {
+        Pressure("Pressure ", "Pressure") {
                     String getValue() {
                         return String.valueOf((int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[1]);
                     }
-                    String getName(){
-                        return ("Pressure");
-                    }
                 },
-        
         /**
          * Read Heading
          */
-        Heading {
+        Heading("Heading ", "Heading") {
                     String getValue() {
                         return String.valueOf((int) hmc.calculateHeading());
-                    }
-                    String getName(){
-                        return ("Heading");
                     }
                 },
         /**
          * Read Latitude
          */
-        Latitude {
+        Latitude("Latitude ", "Latitude") {
                     String getValue() {
                         return gps.getLatitude();
-                    }
-                    String getName(){
-                        return ("Latitude");
                     }
                 },
         /**
          * Read Longitude
          */
-        Longitude {
+        Longitude("Longitude ", "Longitude") {
                     String getValue() {
                         return gps.getLongitude();
                     }
-                    String getName(){
-                        return ("Longitude");
-                    }
                 },
-        
         /**
          * Read Altitude
          */
-        Altitude {
+        Altitude("Altitude ", "Altitude") {
                     String getValue() {
                         return gps.getAltitude();
                     }
-                    String getName(){
-                        return ("Altitude");
-                    }
                 },
-        
-        Stop {
-            
+        /**
+         * Stop REST command
+         */
+        Stop("Stop", "") {
                     String getValue() {
                         return "";
                     }
-                    String getName(){
-                        return ("Stop");
-                    }
-        
-        };
+                };
 
+        /**
+         * Name string
+         */
+        public String name;
+
+        /**
+         * Xively and REST name string
+         */
+        public String xivelyName;
+
+        /**
+         * Value from sensor
+         */
         abstract String getValue();
-        abstract String getName();
+
+        /**
+         * Get name, xively name and value from enum
+         */
+        private Sensors(String name, String xivelyName) {
+            this.name = name;
+            this.xivelyName = xivelyName;
+        }
+
     };
-    
 
     /**
+     * Create all object devices
      *
      * @throws IOException
      */
     public Devices() throws IOException {
         emic2 = new EMICI2CDevice(emic2Msgs);
         I2CUtils.I2Cdelay(3000);
-        
+
         //emic2.write("");
         emic2.writeCommand("W200");
         emic2.writeCommand("L0");
@@ -265,11 +302,11 @@ public class Devices {
         emic2.Msg(4);
 
         wiiremote = new WiiRemote();
-        emic2.write(emic2Msgs[5]);
+        emic2.Msg(5);
 
         move = new Move();
-        emic2.write(emic2Msgs[6]);
-        
+        emic2.Msg(6);
+
         servo = new PCA9685Device();
         servo.setPWMFreq(60);
         emic2.Msg(7);
@@ -284,26 +321,24 @@ public class Devices {
         hmc.SetScale(1.3F);
         hmc.SetMeasurementMode(HMC5883LDevice.Measurement.Continuous);
         emic2.Msg(24);
-
+//TODO Define PIRDevice with pin parameter and move listeners to that
         //Inicialize PIR Left motion detect
         pirl = new GPIODevice(pinPirl);
         pirl.setListener(new PirSensor());
         emic2.Msg(10);
-        
+
         //Inicialize PIR Right motion detect
         pirr = new GPIODevice(pinPirr);
         pirr.setListener(new PirSensor());
         emic2.Msg(27);
-        
+
         //Inicialize Flame Sensor
         flame = new DFR0076Device(flamepin);
         //flame.setListener(new FlameSensor());
         emic2.Msg(28);
-        
-        
-        gps=new GPSEM406Device();
+
+        gps = new GPSEM406Device();
         emic2.Msg(25);
-        
 
 //            //Inicialize audio amp
 //            tpa = new TPA2016Device();
@@ -315,6 +350,7 @@ public class Devices {
     }
 
     /**
+     * Activate PIR sensors
      *
      * @param pirActivate
      */
@@ -323,6 +359,7 @@ public class Devices {
     }
 
     /**
+     * Detect if PIRs are activated
      *
      * @return
      */
@@ -330,18 +367,26 @@ public class Devices {
         return pirActivate;
     }
 
+    /**
+     * Detect if Flame sensor is activated
+     *
+     * @return
+     */
     public boolean isFlameActivate() {
         return flameActivate;
     }
 
+    /**
+     * Activate flame sensor
+     *
+     * @param flameActivate
+     */
     public void setFlameActivate(boolean flameActivate) {
         this.flameActivate = flameActivate;
     }
-    
-    
 
     /**
-     *
+     * Close all object from devices
      */
     public void Close() {
         emic2.Msg(12);
@@ -378,7 +423,7 @@ public class Devices {
         }
 
     }
-    
+
     //Check Flame Sensor and update Xively
     class FlameSensor implements PinListener {
 
@@ -386,10 +431,10 @@ public class Devices {
         public void valueChanged(PinEvent event) {
             if (flameActivate) {
                 //xively.updateValue("Flame_Sensor", event.getValue() ? "1" : "0");
-                
+
                 if (event.getValue()) {
-                    emic2.write(emic2.getMsg(31));
-                    
+                    emic2.Msg(31);
+
                     //xively.updateValue("Flame_Sensor", "0");
                 }
 

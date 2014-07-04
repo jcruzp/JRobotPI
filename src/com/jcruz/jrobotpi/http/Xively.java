@@ -41,7 +41,7 @@ public enum Xively {
     /**
      * Api key value for let read values
      */
-    APIKEY("8KOJdwNubAa5FS4GhWqzBPB6p4GcEHexTAsGn2ui3FFbCzVM"),
+    APIKEY("Z0rDP12O5ospqm9t0konGJntqytY7WG9OY6bhchGNXU0Y48i"),
     /**
      * Title header from response GET
      */

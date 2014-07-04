@@ -117,32 +117,32 @@ public class WebServer implements Runnable {
 
             jsonvalue = factory.createObjectBuilder();
 
-            if (str.contains(Sensors.AmbientLight.getName())) {
-                jsonvalue.add(Sensors.AmbientLight.getName(), Sensors.AmbientLight.getValue());
+            if (str.contains(Sensors.AmbientLight.xivelyName)) {
+                jsonvalue.add(Sensors.AmbientLight.xivelyName, Sensors.AmbientLight.getValue());
             }
-            if (str.contains(Sensors.Heading.getName())) {
-                jsonvalue.add(Sensors.Heading.getName(), Sensors.Heading.getValue());
+            if (str.contains(Sensors.Heading.xivelyName)) {
+                jsonvalue.add(Sensors.Heading.xivelyName, Sensors.Heading.getValue());
             }
-            if (str.contains(Sensors.Humidity.getName())) {
-                jsonvalue.add(Sensors.Humidity.getName(), Sensors.Humidity.getValue());
+            if (str.contains(Sensors.Humidity.xivelyName)) {
+                jsonvalue.add(Sensors.Humidity.xivelyName, Sensors.Humidity.getValue());
             }
-            if (str.contains(Sensors.Pressure.getName())) {
-                jsonvalue.add(Sensors.Pressure.getName(), Sensors.Pressure.getValue());
+            if (str.contains(Sensors.Pressure.xivelyName)) {
+                jsonvalue.add(Sensors.Pressure.xivelyName, Sensors.Pressure.getValue());
             }
-            if (str.contains(Sensors.RPI_Temperature.getName())) {
-                jsonvalue.add(Sensors.RPI_Temperature.getName(), Sensors.RPI_Temperature.getValue());
+            if (str.contains(Sensors.RPI_Temperature.xivelyName)) {
+                jsonvalue.add(Sensors.RPI_Temperature.xivelyName, Sensors.RPI_Temperature.getValue());
             }
-            if (str.contains(Sensors.Temperature.getName())) {
-                jsonvalue.add(Sensors.Temperature.getName(), Sensors.Temperature.getValue());
+            if (str.contains(Sensors.Temperature.xivelyName)) {
+                jsonvalue.add(Sensors.Temperature.xivelyName, Sensors.Temperature.getValue());
             }
-            if (str.contains(Sensors.Latitude.getName())) {
-                jsonvalue.add(Sensors.Latitude.getName(), Sensors.Latitude.getValue());
+            if (str.contains(Sensors.Latitude.xivelyName)) {
+                jsonvalue.add(Sensors.Latitude.xivelyName, Sensors.Latitude.getValue());
             }
-            if (str.contains(Sensors.Longitude.getName())) {
-                jsonvalue.add(Sensors.Longitude.getName(), Sensors.Longitude.getValue());
+            if (str.contains(Sensors.Longitude.xivelyName)) {
+                jsonvalue.add(Sensors.Longitude.xivelyName, Sensors.Longitude.getValue());
             }
-            if (str.contains(Sensors.Altitude.getName())) {
-                jsonvalue.add(Sensors.Altitude.getName(), Sensors.Altitude.getValue());
+            if (str.contains(Sensors.Altitude.xivelyName)) {
+                jsonvalue.add(Sensors.Altitude.xivelyName, Sensors.Altitude.getValue());
             }
             return jsonvalue;
         }
@@ -185,7 +185,7 @@ public class WebServer implements Runnable {
                 System.out.println(str);
 
                 if (str != null) {
-                    if (str.contains(Sensors.Stop.getName())) {
+                    if (str.contains(Sensors.Stop.name)) {
                         shouldRun = false; // Stop WebServer Thread
                     } else {
                         sendResponse(restJsonValues(str));

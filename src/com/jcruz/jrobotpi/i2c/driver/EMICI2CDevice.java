@@ -55,7 +55,7 @@ public class EMICI2CDevice {
      */
     public void Msg(int msgnum) {
         write(emic2Msgs[msgnum]);
-        Logger.getGlobal().log(Level.FINE,emic2Msgs[msgnum].substring(2));
+        Logger.getGlobal().log(Level.FINE,emic2Msgs[msgnum]);
     }
     
     /**
@@ -72,12 +72,16 @@ public class EMICI2CDevice {
      * @param cad String to send to Emic-2
      */
     public void write(String cad) {
-        cad = cad.concat("\r\n");
+        cad = "S " + cad.concat("\r\n");
         sc.write(cad);
         // Wait for response from Emic-2. It respond to all commands with :
         waitResponse(2);
     }
     
+    /**
+     *
+     * @param cad
+     */
     public void writeCommand(String cad) {
         cad = cad.concat("\r\n");
         sc.write(cad);
@@ -89,7 +93,7 @@ public class EMICI2CDevice {
      *
      * Wait for response from UART. It respond to all commands with car
      *
-     * @param car
+     * @param nrobytes
      */
     public void waitResponse(int nrobytes) {
         int work = 0;

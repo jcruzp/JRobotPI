@@ -28,8 +28,6 @@ import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -37,12 +35,11 @@ import java.util.logging.Logger;
  */
 public class Processor extends Devices {
 
-    
     //Control menu options
     private static int opcMenu = 1;
     private static int opcMenuSave = 0;
     private final int nroOpcsMenu = 6;
-    
+
     //Activate option sensors
     private static boolean menuSensors = false;
     //Activate option move
@@ -51,11 +48,11 @@ public class Processor extends Devices {
     private static boolean menuScan = false;
     //Activate option flame
     private static boolean menuFlame = false;
-    
+
     //Control servo movement
     private short servoOff = 100;
     private short servoOffSave = 1;
-    
+
     //Save read distance to objects
     private int distance = 0;
     //Top distance in cmts to object, above that no objects
@@ -98,9 +95,9 @@ public class Processor extends Devices {
         while ((!stopMenu) && (webserver.isShouldRun())) {
             I2CUtils.I2Cdelay(10);
             //Menu Options Home (menu) / B (move) / A (scan) / 1 (PIR)
-            keyMenu();
+            //keyMenu();
             //Process all menu options
-            processMenu();
+            //processMenu();
         }
     }
 
@@ -128,21 +125,21 @@ public class Processor extends Devices {
             //int celsius = 0, fahrenheit = 0, hectorPascal = 0, inchesMercury = 0;
 
             //short amb = vcnl4000.readAmbientLight();
-            xively.updateValue("Ambient_Light", Sensors.AmbientLight.getValue());
+            xively.updateValue(Sensors.AmbientLight.xivelyName, Sensors.AmbientLight.getValue());
 
-            xively.updateValue("Humidity", Sensors.Humidity.getValue());
+            xively.updateValue(Sensors.Humidity.xivelyName, Sensors.Humidity.getValue());
 
-            xively.updateValue("RPI_Temperature", Sensors.RPI_Temperature.getValue());
+            xively.updateValue(Sensors.RPI_Temperature.xivelyName, Sensors.RPI_Temperature.getValue());
 
             //float[] result = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
             //celsius = (int) result[0];
-            xively.updateValue("Temperature", Sensors.Temperature.getValue());
+            xively.updateValue(Sensors.Temperature.xivelyName, Sensors.Temperature.getValue());
             //fahrenheit = BMP180Device.celsiusToFahrenheit(celsius);
             //hectorPascal = (int) result[1];
-            xively.updateValue("Pressure", Sensors.Pressure.getValue());
+            xively.updateValue(Sensors.Pressure.xivelyName, Sensors.Pressure.getValue());
             //inchesMercury = BMP180Device.pascalToInchesMercury(hectorPascal);
             //short heading = (short) hmc.calculateHeading();
-            xively.updateValue("Heading", Sensors.Heading.getValue());
+            xively.updateValue(Sensors.Heading.xivelyName, Sensors.Heading.getValue());
 
             //System.out.format("Temperature: %.2f C, %.2f F\n", celsius, fahrenheit);
             //System.out.format("Pressure: %.2f hPa, %.2f inHg\n\n", hectorPascal, inchesMercury);
@@ -249,38 +246,39 @@ public class Processor extends Devices {
             switch (opcMenu) {
                 case 1:
                     //short amb = vcnl4000.readAmbientLight();
-                    emic2.write("SAmbient Light" + Sensors.AmbientLight.getValue());
+                    emic2.write(Sensors.AmbientLight.name + Sensors.AmbientLight.getValue());
                     break;
                 case 2:
                     //float[] result2 = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
-                    emic2.write("SPressure" + Sensors.Pressure.getValue());
+                    emic2.write(Sensors.Pressure.name + Sensors.Pressure.getValue());
                     break;
                 case 3:
-                    emic2.write("SHumidity" + Sensors.Humidity.getValue());
+                    emic2.write(Sensors.Humidity.name + Sensors.Humidity.getValue());
                     break;
                 case 4:
-                    emic2.write("SRaspberry PI Temperature" + Sensors.RPI_Temperature.getValue());
+                    emic2.write(Sensors.RPI_Temperature.name + Sensors.RPI_Temperature.getValue());
                     break;
                 case 5:
                     //float[] result1 = bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION);
-                    emic2.write("STemperature" + Sensors.Temperature.getValue());
+                    emic2.write(Sensors.Temperature.name + Sensors.Temperature.getValue());
                     break;
                 case 6:
-                    emic2.write("SHeading" + Sensors.Heading.getValue() + " Degrees");
+                    emic2.write(Sensors.Heading.name + Sensors.Heading.getValue() + " Degrees");
                     break;
             }
             opcMenuSave = opcMenu;
         }
 
     }
-    
+
     private void flameMenu() {
         try {
-                
-                if (flame.getPin().getValue())               
-                    emic2.write(emic2.getMsg(31));
-            } catch (IOException ex) {
+
+            if (flame.getPin().getValue()) {
+                emic2.Msg(31);
             }
+        } catch (IOException ex) {
+        }
         //Move servo left
         if (wiiremote.getButton1Press(WiiRemote.Button1Enum.LEFT)) {
             servoOff = (short) Math.max(100, servoOff - 50);
@@ -290,8 +288,8 @@ public class Processor extends Devices {
         }
         //If move to new position
         if (servoOff != servoOffSave) {
-           servo.setPWM((byte) 0, (short) 0, servoOff);
-           servoOffSave = servoOff;
+            servo.setPWM((byte) 0, (short) 0, servoOff);
+            servoOffSave = servoOff;
         }
 
     }
@@ -307,7 +305,7 @@ public class Processor extends Devices {
         if (menuSensors) {
             sensorsMenu();
         }
-         if (menuFlame) {
+        if (menuFlame) {
             flameMenu();
         }
     }

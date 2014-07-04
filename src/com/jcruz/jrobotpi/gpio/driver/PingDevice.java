@@ -110,13 +110,13 @@ public class PingDevice {
         sigOut.close();
     }
 
-    class MyPinListener implements PinListener {
-
-        @Override
-        public void valueChanged(PinEvent event) {
-            System.out.println("Pin listener for pin 11 has been called!");
-            System.out.println("Pin is now " + event.getValue());
-        }
-    }
+//    class MyPinListener implements PinListener {
+//
+//        @Override
+//        public void valueChanged(PinEvent event) {
+//            System.out.println("Pin listener for pin 11 has been called!");
+//            System.out.println("Pin is now " + event.getValue());
+//        }
+//    }
 
 }
