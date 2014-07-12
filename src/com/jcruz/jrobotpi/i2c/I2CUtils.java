@@ -83,7 +83,9 @@ public class I2CUtils {
         try {
             device.read(cmd, 1, rxBuf);
         } catch (IOException ex) {
-           Logger.getGlobal().log(Level.WARNING,ex.getMessage());
+           //Logger.getGlobal().log(Level.WARNING,ex.getMessage());
+            ex.printStackTrace();
+            
         }
         return asInt(rxBuf.get(0));
     }

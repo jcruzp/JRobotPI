@@ -80,7 +80,7 @@ public class Processor extends Devices {
         super();
         //Task to update Xively
         task = new Timer();
-        task.schedule(readDevices, 0, 20000);
+        task.scheduleAtFixedRate(readDevices, 100000, 120000);
         emic2.Msg(11);
         //Create webserver
         webserver = new WebServer();
@@ -95,9 +95,9 @@ public class Processor extends Devices {
         while ((!stopMenu) && (webserver.isShouldRun())) {
             I2CUtils.I2Cdelay(10);
             //Menu Options Home (menu) / B (move) / A (scan) / 1 (PIR)
-            //keyMenu();
+            keyMenu();
             //Process all menu options
-            //processMenu();
+            processMenu();
         }
     }
 
@@ -149,7 +149,7 @@ public class Processor extends Devices {
 
     //Activate control options Home (menu) / B (move) / A (scan) / 1 (PIR)
     private void keyMenu() {
-        I2CUtils.I2Cdelay(10);
+        I2CUtils.I2Cdelay(100);
         if (wiiremote.getButton2Press(WiiRemote.Button2Enum.HOME)) {
             menuSensors = !menuSensors;
             emic2.Msg(menuSensors ? 13 : 14);
@@ -171,7 +171,7 @@ public class Processor extends Devices {
             menuFlame = !menuFlame;
             emic2.Msg(menuFlame ? 29 : 30);
         }
-
+        I2CUtils.I2Cdelay(100);
     }
 
     private void scanMenu() {
