@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.jcruz.jrobotpi;
+package com.jcruz.jrobotpi.devices;
 
 import com.jcruz.jrobotpi.gpio.driver.DFR0076Device;
 import com.jcruz.jrobotpi.gpio.driver.HCSR04Device;
@@ -29,13 +29,11 @@ import com.jcruz.jrobotpi.gpio.driver.HCSR501Device;
 import com.jcruz.jrobotpi.http.driver.XivelyDevice;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.driver.BMP180Device;
-import com.jcruz.jrobotpi.i2c.driver.BMP180Mode;
 import com.jcruz.jrobotpi.i2c.driver.EMICI2CDevice;
 import com.jcruz.jrobotpi.i2c.driver.HMC5883LDevice;
 import com.jcruz.jrobotpi.i2c.driver.HTU21DDevice;
 import com.jcruz.jrobotpi.i2c.driver.Move;
 import com.jcruz.jrobotpi.i2c.driver.PCA9685Device;
-//import com.jcruz.jrobotpi.i2c.driver.TPA2016Device;
 import com.jcruz.jrobotpi.i2c.driver.VCNL4000Device;
 import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
 import com.jcruz.jrobotpi.uart.driver.GPSEM406Device;
@@ -127,154 +125,8 @@ public class Devices {
      */
     public static GPSEM406Device gps = null;
 
-    /**
-     * Define all messages for Emic
-     */
-    public final String[] emic2Msgs = {
-        "Emic 2 Ok.", //0
-        "Inicializing devices.", //1
-        "HCSR04 Ok.", //2
-        "BMP180 Ok.", //3
-        "HTU21D Ok.", //4
-        "Wii Remote Ok.", //5
-        "DC Motors Ok.", //6
-        "Servo Ok.", //7
-        "VCNL4000 Ok.", //8
-        "Xively Ok.", //9    
-        "PIR left and it listener Ok.", //10
-        "Task to read devices created.",//11
-        "Close devices comunication.", //12
-        "Menu activated.", //13
-        "Menu deactivated.", //14
-        "Prepare to move.", //15
-        "Stop move.", //16
-        "Prepare to detect objects.", //17
-        "Stop searching objects.", //18
-        "Scanning.", //19
-        "Object detected at ", //20
-        "No Object detected.", //21
-        "PIR Activated", //22
-        "PIR Deactivated.", //23
-        "HMC5883L Ok.", //24  
-        "GPS Ok.", //25  
-        "REST Server Ok.", //26    
-        "PIR right and it listener Ok.", //27        
-        "Flame sensor Ok.", //28            
-        "Prepare to search flame.", //29
-        "Stop searching flame.", //30
-        "Alert Flame detected." //31
-    };
+    
 
-    /**
-     * Enum used to read all sensors data
-     */
-    public enum Sensors {
-
-        /**
-         * Read Ambient Light
-         */
-        AmbientLight("Ambient Light ", "Ambient_Light") {
-                    String getValue() {
-                        return String.valueOf(vcnl4000.readAmbientLight());
-                    }
-                },
-        /**
-         * Read Humidity
-         */
-        Humidity("Humidity ", "Humidity") {
-                    String getValue() {
-                        return String.valueOf((int) htu21d.readHumidity());
-                    }
-                },
-        /**
-         * Read RPI_Temperature
-         */
-        RPI_Temperature("Raspberry PI Temperature ", "RPI_Temperature") {
-                    String getValue() {
-                        return String.valueOf((int) htu21d.readTemperature());
-                    }
-                },
-        /**
-         * Read Temperature
-         */
-        Temperature("Temperature ", "Temperature") {
-                    String getValue() {
-                        return String.valueOf((int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[0]);
-                    }
-                },
-        /**
-         * Read Pressure
-         */
-        Pressure("Pressure ", "Pressure") {
-                    String getValue() {
-                        return String.valueOf((int) bmp180.getTemperaturePressure(BMP180Mode.ULTRA_HIGH_RESOLUTION)[1]);
-                    }
-                },
-        /**
-         * Read Heading
-         */
-        Heading("Heading ", "Heading") {
-                    String getValue() {
-                        return String.valueOf((int) hmc.calculateHeading());
-                    }
-                },
-        /**
-         * Read Latitude
-         */
-        Latitude("Latitude ", "Latitude") {
-                    String getValue() {
-                        return gps.getLatitude();
-                    }
-                },
-        /**
-         * Read Longitude
-         */
-        Longitude("Longitude ", "Longitude") {
-                    String getValue() {
-                        return gps.getLongitude();
-                    }
-                },
-        /**
-         * Read Altitude
-         */
-        Altitude("Altitude ", "Altitude") {
-                    String getValue() {
-                        return gps.getAltitude();
-                    }
-                },
-        /**
-         * Stop REST command
-         */
-        Stop("Stop", "") {
-                    String getValue() {
-                        return "";
-                    }
-                };
-
-        /**
-         * Name string
-         */
-        public String name;
-
-        /**
-         * Xively and REST name string
-         */
-        public String xivelyName;
-
-        /**
-         * Value from sensor
-         */
-        abstract String getValue();
-
-        /**
-         * Get name, xively name and value from enum
-         */
-        private Sensors(String name, String xivelyName) {
-            this.name = name;
-            this.xivelyName = xivelyName;
-        }
-
-    };
 
     /**
      * Create all object devices
@@ -282,7 +134,7 @@ public class Devices {
      * @throws IOException
      */
     public Devices() throws IOException {
-        emic2 = new EMICI2CDevice(emic2Msgs);
+        emic2 = new EMICI2CDevice();
         I2CUtils.I2Cdelay(3000);
 
         //emic2.write("");

@@ -53,7 +53,7 @@ public class JRobotPI extends MIDlet {
             Logger.getGlobal().setLevel(Level.INFO);
             
             Logger.getGlobal().log(Level.INFO, "************************************");
-            Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v2.3.0...  *");
+            Logger.getGlobal().log(Level.INFO, "*     Starting JRobotPI v3.0.0...  *");
             Logger.getGlobal().log(Level.INFO, "************************************");
 
             //TODO Convert to Thread
@@ -68,6 +68,7 @@ public class JRobotPI extends MIDlet {
     }
 
 
+    @Override
     public void destroyApp(boolean unconditional){
         if (processor != null) {
             processor.Stop();

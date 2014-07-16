@@ -95,7 +95,7 @@ public class SC16IS750Device extends I2CRpi {
         try {
             device.write(SC16IS750.XHR.cmd, 1, buffer);
         } catch (IOException ex) {
-            ex.printStackTrace();
+             Logger.getGlobal().log(Level.WARNING,ex.getMessage()); 
         }
     }
 

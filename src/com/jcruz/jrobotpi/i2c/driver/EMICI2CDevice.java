@@ -35,7 +35,44 @@ import java.util.logging.Logger;
 public class EMICI2CDevice {
 
     private SC16IS750Device sc;
-    private String[] emic2Msgs=null;
+       
+    /**
+     * Define all messages for Emic
+     */
+    private final String[] emic2Msgs = {
+        "Emic 2 Ok.", //0
+        "Inicializing devices.", //1
+        "HCSR04 Ok.", //2
+        "BMP180 Ok.", //3
+        "HTU21D Ok.", //4
+        "Wii Remote Ok.", //5
+        "DC Motors Ok.", //6
+        "Servo Ok.", //7
+        "VCNL4000 Ok.", //8
+        "Xively Ok.", //9    
+        "PIR left and it listener Ok.", //10
+        "Task to read devices created.",//11
+        "Close devices comunication.", //12
+        "Menu activated.", //13
+        "Menu deactivated.", //14
+        "Prepare to move.", //15
+        "Stop move.", //16
+        "Prepare to detect objects.", //17
+        "Stop searching objects.", //18
+        "Scanning.", //19
+        "Object detected at ", //20
+        "No Object detected.", //21
+        "PIR Activated", //22
+        "PIR Deactivated.", //23
+        "HMC5883L Ok.", //24  
+        "GPS Ok.", //25  
+        "REST Server Ok.", //26    
+        "PIR right and it listener Ok.", //27        
+        "Flame sensor Ok.", //28            
+        "Prepare to search flame.", //29
+        "Stop searching flame.", //30
+        "Alert Flame detected." //31
+    };
 
     /**
      * Define a UART device config to interface to Emic-2
@@ -43,10 +80,9 @@ public class EMICI2CDevice {
      * @param emic2Msgs
      * @throws IOException
      */
-    public EMICI2CDevice(String[] emic2Msgs) throws IOException {
+    public EMICI2CDevice() throws IOException {
         //I2C Emic interface using SC16IS750
         sc = new SC16IS750Device();
-        this.emic2Msgs=emic2Msgs;
     }
     
     /**

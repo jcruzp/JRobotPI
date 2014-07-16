@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.jcruz.jrobotpi;
+package com.jcruz.jrobotpi.http;
 
-import com.jcruz.jrobotpi.Devices.Sensors;
+import com.jcruz.jrobotpi.devices.Sensors;
 import com.oracle.json.Json;
 import com.oracle.json.JsonBuilderFactory;
 import com.oracle.json.JsonObjectBuilder;

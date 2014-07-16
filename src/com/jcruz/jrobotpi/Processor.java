@@ -23,6 +23,9 @@
  */
 package com.jcruz.jrobotpi;
 
+import com.jcruz.jrobotpi.devices.Devices;
+import com.jcruz.jrobotpi.devices.Sensors;
+import com.jcruz.jrobotpi.http.WebServer;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.driver.WiiRemote;
 import java.io.IOException;
@@ -31,7 +34,7 @@ import java.util.TimerTask;
 
 /**
  *
- * @author eve0002474
+ * @author Jose Cruz
  */
 public class Processor extends Devices {
 

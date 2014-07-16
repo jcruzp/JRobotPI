@@ -73,7 +73,7 @@ public class TestEmicI2C extends MIDlet {
 
         Logger.getGlobal().log(Level.INFO, "************************************");
         try {
-            EMICI2CDevice sc = new EMICI2CDevice(emic2Msgs);
+            EMICI2CDevice sc = new EMICI2CDevice();
             
         sc.writeCommand("W200");
         sc.writeCommand("L0");
