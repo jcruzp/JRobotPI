@@ -25,7 +25,7 @@ package com.jcruz.jrobotpi;
 
 import com.jcruz.jrobotpi.gpio.driver.DFR0076Device;
 import com.jcruz.jrobotpi.gpio.driver.HCSR04Device;
-import com.jcruz.jrobotpi.gpio.driver.GPIODevice;
+import com.jcruz.jrobotpi.gpio.driver.HCSR501Device;
 import com.jcruz.jrobotpi.http.driver.XivelyDevice;
 import com.jcruz.jrobotpi.i2c.I2CUtils;
 import com.jcruz.jrobotpi.i2c.driver.BMP180Device;
@@ -59,13 +59,13 @@ public class Devices {
     /**
      * Define PIR Left object
      */
-    public GPIODevice pirl = null;
+    public HCSR501Device pirl = null;
     private final int pinPirl = 25;
 
     /**
      * Define PIR Right object
      */
-    public GPIODevice pirr = null;
+    public HCSR501Device pirr = null;
     private final int pinPirr = 24;
     private boolean pirActivate = false;
 
@@ -323,12 +323,12 @@ public class Devices {
         emic2.Msg(24);
 //TODO Define PIRDevice with pin parameter and move listeners to that
         //Inicialize PIR Left motion detect
-        pirl = new GPIODevice(pinPirl);
+        pirl = new HCSR501Device(pinPirl);
         pirl.setListener(new PirSensor());
         emic2.Msg(10);
 
         //Inicialize PIR Right motion detect
-        pirr = new GPIODevice(pinPirr);
+        pirr = new HCSR501Device(pinPirr);
         pirr.setListener(new PirSensor());
         emic2.Msg(27);
 
@@ -390,11 +390,8 @@ public class Devices {
      */
     public void Close() {
         emic2.Msg(12);
-        pirl.removeListener();
         pirl.close();
-        pirr.removeListener();
         pirr.close();
-        flame.removeListener();
         flame.close();
         hmc.close();
         vcnl4000.close();

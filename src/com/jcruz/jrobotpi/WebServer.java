@@ -63,7 +63,7 @@ public class WebServer implements Runnable {
             scn = (StreamConnectionNotifier) Connector.open("socket://:8000");
             new Thread(this).start();
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
         return true;
     }
@@ -81,7 +81,7 @@ public class WebServer implements Runnable {
                 // service the connection in a separate thread 
             }
         } catch (IOException e) {
-            Logger.getGlobal().log(Level.WARNING, e.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -95,7 +95,7 @@ public class WebServer implements Runnable {
                 scn.close();
             }
         } catch (IOException e) {
-            Logger.getGlobal().log(Level.WARNING, e.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -160,13 +160,13 @@ public class WebServer implements Runnable {
                     out.println(jsonvalue.build().toString());
                     out.flush();
                 } catch (IOException ex) {
-                    Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+                    Logger.getGlobal().log(Level.WARNING, ex.getMessage());
                 } finally {
                     if (client != null) {
                         try {
                             client.close();
                         } catch (IOException ex) {
-                            Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+                            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
                         }
                     }
                 }
@@ -193,7 +193,7 @@ public class WebServer implements Runnable {
                 }
 
             } catch (IOException ex) {
-                Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+                Logger.getGlobal().log(Level.WARNING, ex.getMessage());
             }
 
         }

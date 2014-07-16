@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 jcruz.
+ * Copyright 2014 Jose Cruz <joseacruzp@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.jcruz.jrobotpi.gpio.driver;
 
 import com.jcruz.jrobotpi.i2c.I2CUtils;
@@ -35,12 +34,16 @@ import jdk.dio.gpio.PinListener;
 
 /**
  *
- * @author jcruz
+ * @author Jose Cruz
  */
 public class DFR0076Device {
-    
+
     private GPIOPin pin = null;
 
+    /**
+     *
+     * @param pinGPIO
+     */
     public DFR0076Device(int pinGPIO) {
         try {
             pin = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
@@ -49,16 +52,18 @@ public class DFR0076Device {
 
             I2CUtils.I2Cdelay(3000);    //wait for 3 seconds
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public GPIOPin getPin() {
         return pin;
     }
-    
-    
-    
+
     /**
      * Defined listener to flame sensor pin
      *
@@ -66,33 +71,25 @@ public class DFR0076Device {
      */
     public void setListener(PinListener pirListener) {
         try {
-            pin.setInputListener(pirListener);
+            if (pin!=null)
+                pin.setInputListener(pirListener);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
     }
     
     /**
-     * Remove listener for flame sensor
-     */
-    public void removeListener() {
-        try {
-            pin.setInputListener(null);
-        } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
-        }
-    }
-
-    /**
-     * Free PIR GPIO
-     *
+     * Free flame GPIO
      */
     public void close() {
         try {
-            pin.close();
+            //Remove listener for flame sensor
+            if (pin!=null){
+                pin.setInputListener(null); 
+                pin.close(); 
+            }    
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
     }
-    
 }

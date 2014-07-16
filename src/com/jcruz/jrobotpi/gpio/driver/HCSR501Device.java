@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2014 Jose Cruz <joseacruzp@gmail.com>.
@@ -37,7 +37,7 @@ import jdk.dio.gpio.PinListener;
  *
  * @author Jose Cuz
  */
-public class GPIODevice {
+public class HCSR501Device {
 
     private GPIOPin pin = null;
 
@@ -46,7 +46,7 @@ public class GPIODevice {
      *
      * @param pinGPIO
      */
-    public GPIODevice(int pinGPIO) {
+    public HCSR501Device(int pinGPIO) {
         try {
             pin = (GPIOPin) DeviceManager.open(new GPIOPinConfig(
                     0, pinGPIO, GPIOPinConfig.DIR_INPUT_ONLY, GPIOPinConfig.MODE_INPUT_PULL_DOWN,
@@ -54,7 +54,7 @@ public class GPIODevice {
 
             I2CUtils.I2Cdelay(3000);    //wait for 3 seconds
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
     }
 
@@ -62,41 +62,34 @@ public class GPIODevice {
         return pin;
     }
 
-    
     /**
      * Defined listener to pir GPIO pin. Pin change value for some time depends
-     * config by PIR
+     * PIR time delay potentiometer adjust.
      *
      * @param pirListener
      */
     public void setListener(PinListener pirListener) {
         try {
-            pin.setInputListener(pirListener);
+            if (pin != null) {
+                pin.setInputListener(pirListener);
+            }
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
-        }
-    }
-    
-    /**
-     * Remove listener for GPIO pin of PIR
-     */
-    public void removeListener() {
-        try {
-            pin.setInputListener(null);
-        } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
     }
 
     /**
      * Free PIR GPIO
-     *
      */
     public void close() {
         try {
-            pin.close();
+            //Remove listener for GPIO pin of PIR
+            if (pin != null) {
+                pin.setInputListener(null);
+                pin.close();
+            }
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
     }
 }

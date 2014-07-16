@@ -79,7 +79,7 @@ public class XivelyDevice {
             rc = hc.getResponseCode();
 
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         } finally {
             if (os != null) {
                 try {
@@ -119,7 +119,7 @@ public class XivelyDevice {
             }
 
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         } finally {
 
             if (hc != null) {

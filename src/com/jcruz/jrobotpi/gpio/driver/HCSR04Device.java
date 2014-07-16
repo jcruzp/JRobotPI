@@ -32,10 +32,10 @@ import jdk.dio.gpio.GPIOPin;
 import jdk.dio.gpio.GPIOPinConfig;
 
 /**
- * Interface to Ultrasound HC-SR04 device
- * Code based in book Raspberry Pi Cookbook for Python Programmers Copyright © 2014 Packt Publishing
- * Author Tim Cox (thanks for excellent book)
- * I converted sonyc.py python script at chapter 9 to Java
+ * Interface to Ultrasound HC-SR04 device Code based in book Raspberry Pi
+ * Cookbook for Python Programmers Copyright © 2014 Packt Publishing Author Tim
+ * Cox (thanks for excellent book) I converted sonyc.py python script at chapter
+ * 9 to Java
  *
  * @author JCruz
  */
@@ -66,7 +66,7 @@ public class HCSR04Device {
             I2CUtils.I2Cdelay(500);  //wait for 0.5 seconds
 
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
     }
 
@@ -77,7 +77,6 @@ public class HCSR04Device {
      */
     public double pulse() {
         long distance = 0;
-        long delta = 0;
         try {
             trigger.setValue(true);         //Send a pulse trigger must be 1 and 0 with a 10 us wait
             I2CUtils.I2CdelayNano(0, PULSE);// wait 10 us
@@ -92,24 +91,24 @@ public class HCSR04Device {
             while ((echo.getValue()) && (stop < starttime + 1000000000L * 2)) {
                 stop = System.nanoTime();
             }
-            delta = (stop - start);
-            distance = delta * SPEEDOFSOUND;       // echo from 0 to 1 depending object distance
+            distance = (stop - start) * SPEEDOFSOUND;       // echo from 0 to 1 depending object distance
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
         return distance / 2.0 / (1000000000L); // cm/s
     }
 
     /**
-     * free device GPIO
-     *
+     * Free device GPIO
      */
     public void close() {
         try {
-            trigger.close();
-            echo.close();;
+            if ((trigger!=null) && (echo!=null)){
+                trigger.close();
+                echo.close();;
+            }   
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
     }
 }

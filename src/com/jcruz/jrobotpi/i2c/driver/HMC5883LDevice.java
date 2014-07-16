@@ -84,7 +84,7 @@ public class HMC5883LDevice extends I2CRpi {
         try {
             device.read(HMC5883L.DataRegBegin.cmd, 1, buffer);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
        
         // Read each of the pairs of data as a signed short

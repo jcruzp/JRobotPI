@@ -208,7 +208,7 @@ public class BMP180Device extends I2CRpi {
         try {
             result = device.read(BMP180.pressAddr.cmd, subAddressSize, uncompPress);
         } catch (IOException ex) {
-            Logger.getGlobal().log(Level.WARNING,ex.getLocalizedMessage());
+            Logger.getGlobal().log(Level.WARNING,ex.getMessage());
         }
         if (result < 3) {
             Logger.getGlobal().log(Level.SEVERE, "Error: " + result+" bytes read" );

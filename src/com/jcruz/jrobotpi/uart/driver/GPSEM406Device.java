@@ -265,7 +265,7 @@ public class GPSEM406Device {
                         + " Altitude: " + getAltitude() + "\n");
             }
         } catch (Exception ex) {
-            //Logger.getGlobal().log(Level.WARNING, ex.getLocalizedMessage());
+            //Logger.getGlobal().log(Level.WARNING, ex.getMessage());
         }
     }
 
